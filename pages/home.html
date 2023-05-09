@@ -287,9 +287,9 @@
                         </div>
                       </div>
                     </div>
-                    <span class="fw-semibold d-block mb-1">Profit</span>
-                    <h3 class="card-title mb-2">$12,628</h3>
-                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                    <span class="fw-semibold d-block mb-1">Triwulan</span>
+                    <h3 class="card-title mb-2 plain_triwulan">-</h3>
+                    <small class="fw-semibold plain_tahun">-</small>
                   </div>
                 </div>
               </div>
@@ -758,6 +758,10 @@
         var stringUid = user.uid;
         var userById = db.collection(collectionsName.users).doc(stringUid);
         var getUserById = userById.get();
+        var curTriwulan = getCurrentTriwulan();
+        const dt = new Date();
+        var month = dt.getMonth() + 1;
+        var year = dt.getFullYear();
         
         var docRefJemaat = db.collection(collectionsName.kode_jemaat);
         
@@ -765,6 +769,8 @@
         var plainName = $(".plain_name");
         var plainJemaat = $(".plain_jemaat");
         var adminPannel = $("#admin_pannel_nav");
+        var triwulanPannel = $(".plain_triwulan");
+        var tahunPannel = $(".plain_tahun");
         var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
         var btnGerejaAdmin = $('<li class="menu-item">').append(
           $('<a href="gereja.html" class="menu-link">')
@@ -775,6 +781,14 @@
           .append($('<i class="menu-icon tf-icons bx bx-list-check">')).append($('<div data-i18n="Support">').text("User Management"))
         );
   
+        triwulanPannel.each(function(index, element){
+          $(element).html(curTriwulan);
+        });
+  
+        tahunPannel.each(function(index, element){
+          $(element).html(year);
+        });
+
         getUserById.then(function(doc){
           var userData = doc.data();
           if(userData.user_type.toLowerCase() == "admin"){
