@@ -1,0 +1,1499 @@
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Schadule Setting</title>
+
+  <meta name="description" content="" />
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+  <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../assets/css/demo.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <link rel="stylesheet" href="../assets/bx-icon/css/boxicons.css" />
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+  <style>
+    .disabled-cursor:hover {
+      cursor: not-allowed;
+    }
+
+    .alertMsg {
+      position: fixed;
+      margin-top: 20px;
+      margin-right: 20px;
+      width: 320px;
+      top: 0;
+      right: 0;
+    }
+
+    .input-red {
+      border-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="stylesheet" href="../assets/css/loading.css">
+  <div class="loading">
+    <div>
+      <img src="../assets/spin.gif" width="50px">
+      <h5 style="padding-top: 10px;">loading</h5>
+    </div>
+  </div>
+
+  <div id="toast_alert" class="bs-toast toast fade alertMsg" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- show bg-info -->
+    <div class="toast-header">
+      <i class="bx bx-bell me-2"></i>
+      <div class="me-auto fw-semibold" id="title_toast"></div>
+      <small id="sub_title_toast"></small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="message_toast">
+    </div>
+  </div>
+
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="../index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                  <path
+                    d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                    id="path-1"></path>
+                  <path
+                    d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                    id="path-3"></path>
+                  <path
+                    d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                    id="path-4"></path>
+                  <path
+                    d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                    id="path-5"></path>
+                </defs>
+                <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                    <g id="Icon" transform="translate(27.000000, 15.000000)">
+                      <g id="Mask" transform="translate(0.000000, 8.000000)">
+                        <mask id="mask-2" fill="white">
+                          <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use fill="#696cff" xlink:href="#path-1"></use>
+                        <g id="Path-3" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-3"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3"></use>
+                        </g>
+                        <g id="Path-4" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-4"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4"></use>
+                        </g>
+                      </g>
+                      <g id="Triangle"
+                        transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                        <use fill="#696cff" xlink:href="#path-5"></use>
+                        <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5"></use>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="home.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="schadule.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-notepad'></i>
+              <div data-i18n="Analytics">Schadule</div>
+            </a>
+          </li>
+
+          <!-- Components -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+          <!-- Cards -->
+          <li class="menu-item">
+            <a href="anggota_jemaat.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-group'></i>
+              <div data-i18n="Basic">Anggota Jemaat</div>
+            </a>
+          </li>
+
+          <li class="menu-item active">
+            <a href="schadule_setting.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-copy"></i>
+              <div data-i18n="Extended UI">Schadule Setting</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Setting</span></li>
+          <li class="menu-item">
+            <a href="account_setting.html"
+              class="menu-link">
+              <i class='menu-icon tf-icons bx bx-user'></i>
+              <div data-i18n="Support">Account</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="javascript:void(0)" class="menu-link" id="signOutClick">
+              <i class='menu-icon tf-icons bx bx-log-out'></i>
+              <div data-i18n="Documentation">Logout</div>
+            </a>
+          </li>
+
+          <div id="admin_pannel_nav" class="menu-inner">
+          </div>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <span class="text-muted fw-light">Schadule Setting/</span> <span class="plain_jemaat"></span>
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block plain_name">John Doe</span>
+                          <small class="text-muted plain_jemaat">...</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account_setting.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="schadule.html">
+                      <i class='bx bx-notepad me-2'></i>
+                      <span class="align-middle">Schadule</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" id="logout_user_navbar">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3">
+              <span class="text-muted fw-light">Schadule Setting /</span> <span
+                id="breadcrumbs_schadule_setting"></span>
+            </h4>
+            <div class="nav-align-top mb-4">
+              <div class="tab-content" id="navs_all_tabs_schadule">
+                <ul id="ul_tab_schadule" class="nav nav-pills mb-3 nav-fill" role="tablist">
+                  <li class="nav-item">
+                    <button id="btn_tab_ss" type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-ss" aria-controls="navs-pills-justified-ss"
+                      aria-selected="true" onclick="onclickSchaduleTab('Sabtu Sabat')"><i
+                        class='tf-icons bx bx-church'></i> Sabtu Sabat</button>
+                  </li>
+                  <li class="nav-item">
+                    <button id="btn_tab_rm" type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-rm" aria-controls="navs-pills-justified-rm"
+                      aria-selected="false" onclick="onclickSchaduleTab('Rabu Malam')"><i
+                        class="tf-icons bx bx-message-square"></i> Rabu Malam</button>
+                  </li>
+                  <li class="nav-item">
+                    <button id="btn_tab_vm" type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-vm" aria-controls="navs-pills-justified-vm"
+                      aria-selected="false" onclick="onclickSchaduleTab('Jumat Versper')"><i
+                        class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
+                  </li>
+                </ul>
+                <div class="d-flex justify-content-center text-center">
+                  <!-- <span class="text-secondary">
+                    * Kami membutuhkan izin untuk perubahan jadwal anda dengan.
+                    <span class="notificationRequest"><strong>Passcode Jemaat</strong></span>
+                  </span> -->
+                </div>
+                <div class="dropdown-divider mb-3"></div>
+                <div class="tab-pane fade" id="navs-pills-justified-ss" role="tabpanel">
+                  <div id="pannel_sekolah_sabat">
+                    <h5>Kolom Schadule SEKOLAH SABAT</h5>
+                    <div class="dropdown-divider"></div>
+                    <div class="table-responsive mt-3">
+                      <table id="table_column_sekolah_sabat" class="table table-striped table-borderless">
+                        <thead>
+                          <tr>
+                            <th>Posisi</th>
+                            <th class="text-nowrap">Kolom-N</th>
+                            <th class="text-nowrap">Nama Kolom</th>
+                            <th class="text-nowrap text-center">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr id="colomn_row_1" colomnrow="1">
+                            <td>
+                              <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+                            </td>
+                            <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+                            <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+                            <td>
+                              <div class="d-flex justify-content-center">
+                                <a href="javascript:;" class="text-secondary disabled-cursor">
+                                  <i class="bx bx-trash me-1"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr id="colomn_row_2" colomnrow="2">
+                            <td>
+                              <a href="javascript:;" onclick='upPositionRow(event, "table_column_sekolah_sabat")'><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick='downPositionRow(event, "table_column_sekolah_sabat")'><i class='bx bxs-chevrons-down'></i></a>
+                            </td>
+                            <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+                            <td class="text-nowrap">
+                              <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+                            </td>
+                            <td>
+                              <div class="d-flex justify-content-center">
+                                <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, 'table_column_sekolah_sabat')">
+                                  <i class="bx bx-trash me-1"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="row mb-4 mt-3">
+                      <div class="col-12">
+                        <div class="input-group text-end" style="z-index: 1; width: 130px;">
+                          <input min="1" value="1" type="number" id="input_number_count_add" class="form-control" />
+                          <button class="btn btn-primary btn-sm" type="button" onclick="btnAddNewRowTbl($('#input_number_count_add'), 'table_column_sekolah_sabat')">
+                            <i class='bx bx-plus'></i>
+                          </button>
+                        </div>
+                        <!-- <button type="button" class="btn btn-primary me-2">Simpan</button> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div id="pannel_khotbah_sabat">
+                    <div class="dropdown-divider mb-3"></div>
+                    <h5>Kolom Schadule KHOTBAH SABAT</h5>
+                    <div class="dropdown-divider"></div>
+                    <div class="table-responsive mt-3">
+                      <table id="table_column_Khotbah_sabat" class="table table-striped table-borderless">
+                        <thead>
+                          <tr>
+                            <th>Posisi</th>
+                            <th class="text-nowrap">Kolom-N</th>
+                            <th class="text-nowrap">Nama Kolom</th>
+                            <th class="text-nowrap text-center">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr id="colomn_row_1" colomnrow="1">
+                            <td>
+                              <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+                            </td>
+                            <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+                            <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+                            <td>
+                              <div class="d-flex justify-content-center">
+                                <a href="javascript:;" class="text-secondary disabled-cursor">
+                                  <i class="bx bx-trash me-1"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr id="colomn_row_2" colomnrow="2">
+                            <td>
+                              <a href="javascript:;" onclick='upPositionRow(event, "table_column_Khotbah_sabat")'><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick='downPositionRow(event, "table_column_Khotbah_sabat")'><i class='bx bxs-chevrons-down'></i></a>
+                            </td>
+                            <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+                            <td class="text-nowrap">
+                              <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+                            </td>
+                            <td>
+                              <div class="d-flex justify-content-center">
+                                <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, 'table_column_Khotbah_sabat')">
+                                  <i class="bx bx-trash me-1"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="row mb-4 mt-3">
+                      <div class="col-12">
+                        <div class="input-group text-end" style="z-index: 1; width: 130px;">
+                          <input min="1" value="1" type="number" id="input_number_count_add_KS" class="form-control" />
+                          <button class="btn btn-primary btn-sm" type="button" onclick="btnAddNewRowTbl($('#input_number_count_add_KS'), 'table_column_Khotbah_sabat')">
+                            <i class='bx bx-plus'></i>
+                          </button>
+                        </div>
+                        <!-- <button type="button" class="btn btn-primary me-2">Simpan</button> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="mb-3 col-12">
+                    <div class="alert alert-info">
+                      <h6 class="alert-heading mb-1">Jika data kolom jadwal <span class="fw-bold">Sabtu Sabat</span> sudah sesuai,</h6>
+                      <p class="mb-0">Masukkan passcode jemaat untuk mengukuhkan kolom schadule jadwal!</p>
+                    </div>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="checkboxReqSS" id="checkboxReqSS">
+                    <label class="form-check-label" for="checkboxReqSS">Saya staff jemaat <span class="fw-bold plain_jemaat"></span> mengkonfirmasi perubahan jadwal</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <input type="password" id="passcode_jemaatSS" class="form-control"
+                        placeholder="masukkan passcode jemaat">
+                    </div>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-primary me-2" onclick="saveChangeShcaduleSS('table_column_sekolah_sabat', 'table_column_Khotbah_sabat', $('#checkboxReqSS'), $('#passcode_jemaatSS'))">Simpan</button>
+                      <button type="reset" class="btn btn-outline-secondary" disabled>Batal</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="navs-pills-justified-rm" role="tabpanel">
+                  <h5>Kolom Schadule RABU MALAM</h5>
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive mt-3">
+                    <table id="table_column_rabu_malam" class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th>Posisi</th>
+                          <th class="text-nowrap">Kolom-N</th>
+                          <th class="text-nowrap">Nama Kolom</th>
+                          <th class="text-nowrap text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr id="colomn_row_1" colomnrow="1">
+                          <td>
+                            <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+                          </td>
+                          <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+                          <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-secondary disabled-cursor">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr id="colomn_row_2" colomnrow="2">
+                          <td>
+                            <a href="javascript:;" onclick='upPositionRow(event, "table_column_rabu_malam")'><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick='downPositionRow(event, "table_column_rabu_malam")'><i class='bx bxs-chevrons-down'></i></a>
+                          </td>
+                          <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+                          <td class="text-nowrap">
+                            <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, 'table_column_rabu_malam')">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="row mb-4 mt-3">
+                    <div class="col-12">
+                      <div class="input-group text-end" style="z-index: 1; width: 130px;">
+                        <input min="1" value="1" type="number" id="input_number_count_add_RM" class="form-control" />
+                        <button class="btn btn-primary btn-sm" type="button" onclick="btnAddNewRowTbl($('#input_number_count_add_RM'), 'table_column_rabu_malam')">
+                          <i class='bx bx-plus'></i>
+                        </button>
+                      </div>
+                      <!-- <button type="button" class="btn btn-primary me-2">Simpan</button> -->
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="mb-3 col-12">
+                    <div class="alert alert-info">
+                      <h6 class="alert-heading mb-1">Jika data kolom jadwal <span class="fw-bold">Rabu Malam</span> sudah sesuai,</h6>
+                      <p class="mb-0">Masukkan passcode jemaat untuk mengukuhkan kolom schadule jadwal!</p>
+                    </div>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="checkBoxReqRM" id="checkBoxReqRM">
+                    <label class="form-check-label" for="checkBoxReqRM">Saya staff jemaat <span class="fw-bold plain_jemaat"></span> mengkonfirmasi perubahan jadwal</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <input type="password" id="passcode_jemaatRM" class="form-control"
+                        placeholder="masukkan passcode jemaat">
+                    </div>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-primary me-2" onclick="saveChangeShcaduleRM('table_column_rabu_malam', $('#checkBoxReqRM'), $('#passcode_jemaatRM'))">Simpan</button>
+                      <button type="reset" class="btn btn-outline-secondary" disabled>Batal</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="navs-pills-justified-vm" role="tabpanel">
+                  <h5>Kolom Schadule VESPER MALAM</h5>
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive mt-3">
+                    <table id="table_column_vesper_malam" class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th>Posisi</th>
+                          <th class="text-nowrap">Kolom-N</th>
+                          <th class="text-nowrap">Nama Kolom</th>
+                          <th class="text-nowrap text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr id="colomn_row_1" colomnrow="1">
+                          <td>
+                            <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+                          </td>
+                          <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+                          <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-secondary disabled-cursor">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr id="colomn_row_2" colomnrow="2">
+                          <td>
+                            <a href="javascript:;" onclick='upPositionRow(event, "table_column_vesper_malam")'><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick='downPositionRow(event, "table_column_vesper_malam")'><i class='bx bxs-chevrons-down'></i></a>
+                          </td>
+                          <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+                          <td class="text-nowrap">
+                            <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, 'table_column_vesper_malam')">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="row mb-4 mt-3">
+                    <div class="col-12">
+                      <div class="input-group text-end" style="z-index: 1; width: 130px;">
+                        <input min="1" value="1" type="number" id="input_number_count_add_VM" class="form-control" />
+                        <button class="btn btn-primary btn-sm" type="button" onclick="btnAddNewRowTbl($('#input_number_count_add_VM'), 'table_column_vesper_malam')">
+                          <i class='bx bx-plus'></i>
+                        </button>
+                      </div>
+                      <!-- <button type="button" class="btn btn-primary me-2">Simpan</button> -->
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="mb-3 col-12">
+                    <div class="alert alert-info">
+                      <h6 class="alert-heading mb-1">Jika data kolom jadwal <span class="fw-bold">Vesper Malam</span> sudah sesuai,</h6>
+                      <p class="mb-0">Masukkan passcode jemaat untuk mengukuhkan kolom schadule jadwal!</p>
+                    </div>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="checkBoxReqVM" id="checkBoxReqVM">
+                    <label class="form-check-label" for="checkBoxReqVM">Saya staff jemaat <span class="fw-bold plain_jemaat"></span> mengkonfirmasi perubahan jadwal</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <input type="password" id="passcode_jemaatVM" class="form-control" placeholder="masukkan passcode jemaat">
+                    </div>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-primary me-2" onclick="saveChangeShcaduleVM('table_column_vesper_malam', $('#checkBoxReqVM'), $('#passcode_jemaatVM'))">Simpan</button>
+                      <button type="reset" class="btn btn-outline-secondary" disabled>Batal</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-start py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © 2023,
+                <!-- <script>
+                  document.write(new Date().getFullYear());
+                </script> -->
+                made by
+                <a href="https://davidhedrin.github.io/david-port/" target="_blank" class="footer-link fw-bolder">David
+                  Simbolon</a>
+              </div>
+              <!-- <div>
+                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
+                  Themes</a>
+              </div> -->
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- <div class="buy-now">
+    <a href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/" target="_blank"
+      class="btn btn-danger btn-buy-now">Upgrade to Pro</a>
+  </div> -->
+
+  <div class="modal fade" id="confirm_modal" tabindex="-1" style="display: none; z-index: 9999;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Logout
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin keluar dari aplikasi?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="confirm_modal_submit" tabindex="-1" style="display: none; z-index: 9999;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Schadule
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin keluar dari aplikasi?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="../assets/vendor/js/menu.js"></script>
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/dashboards-analytics.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script src="../halpers/pubic_function.js"></script>
+  <script src="../halpers/collections.js"></script>
+
+  <script>
+    var userIdLogin = "";
+    var toastAlert = $("#toast_alert");
+
+    var divNavsAllTabs = $("#navs_all_tabs_schadule");
+    var navsPillSS = divNavsAllTabs.find("#navs-pills-justified-ss");
+    var navsPillRM = divNavsAllTabs.find("#navs-pills-justified-rm");
+    var navsPillVM = divNavsAllTabs.find("#navs-pills-justified-vm");
+    
+    var tableSS = navsPillSS.find("#table_column_sekolah_sabat");
+    var tbody_SS = tableSS.find("tbody");
+    var tableKS = navsPillSS.find("#table_column_Khotbah_sabat");
+    var tbody_KS = tableKS.find("tbody");
+    var tableRM = navsPillRM.find("#table_column_rabu_malam");
+    var tbody_RM = tableRM.find("tbody");
+    var tableVM = navsPillVM.find("#table_column_vesper_malam");
+    var tbody_VM = tableVM.find("tbody");
+
+    let setDefaultRowSS = [];
+    let setDefaultRowKS = [];
+    let setDefaultRowRM = [];
+    let setDefaultRowVM = [];
+
+    $(document).ready(function () {
+      var activeTabSchadule = getParameterUrlByName('active_tab');
+      var findUlTab = divNavsAllTabs.find("#ul_tab_schadule");
+      var findBtnSS = findUlTab.find("button#btn_tab_ss");
+      var findBtnRM = findUlTab.find("button#btn_tab_rm");
+      var findBtnVM = findUlTab.find("button#btn_tab_vm");
+
+      if(activeTabSchadule == "" || activeTabSchadule == "ss"){
+        navsPillSS.addClass("active show");
+        findBtnSS.addClass("active");
+      }else if(activeTabSchadule == "rm"){
+        navsPillRM.addClass("active show");
+        findBtnRM.addClass("active");
+      }else if(activeTabSchadule == "vm"){
+        navsPillVM.addClass("active show");
+        findBtnVM.addClass("active");
+      }
+
+      var findActiveTab = findUlTab.find(".nav-link.active");
+      var findFirstActive = findActiveTab[0];
+      var getOnlyText = findFirstActive.textContent.trim();
+      var labelBreadCrum = $("#breadcrumbs_schadule_setting");
+      labelBreadCrum.html(getOnlyText);
+
+      tbody_SS.find("tr").each(function() {
+        setDefaultRowSS.push($(this).clone());
+      });
+      tbody_KS.find("tr").each(function() {
+        setDefaultRowKS.push($(this).clone());
+      });
+      tbody_RM.find("tr").each(function() {
+        setDefaultRowRM.push($(this).clone());
+      });
+      tbody_VM.find("tr").each(function() {
+        setDefaultRowVM.push($(this).clone());
+      });
+    });
+
+    function generateDefaultRowTable(tableName){
+      var result = [];
+
+      var newRow1 = `
+      <tr id="colomn_row_1" colomnrow="1">
+        <td>
+          <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+        </td>
+        <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+        <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+        <td>
+          <div class="form-check d-flex justify-content-center">
+            <input class="form-check-input disabled-cursor" type="checkbox" id="checked_show_colomn_row_1" checked disabled>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex justify-content-center">
+            <a href="javascript:;" class="text-secondary disabled-cursor">
+              <i class="bx bx-trash me-1"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      `;
+      
+      var newRow2 = `
+      <tr id="colomn_row_2" colomnrow="2">
+        <td>
+          <a href="javascript:;" onclick="upPositionRow(event, '`+tableName+`')"><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick="downPositionRow(event, '`+tableName+`')"><i class='bx bxs-chevrons-down'></i></a>
+        </td>
+        <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+        <td class="text-nowrap">
+          <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+        </td>
+        <td>
+          <div class="form-check d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" id="checked_show_colomn_row_2" checked>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex justify-content-center">
+            <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, '`+tableName+`')">
+              <i class="bx bx-trash me-1"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      `;
+
+      result.push(newRow1, newRow2);
+
+      return result;
+    }
+
+    function onclickSchaduleTab(tabName) {
+      var labelBreadCrum = $("#breadcrumbs_schadule_setting");
+      labelBreadCrum.html(tabName);
+    };
+    
+    var setLoading = {
+      showLoading: function showLoading() {
+        $(".loading").attr("hidden", false);
+        $(".layout-navbar").css("z-index", 0);
+        $(".navbar").css("z-index", 0);
+      },
+      hideLoading: function hideLoading() {
+        $(".loading").attr("hidden", true);
+        $(".layout-navbar").css("z-index", "2");
+        $(".navbar").css("z-index", "2");
+      }
+    }
+
+    function btnAddNewRowTbl(input, tableId){
+      var table = $("#" + tableId);
+      var count = input.val();
+      var tbody = table.find("tbody");
+      var rowCount = tbody.find('tr').length;
+      var nextCount = rowCount + 1;
+
+      for (var i = 0; i < count; i++) {
+        var newRow = $("<tr id='colomn_row_" + nextCount + "'  colomnrow="+nextCount+">");
+        newRow.append($("<td>").append($("<a href='javascript:;' onclick='upPositionRow(event, \"" + tableId + "\")'>").append($("<i class='bx bxs-chevrons-up'>"))).append($("<a href='javascript:;' onclick='downPositionRow(event, \"" + tableId + "\")'>").append($("<i class='bx bxs-chevrons-down'>"))));
+        newRow.append($("<td id='kolom_text_"+nextCount+"' class='text-nowrap' data-colomn='"+nextCount+"'>").text("Kolom-").append($("<span class='lable_nomor'>").text(nextCount)));
+        newRow.append($("<td class='text-nowrap'>").append($("<input type='text' class='form-control' placeholder='masukkan nama kolom' id='input_nama_row_"+nextCount+"' />")));
+        newRow.append($("<td>").append($("<div class='d-flex justify-content-center'>").append($("<a href='javascript:;' class='text-danger' onclick='actionDeleteRow(event, \"" + tableId + "\")'>").append($("<i class='bx bx-trash me-1'>")))));
+
+        tbody.append(newRow);
+        nextCount++;
+      }
+      input.val(1);
+    }
+
+    function actionDeleteRow(event, tableId){
+      var table = $("#" + tableId);
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      if (target.length) {
+        var tbody = table.find("tbody");
+        var allTrRow = tbody.find('tr');
+        var rowCount = allTrRow.length;
+        var currentrowId = target.attr("id");
+        var currentrowColumn = parseInt(target.attr("colomnrow"));
+        var idxForChange = currentrowColumn;
+        
+        for(i = 0; i < rowCount; i++){
+          var getIdxColRow = $(allTrRow[i]);
+          var idxRowid = getIdxColRow.attr("id");
+          var idxColomnRow = parseInt(getIdxColRow.attr("colomnrow"));
+          if(idxColomnRow > currentrowColumn){
+            getIdxColRow.attr("id", "colomn_row_"+idxForChange);
+            getIdxColRow.attr("colomnrow", idxForChange);
+            var findKolomN = getIdxColRow.find("td#kolom_text_"+idxColomnRow);
+            findKolomN.attr("id", "kolom_text_"+idxForChange);
+            findKolomN.attr("data-colomn", idxForChange);
+            findKolomN.find("span").html(idxForChange);
+            var findInputTextName = getIdxColRow.find("input#input_nama_row_"+idxColomnRow);
+            findInputTextName.attr("id", "input_nama_row_"+idxForChange);
+
+            idxForChange++;
+          }
+        }
+        
+        target.remove();
+      }
+    }
+
+    function upPositionRow(event, tableId){
+      var table = $("#" + tableId);
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      
+      if (target.length) {
+        var tbody = table.find("tbody");
+
+        if (target.index() > 1) {
+          var currentrowId = target.attr("id");
+          var currentrowColumn = parseInt(target.attr("colomnrow"));
+
+          var tfBefore = target.prev();
+          var tfBeforeRowid = tfBefore.attr("id");
+          var tfBeforeColomnRow = parseInt(tfBefore.attr("colomnrow"));
+
+          target.attr("id", "colomn_row_"+tfBeforeColomnRow);
+          target.attr("colomnrow", tfBeforeColomnRow);
+          var findColTarget = target.find("td#kolom_text_"+currentrowColumn);
+          findColTarget.attr("id", "kolom_text_"+tfBeforeColomnRow);
+          findColTarget.attr("data-colomn", tfBeforeColomnRow);
+          findColTarget.find("span").html(tfBeforeColomnRow);
+          var targetInputTextName = target.find("input#input_nama_row_"+currentrowColumn);
+          targetInputTextName.attr("id", "input_nama_row_"+tfBeforeColomnRow);
+          
+          tfBefore.attr("id", "colomn_row_"+currentrowColumn);
+          tfBefore.attr("colomnrow", currentrowColumn);
+          var findColBefore = tfBefore.find("td#kolom_text_"+tfBeforeColomnRow);
+          findColBefore.attr("id", "kolom_text_"+currentrowColumn);
+          findColBefore.attr("data-colomn", currentrowColumn);
+          findColBefore.find("span").html(currentrowColumn);
+          var beforeInputTextName = tfBefore.find("input#input_nama_row_"+tfBeforeColomnRow);
+          beforeInputTextName.attr("id", "input_nama_row_"+currentrowColumn);
+
+          target.prev().before(target);
+        }
+      }
+    }
+    
+    function downPositionRow(event, tableId){
+      var table = $("#" + tableId);
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      
+      if (target.length) {
+        var tbody = table.find("tbody");
+        if (target.index() < tbody.find('tr').length - 1) {
+          var currentrowId = target.attr("id");
+          var currentrowColumn = parseInt(target.attr("colomnrow"));
+          
+          var tfAfter = target.next();
+          var tfAfterRowid = tfAfter.attr("id");
+          var tfAfterColomnRow = parseInt(tfAfter.attr("colomnrow"));
+          
+          target.attr("id", "colomn_row_"+tfAfterColomnRow);
+          target.attr("colomnrow", tfAfterColomnRow);
+          var findColTarget = target.find("td#kolom_text_"+currentrowColumn);
+          findColTarget.attr("id", "kolom_text_"+tfAfterColomnRow);
+          findColTarget.attr("data-colomn", tfAfterColomnRow);
+          findColTarget.find("span").html(tfAfterColomnRow);
+          var targetInputTextName = target.find("input#input_nama_row_"+currentrowColumn);
+          targetInputTextName.attr("id", "input_nama_row_"+tfAfterColomnRow);
+          
+          tfAfter.attr("id", "colomn_row_"+currentrowColumn);
+          tfAfter.attr("colomnrow", currentrowColumn);
+          var findColAfter = tfAfter.find("td#kolom_text_"+tfAfterColomnRow);
+          findColAfter.attr("id", "kolom_text_"+currentrowColumn);
+          findColAfter.attr("data-colomn", currentrowColumn);
+          findColAfter.find("span").html(currentrowColumn);
+          var afterInputTextName = tfAfter.find("input#input_nama_row_"+tfAfterColomnRow);
+          afterInputTextName.attr("id", "input_nama_row_"+currentrowColumn);
+
+          target.next().after(target);
+        }
+      }
+    };
+
+    function checkValAllInputColName(allInputColName){
+      var result = false;
+      try{
+        if(allInputColName.length > 0){
+          allInputColName.each(function() {
+            if ($.trim($(this).val()) != "") {
+              result = true;
+            }
+          });
+        }
+      }catch(e){
+        result = false;
+      }
+      return result;
+    }    
+    
+    async function saveChangeShcaduleSS(idtableSS, idtableKS, eventCheckbox, eventInputPascode){
+      try{
+        setLoading.showLoading();
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
+
+        var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).get();
+        var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+        if(eventCheckbox.prop('checked')){
+          if(eventInputPascode.val() == datagetCollKodeJemaat.passcode){
+            const tableSS = $("#" + idtableSS).find("tbody");
+            const tableKS = $("#" + idtableKS).find("tbody");
+            const allTrRowSS = tableSS.find('tr');
+            const allTrRowKS = tableKS.find('tr');
+            const allInputColSS = tableSS.find('tr input:text');
+            const allInputColSK = tableKS.find('tr input:text');
+            var rowCountSS = allTrRowSS.length;
+            var rowCountKS = allTrRowKS.length;
+    
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+    
+            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
+            var getKolomJemaat = await docRefKolomJemaat.get();
+    
+            if(!getKolomJemaat.empty){
+              var kolomJemaatDoc = getKolomJemaat.docs[0];
+              var kolomJemaatRef = kolomJemaatDoc.ref;
+              const collectionSS = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+              const collectionKS = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+
+              deleteFirestoreCollection(collectionSS).then(function(){
+                if(rowCountSS > 1 && checkValAllInputColName(allInputColSS)){
+                  allTrRowSS.each(function(){
+                    var getIdxColRowSS = $(this);
+                    var idxColomnRowSS = parseInt(getIdxColRowSS.attr("colomnrow"));
+                    var valInputNameSS = "";
+                    if(idxColomnRowSS == 1){
+                      valInputNameSS = getIdxColRowSS.find("#input_nama_row_"+idxColomnRowSS).html();
+                    }else{
+                      valInputNameSS  = getIdxColRowSS.find("input#input_nama_row_"+idxColomnRowSS).val();
+                    }
+                    if($.trim(valInputNameSS) != ''){
+                      collectionSS.add({
+                        "id" : '-',
+                        "posisi" : idxColomnRowSS,
+                        "nama_kolom" : valInputNameSS,
+                        "createBy" : getDataUserLogin.email,
+                        "createDate" : firebase.firestore.Timestamp.fromDate(new Date()),
+                      }).then((doc)=>{
+                        collectionSS.doc(doc.id).update({
+                          "id": doc.id,
+                        });
+                      });
+                    }
+                  });
+                }else{
+                  tbody_SS.empty();
+                  var setDefaultTableSS = generateDefaultRowTable("table_column_sekolah_sabat");
+                  $.each(setDefaultTableSS, function(index, element) {
+                    tbody_SS.append(element);
+                  });
+                }
+
+                deleteFirestoreCollection(collectionKS).then(function(){
+                  if(rowCountKS > 1 && checkValAllInputColName(allInputColSK)){
+                    allTrRowKS.each(function(){
+                      var getIdxColRowKS = $(this);
+                      var idxColomnRowKS = parseInt(getIdxColRowKS.attr("colomnrow"));
+                      var valInputNameKS = "";
+                      if(idxColomnRowKS == 1){
+                        valInputNameKS = getIdxColRowKS.find("#input_nama_row_"+idxColomnRowKS).html();
+                      }else{
+                        valInputNameKS  = getIdxColRowKS.find("input#input_nama_row_"+idxColomnRowKS).val();
+                      }
+                      if($.trim(valInputNameKS) != ''){
+                        collectionKS.add({
+                          "id" : '-',
+                          "posisi" : idxColomnRowKS,
+                          "nama_kolom" : valInputNameKS,
+                          "createBy" : getDataUserLogin.email,
+                          "createDate" : firebase.firestore.Timestamp.fromDate(new Date()),
+                        }).then((doc)=>{
+                          collectionKS.doc(doc.id).update({
+                            "id": doc.id,
+                          });
+                        });
+                      }
+                    });
+                  }else{
+                    tbody_KS.empty();
+                    var setDefaultTableKS = generateDefaultRowTable("table_column_Khotbah_sabat");
+                    $.each(setDefaultTableKS, function(index, element) {
+                      tbody_KS.append(element);
+                    });
+                  }
+
+                  setLoading.hideLoading();
+                  toastAction.showToastAlert(toastAlert, "Schadule", "success", 'Kolom kebaktian Sabtu Sabat berhasil dikukuhkan', "success");
+                  toastAction.hideToastAlert(toastAlert);
+                  eventInputPascode.val("");
+                  eventCheckbox.prop('checked', false);
+                });
+              });
+            }else{
+              alert(123);
+            }
+          }else{
+            setLoading.hideLoading();
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+        }else{
+          toastAction.showToastAlert(toastAlert, "Staff", "konfirmasi", 'Silahkan setujui kolom staff, sebagai tanda pengukuhan perubahan schadule', "info");
+          toastAction.hideToastAlert(toastAlert);
+        }
+      }catch(e){
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER002-ADD-AGT-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    }
+
+    async function saveChangeShcaduleRM(idTable, eventCheckbox, eventInputPascode){
+      try{
+        setLoading.showLoading();
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
+
+        var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).get();
+        var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+        if(eventCheckbox.prop('checked')){
+          if(eventInputPascode.val() == datagetCollKodeJemaat.passcode){
+            const table = $("#" + idTable).find("tbody");
+            const allTrRow = table.find('tr');
+            const allInputCol = table.find('tr input:text');
+            var rowCount = allTrRow.length;
+    
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+    
+            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
+            var getKolomJemaat = await docRefKolomJemaat.get();
+    
+            if(!getKolomJemaat.empty){
+              var kolomJemaatDoc = getKolomJemaat.docs[0];
+              var kolomJemaatRef = kolomJemaatDoc.ref;
+              const setCollection = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+
+              deleteFirestoreCollection(setCollection).then(function(){
+                if(rowCount > 1 && checkValAllInputColName(allInputCol)){
+                  allTrRow.each(function(){
+                    var getIdxColRow = $(this);
+                    var idxColomnRow = parseInt(getIdxColRow.attr("colomnrow"));
+                    var valInputName = "";
+                    if(idxColomnRow == 1){
+                      valInputName = getIdxColRow.find("#input_nama_row_"+idxColomnRow).html();
+                    }else{
+                      valInputName  = getIdxColRow.find("input#input_nama_row_"+idxColomnRow).val();
+                    }
+                    if($.trim(valInputName) != ''){
+                      setCollection.add({
+                        "id" : '-',
+                        "posisi" : idxColomnRow,
+                        "nama_kolom" : valInputName,
+                        "createBy" : getDataUserLogin.email,
+                        "createDate" : firebase.firestore.Timestamp.fromDate(new Date()),
+                      }).then((doc)=>{
+                        setCollection.doc(doc.id).update({
+                          "id": doc.id,
+                        });
+                      });
+                    }
+                  });
+                }else{
+                  tbody_RM.empty();
+                  var setDefaultTable = generateDefaultRowTable("table_column_rabu_malam");
+                  $.each(setDefaultTable, function(index, element) {
+                    tbody_RM.append(element);
+                  });
+                }
+                
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Schadule", "success", 'Kolom kebaktian Sabtu Sabat berhasil dikukuhkan', "success");
+                toastAction.hideToastAlert(toastAlert);
+                eventInputPascode.val("");
+                eventCheckbox.prop('checked', false);
+              });
+            }
+          }else{
+            setLoading.hideLoading();
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+        }else{
+          toastAction.showToastAlert(toastAlert, "Staff", "konfirmasi", 'Silahkan setujui kolom staff, sebagai tanda pengukuhan perubahan schadule', "info");
+          toastAction.hideToastAlert(toastAlert);
+        }
+      }catch(e){
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER002-ADD-AGT-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    }
+  
+    async function saveChangeShcaduleVM(idTable, eventCheckbox, eventInputPascode){
+      try{
+        setLoading.showLoading();
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
+
+        var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).get();
+        var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+        if(eventCheckbox.prop('checked')){
+          if(eventInputPascode.val() == datagetCollKodeJemaat.passcode){
+            const table = $("#" + idTable).find("tbody");
+            const allTrRow = table.find('tr');
+            const allInputCol = table.find('tr input:text');
+            var rowCount = allTrRow.length;
+    
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+    
+            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
+            var getKolomJemaat = await docRefKolomJemaat.get();
+    
+            if(!getKolomJemaat.empty){
+              var kolomJemaatDoc = getKolomJemaat.docs[0];
+              var kolomJemaatRef = kolomJemaatDoc.ref;
+              const setCollection = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+
+              deleteFirestoreCollection(setCollection).then(function(){
+                if(rowCount > 1 && checkValAllInputColName(allInputCol)){
+                  allTrRow.each(function(){
+                    var getIdxColRow = $(this);
+                    var idxColomnRow = parseInt(getIdxColRow.attr("colomnrow"));
+                    var valInputName = "";
+                    if(idxColomnRow == 1){
+                      valInputName = getIdxColRow.find("#input_nama_row_"+idxColomnRow).html();
+                    }else{
+                      valInputName  = getIdxColRow.find("input#input_nama_row_"+idxColomnRow).val();
+                    }
+                    if($.trim(valInputName) != ''){
+                      setCollection.add({
+                        "id" : '-',
+                        "posisi" : idxColomnRow,
+                        "nama_kolom" : valInputName,
+                        "createBy" : getDataUserLogin.email,
+                        "createDate" : firebase.firestore.Timestamp.fromDate(new Date()),
+                      }).then((doc)=>{
+                        setCollection.doc(doc.id).update({
+                          "id": doc.id,
+                        });
+                      });
+                    }
+                  });
+                }else{
+                  tbody_VM.empty();
+                  var setDefaultTable = generateDefaultRowTable("table_column_vesper_malam");
+                  $.each(setDefaultTable, function(index, element) {
+                    tbody_VM.append(element);
+                  });
+                }
+                
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Schadule", "success", 'Kolom kebaktian Sabtu Sabat berhasil dikukuhkan', "success");
+                toastAction.hideToastAlert(toastAlert);
+                eventInputPascode.val("");
+                eventCheckbox.prop('checked', false);
+              });
+            }
+          }else{
+            setLoading.hideLoading();
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+        }else{
+          toastAction.showToastAlert(toastAlert, "Staff", "konfirmasi", 'Silahkan setujui kolom staff, sebagai tanda pengukuhan perubahan schadule', "info");
+          toastAction.hideToastAlert(toastAlert);
+        }
+      }catch(e){
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER002-ADD-AGT-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    }
+  
+  </script>
+  <!-- Firebase Inizialize In Last -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    const firebaseConfig = generalSetting.firebaseConfig();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.settings({ timestampsInSnapshots: true });
+
+    var confirModal = $("#confirm_modal");
+    var btnConfirmYes = confirModal.find("#confirm_yes");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        redirect("auth/login.html");
+      } else {
+        var dataUserLogin = await loadAllData.dataUserLogin(user);
+        if(dataUserLogin.flag_active == "1"){
+          loadAllData.loadAllDataSchadule(dataUserLogin);
+        }else{
+          logOut(user, auth, signOut, onAuthStateChanged);
+        }
+      }
+    });
+
+    signOutClick.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+    logout_user_navbar.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+
+    btnConfirmYes.click(function (e) {
+      logOut(e, auth, signOut, onAuthStateChanged);
+    });
+
+    var loadAllData = {
+      dataUserLogin: async function dataUserLogin(user) {
+        var stringUid = user.uid;
+        var userById = db.collection(collectionsName.users).doc(stringUid);
+        var getUserById = await userById.get();
+        userIdLogin = stringUid;
+
+        var docRefJemaat = db.collection(collectionsName.kode_jemaat);
+
+        //Initialize components
+        var plainName = $(".plain_name");
+        var plainJemaat = $(".plain_jemaat");
+        var adminPannel = $("#admin_pannel_nav");
+        var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
+        var btnGerejaAdmin = $('<li class="menu-item">').append(
+          $('<a href="gereja.html" class="menu-link">')
+            .append($('<i class="menu-icon tf-icons bx bx-church">')).append($('<div data-i18n="Support">').text("Gereja"))
+        );
+        var btnUsrManagAdmin = $('<li class="menu-item">').append(
+          $('<a href="user_management.html" class="menu-link">')
+            .append($('<i class="menu-icon tf-icons bx bx-list-check">')).append($('<div data-i18n="Support">').text("User Management"))
+        );
+
+        var userData = getUserById.data();
+        if (userData.user_type.toLowerCase() == "admin") {
+          adminPannel.append(lblAdmin).append(btnGerejaAdmin).append(btnUsrManagAdmin);
+        } else {
+          adminPannel.remove();
+        }
+
+        plainName.each(function (index, element) {
+          $(element).html(userData.nama_lengkap);
+        });
+
+        var getJemaat = await docRefJemaat.doc(userData.kode_jemaat).get();
+        var jemaatData = getJemaat.data();
+        plainJemaat.each(function (index, element) {
+          $(element).html(jemaatData.nama);
+        });
+        return userData;
+      },
+      loadAllDataSchadule : async function loadAllDataSchadule(dataUser){
+        const collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+        var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", dataUser.kode_jemaat);
+        
+        function generateRow(dataRow, table){
+          var posisi = parseInt(dataRow.posisi);
+
+          var newtrRow = $("<tr id='colomn_row_"+posisi+"' colomnrow='"+posisi+"' dataId='"+dataRow.id+"'>");
+          if(posisi == 1){
+            newtrRow.append($("<td>")
+              .append($("<i class='bx bxs-chevrons-up disabled-cursor'>"))
+              .append($("<i class='bx bxs-chevrons-down disabled-cursor'>"))
+            );
+          }else{
+            newtrRow.append($("<td>")
+              .append($("<a href='javascript:;' onclick=\"upPositionRow(event, '"+table+"')\">").append($("<i class='bx bxs-chevrons-up'>")))
+              .append($("<a href='javascript:;' onclick=\"downPositionRow(event, '"+table+"')\">").append($("<i class='bx bxs-chevrons-down'>")))
+            );
+          }
+
+          newtrRow.append($("<td id='kolom_text_"+posisi+"' class='text-nowrap' data-colomn='"+posisi+"'>")
+            .text("Kolom-").append($("<span class='lable_nomor'>").text(posisi))
+          );
+
+          if(posisi == 1){
+            newtrRow.append($("<td class='text-nowrap'>")
+              .append($("<span id='input_nama_row_"+posisi+"'>").text(dataRow.nama_kolom))
+            );
+          }else{
+            newtrRow.append($("<td class='text-nowrap'>")
+              .append($("<input type='text' class='form-control' placeholder='masukkan nama kolom' id='input_nama_row_"+posisi+"' value='"+dataRow.nama_kolom+"' />"))
+            );
+          }
+          
+          if(posisi == 1){
+            newtrRow.append($("<td>")
+              .append($("<div class='d-flex justify-content-center'>")
+                .append($("<a href='javascript:;' class='text-secondary disabled-cursor'>").append($("<i class='bx bx-trash me-1'>")))
+              )
+            );
+          }else{
+            newtrRow.append($("<td>")
+              .append($("<div class='d-flex justify-content-center'>")
+                .append($("<a href='javascript:;' class='text-danger' onclick=\"actionDeleteRow(event, '"+table+"')\">")
+                  .append($("<i class='bx bx-trash me-1'>"))
+                )  
+              )
+            );
+          }
+
+          return newtrRow;
+        }
+        
+        try{
+          docRefKolomJemaat.onSnapshot(function (querySnapshot) {
+            if (querySnapshot.size > 0) {
+              try{
+                var doc_tb_kolom = querySnapshot.docs[0];
+                var data_tb_kolom = doc_tb_kolom.data();
+
+                var subcollSabtuSabat = doc_tb_kolom.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollSabtuSabat.onSnapshot(function (subcollectionSS) {
+                  if (subcollectionSS.size > 0) {
+                    tbody_SS.empty();
+                    subcollectionSS.forEach(function (subdocSS) {
+                      var subdataSS = subdocSS.data();
+                      var setRow = generateRow(subdataSS, "table_column_sekolah_sabat");
+                      tbody_SS.append(setRow);
+                    });
+                  }
+                });
+
+                var subcollKhotbahSabat = doc_tb_kolom.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollKhotbahSabat.onSnapshot(function (subcollectionKS) {
+                  if (subcollectionKS.size > 0) {
+                    tbody_KS.empty();
+                    subcollectionKS.forEach(function (subdocKS) {
+                      var subdataKS = subdocKS.data();
+                      var setRow = generateRow(subdataKS, "table_column_Khotbah_sabat");
+                      tbody_KS.append(setRow);
+                    });
+                  }
+                });
+                
+                var subcollRabuMalam = doc_tb_kolom.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                  if (subcollectionRM.size > 0) {
+                    tbody_RM.empty();
+                    subcollectionRM.forEach(function (subdocRM) {
+                      var subdataRM = subdocRM.data();
+                      var setRow = generateRow(subdataRM, "table_column_rabu_malam");
+                      tbody_RM.append(setRow);
+                    });
+                  }
+                });
+                
+                var subcollJumatVesper = doc_tb_kolom.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                  if (subcollectionJV.size > 0) {
+                    tbody_VM.empty();
+                    subcollectionJV.forEach(function (subdocJV) {
+                      var subdataJV = subdocJV.data();
+                      var setRow = generateRow(subdataJV, "table_column_vesper_malam");
+                      tbody_VM.append(setRow);
+                    });
+                  }
+                });
+              } catch (e) {
+                toastAction.showToastAlert(toastAlert, "Kolom Schadule", "", 'Something when wrong, Call admin with code "ERG125-TAB-SCH-CATCH"', "info");
+                toastAction.hideToastAlert(toastAlert);
+                console.error("Error table schadule: ", e);
+              }
+            }
+            
+            setLoading.hideLoading();
+          });
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "General Schadule", "", 'Something when wrong, Call admin with code "ERG025-GEN-SCH-CATCH"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error column table: ", e);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+    }
+
+    .content {
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .container .icon-loading {
+        width: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div style="text-align: center;">
+      <img class="icon-loading" src="assets/spin.gif" width="50px">
+    </div>
+  </div>
+
+  <script src="halpers/pubic_function.js"></script>
+  <!-- Firebase Inizialize In Last -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    const firebaseConfig = generalSetting.firebaseConfig();
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        redirect("pages/home.html");
+      } else {
+        redirect("pages/auth/login.html");
+      }
+    });
+  </script>
+</body>
+
+</html>

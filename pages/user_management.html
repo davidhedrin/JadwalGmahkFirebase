@@ -1,0 +1,1431 @@
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Anggota Jemaat</title>
+
+  <meta name="description" content="" />
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+  <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../assets/css/demo.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <link rel="stylesheet" href="../assets/bx-icon/css/boxicons.css" />
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+  <style>
+    .alertMsg {
+      position: fixed;
+      margin-top: 20px;
+      margin-right: 20px;
+      width: 320px;
+      top: 0;
+      right: 0;
+    }
+
+    .input-red {
+      border-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="stylesheet" href="../assets/css/loading.css">
+  <div class="loading">
+    <div>
+      <img src="../assets/spin.gif" width="50px">
+      <h5 style="padding-top: 10px;">loading</h5>
+    </div>
+  </div>
+
+  <div id="toast_alert" class="bs-toast toast fade alertMsg" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- show bg-info -->
+    <div class="toast-header">
+      <i class="bx bx-bell me-2"></i>
+      <div class="me-auto fw-semibold" id="title_toast"></div>
+      <small id="sub_title_toast"></small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="message_toast">
+    </div>
+  </div>
+
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="../index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                  <path
+                    d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                    id="path-1"></path>
+                  <path
+                    d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                    id="path-3"></path>
+                  <path
+                    d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                    id="path-4"></path>
+                  <path
+                    d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                    id="path-5"></path>
+                </defs>
+                <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                    <g id="Icon" transform="translate(27.000000, 15.000000)">
+                      <g id="Mask" transform="translate(0.000000, 8.000000)">
+                        <mask id="mask-2" fill="white">
+                          <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use fill="#696cff" xlink:href="#path-1"></use>
+                        <g id="Path-3" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-3"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3"></use>
+                        </g>
+                        <g id="Path-4" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-4"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4"></use>
+                        </g>
+                      </g>
+                      <g id="Triangle"
+                        transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                        <use fill="#696cff" xlink:href="#path-5"></use>
+                        <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5"></use>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="home.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="schadule.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-notepad'></i>
+              <div data-i18n="Analytics">Schadule</div>
+            </a>
+          </li>
+
+          <!-- Components -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+          <!-- Cards -->
+          <li class="menu-item">
+            <a href="anggota_jemaat.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-group'></i>
+              <div data-i18n="Basic">Anggota Jemaat</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="schadule_setting.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-copy"></i>
+              <div data-i18n="Extended UI">Schadule Setting</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Setting</span></li>
+          <li class="menu-item">
+            <a href="account_setting.html"
+              class="menu-link">
+              <i class='menu-icon tf-icons bx bx-user'></i>
+              <div data-i18n="Support">Account</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="javascript:void(0)" class="menu-link" id="signOutClick">
+              <i class='menu-icon tf-icons bx bx-log-out'></i>
+              <div data-i18n="Documentation">Logout</div>
+            </a>
+          </li>
+
+          <div id="admin_pannel_nav" class="menu-inner">
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Admin</span></li>
+            <li class="menu-item">
+              <a href="gereja.html" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-church'></i>
+                <div data-i18n="Support">Gereja</div>
+              </a>
+            </li>
+            <li class="menu-item active">
+              <a href="user_management.html" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-list-check'></i>
+                <div data-i18n="Support">User Management</div>
+              </a>
+            </li>
+          </div>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <span class="text-muted fw-light">User Management/</span> Daftar User
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block plain_name">John Doe</span>
+                          <small class="text-muted plain_jemaat">...</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account_setting.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="schadule.html">
+                      <i class='bx bx-notepad me-2'></i>
+                      <span class="align-middle">Schadule</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" id="logout_user_navbar">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card">
+              <div class="card-header pb-1 d-flex justify-content-between">
+                <div>
+                  Daftar User
+                </div>
+                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                  data-bs-target="#modal_add_user">Tambah <i class='bx bx-plus'></i>
+                </button>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="table-responsive text-nowrap">
+                <table id="table_user_management" class="table table-hover">
+                  <thead>
+                    <tr class="text-nowrap">
+                      <th>UID</th>
+                      <th>Nama Lengkap</th>
+                      <th>Email</th>
+                      <th>Jemaat</th>
+                      <th>Tipe</th>
+                      <th class="text-center">Status</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="7" class="text-center" style="font-style: italic;">Data kosong atau tidak ditemukan
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div class="card-header pb-1 d-flex justify-content-between">
+                <div class="text-warning">
+                  Panding User
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="table-responsive text-nowrap">
+                <table id="table_user_panding" class="table table-hover">
+                  <thead>
+                    <tr class="text-nowrap">
+                      <th>Email</th>
+                      <th>Jemaat</th>
+                      <th>Tipe</th>
+                      <th class="text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="5" class="text-center" style="font-style: italic;">Data kosong atau tidak ditemukan
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-start py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © 2023,
+                <!-- <script>
+                  document.write(new Date().getFullYear());
+                </script> -->
+                made by
+                <a href="https://davidhedrin.github.io/david-port/" target="_blank" class="footer-link fw-bolder">David
+                  Simbolon</a>
+              </div>
+              <!-- <div>
+                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
+                  Themes</a>
+              </div> -->
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <div class="modal fade" id="modal_add_user" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Tambah User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formAddNewUser">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" class="form-control" placeholder="Masukkan email user"
+                  onchange="onChangeCheck(event)">
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="user_type" class="form-label">Tipe User</label>
+                <select class="form-select" id="user_type" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih Tipe</option>
+                  <option value="USER">User</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="select_jemaat" class="form-label">Jemaat</label>
+                <select class="form-select" id="select_jemaat" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih jemaat</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-end mt-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Batal
+              </button>
+              <button id="btn_tambahkan_user" type="button" class="btn btn-primary">
+                Tambahkan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal_edit_user_panding" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Panding User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formAddEditPandingUser">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-12 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" class="form-control" placeholder="Masukkan email user" readonly
+                  onchange="onChangeCheck(event)">
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="user_type" class="form-label">Tipe User</label>
+                <select class="form-select" id="user_type" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih Tipe</option>
+                  <option value="USER">User</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="select_jemaat" class="form-label">Jemaat</label>
+                <select class="form-select" id="select_jemaat" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih jemaat</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-end mt-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Batal
+              </button>
+              <button id="btn_save_panding_user" type="button" class="btn btn-primary">
+                Simpan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal_edit_user" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="formEditUserData">
+          <div class="modal-body">
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                ID: #<span id="edit_label_id_user"></span>
+              </div>
+              <div class="col-6">
+                Status: <span id="badge_status_edit_user" class="badge me-1"></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 mb-3">
+                <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                <input type="text" id="nama_lengkap" class="form-control" placeholder="Masukkan nama user"
+                  onkeyup="onChangeCheck(event)" />
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="user_type" class="form-label">Tipe User</label>
+                <select class="form-select" id="user_type" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih tipe user</option>
+                  <option value="USER">User</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="select_jemaat" class="form-label">Jemaat</label>
+                <select class="form-select" id="select_jemaat" aria-label="Default select example"
+                  onchange="onChangeCheck(event)">
+                  <option value="">Pilih jemaat</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" class="form-control" placeholder="Masukkan email user" readonly />
+              </div>
+              <div class="col-6 form-password-toggle">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control" name="password" placeholder="*********"
+                  aria-describedby="password" readonly />
+              </div>
+            </div>
+
+            <div class="text-end mt-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Batal
+              </button>
+              <button id="btn_simpan_user" type="button" class="btn btn-primary">
+                Simpan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_add_modal" tabindex="-1" style="display: none; z-index: 9999;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Tambah User
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Apakah informasi data user sudah sesuai?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_add">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_edit_modal" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Update User
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Apakah perubahan data user sudah sesuai?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_edit">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="confirm_edit_panding_modal" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Panding User
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Apakah perubahan data user sudah sesuai?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_edit_panding">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_modal" tabindex="-1" style="display: none; z-index: 9999;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Logout
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin keluar dari aplikasi?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_delete_modal" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Delete
+            <i class='bx bx-trash'></i>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin menghapus user ini?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_delete">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="confirm_delete_panding_modal" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Delete
+            <i class='bx bx-trash'></i>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin menghapus user ini?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_delete_panding">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="../assets/vendor/js/menu.js"></script>
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/dashboards-analytics.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script src="../halpers/pubic_function.js"></script>
+  <script src="../halpers/collections.js"></script>
+
+  <script>
+    var toastAlert = $("#toast_alert");
+    var tableUser = $("#table_user_management");
+    var tbodyUser = tableUser.find("tbody");
+
+    var tablePandingUser = $("#table_user_panding");
+    var tbodyPandingUser = tablePandingUser.find("tbody");
+
+    var modalEditUser = $("#modal_edit_user");
+    var formEditUser = modalEditUser.find("#formEditUserData");
+    var modalConfirmEdit = $("#confirm_edit_modal");
+
+    var modalAddUser = $("#modal_add_user");
+    var formAddUser = modalAddUser.find("#formAddNewUser");
+    var modalConfirmAdd = $("#confirm_add_modal");
+
+    var modalEditPandingUser = $("#modal_edit_user_panding");
+    var formEditPandingUser = modalEditPandingUser.find("#formAddEditPandingUser");
+    var modalConfirmEditPanding = $("#confirm_edit_panding_modal");
+
+    var setLoading = {
+      showLoading: function showLoading() {
+        $(".loading").attr("hidden", false);
+        $(".layout-navbar").css("z-index", 0);
+        $(".navbar").css("z-index", 0);
+      },
+      hideLoading: function hideLoading() {
+        $(".loading").attr("hidden", true);
+        $(".layout-navbar").css("z-index", "2");
+        $(".navbar").css("z-index", "2");
+      }
+    }
+
+    var setTableData = {
+      generateTableGereja: async function generateTableGereja(data) {
+        const db = firebase.firestore();
+        const docRefJemaat = db.collection(collectionsName.kode_jemaat);
+        var getUserJemaat = await docRefJemaat.doc(data.kode_jemaat).get();
+        var getDataJemaat = getUserJemaat.data();
+
+        var newRow = $("<tr id='" + data.id + "'>");
+        newRow.append($("<td id='uid_" + data.id + "'>").text(data.id));
+        newRow.append($("<td id='nama_" + data.id + "'>").text(data.nama_lengkap));
+        newRow.append($("<td id='email_" + data.id + "'>").text(data.email));
+        newRow.append($("<td> id='jemaat_" + data.id + "'").text(getDataJemaat.nama));
+        newRow.append($("<td> id='user_tipe_" + data.id + "'").text(data.user_type));
+        var setBadge = data.flag_active == "1" ? "success" : "warning";
+        var setStatus = data.flag_active == "1" ? "Active" : "InActive";
+        var setStatusAction = `
+            <a href="javascript:void(0)" onclick="activeInactiveStatus(event)">
+              <span class="badge bg-label-`+ setBadge + ` me-1">` + setStatus + `</span>
+            </a>
+          `;
+        newRow.append($("<td id='status_" + data.id + "' status='" + data.flag_active + "' class='text-center'>").append(setStatusAction));
+
+        var setActionClass = `
+            <div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openModalEdit(event)">
+                  <i class="bx bx-edit-alt me-1"></i>
+                  Edit
+                </a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="deleteUser('`+ data.id + `')">
+                  <i class="bx bx-trash me-1"></i>
+                  Delete
+                </a>
+              </div>
+            </div>
+          `;
+        newRow.append($("<td id='action_" + data.id + "' class='text-center row_action'>").append(setActionClass));
+        tbodyUser.append(newRow);
+      },
+      generateTablePanding: async function generateTablePanding(data) {
+        const db = firebase.firestore();
+        const docRefJemaat = db.collection(collectionsName.kode_jemaat);
+        var getUserJemaat = await docRefJemaat.doc(data.kode_jemaat).get();
+        var getDataJemaat = getUserJemaat.data();
+
+        var newRow = $("<tr id='" + data.email + "'>");
+        newRow.append($("<td id='email_" + data.email + "'>").text(data.email));
+        newRow.append($("<td> id='jemaat_" + data.email + "'").text(getDataJemaat.nama));
+        newRow.append($("<td> id='user_tipe_" + data.email + "'").text(data.user_type));
+        var setActionClass = `
+            <div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-dots-vertical-rounded"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:void(0);" onclick="openModalEditPanding(event)">
+                  <i class="bx bx-edit-alt me-1"></i>
+                  Edit
+                </a>
+                <a class="dropdown-item" href="javascript:void(0);" onclick="deleteUserPanding('`+ data.email + `')">
+                  <i class="bx bx-trash me-1"></i>
+                  Delete
+                </a>
+              </div>
+            </div>
+          `;
+        newRow.append($("<td id='action_" + data.email + "' class='text-center row_action'>").append(setActionClass));
+        tbodyPandingUser.append(newRow);
+      }
+    }
+
+    modalAddUser.on("show.bs.modal", function(){
+      resetFormAdd();
+    });
+
+    function activeInactiveStatus(event) {
+      setLoading.showLoading();
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      if (target.length) {
+        var rowId = target.attr("id");
+        var columnStatus = target.find("#status_" + rowId).attr("status");
+
+        const db = firebase.firestore();
+        const docRefrensi = db.collection(collectionsName.users);
+        docRefrensi.doc(rowId).update({
+          "flag_active": columnStatus == "1" ? "2" : "1",
+        }).then(() => {
+          setLoading.hideLoading();
+          var statusUpdated = columnStatus == "1" ? "NonAktifkan" : "Aktifkan";
+          toastAction.showToastAlert(toastAlert, "Status", "success", "Status user telah berhasil " + statusUpdated, "success");
+          toastAction.hideToastAlert(toastAlert);
+        });
+      }
+    }
+
+    function validasiInputUserFormAdd(validFor) {
+      var result = true;
+
+      let getForm;
+      if(validFor == 1){
+        getForm = formAddUser;
+      }else{
+        getForm = formEditPandingUser;
+      }
+
+      var selectType = getForm.find("#user_type");
+      var selectJemaat = getForm.find("#select_jemaat");
+      var inputEmail = getForm.find("#email");
+
+      var valueType = selectType.val();
+      var valueJemaat = selectJemaat.val();
+      var valueEmail = inputEmail.val();
+
+      var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var checkNullInput;
+      var subtitleNullInput;
+
+      if (!valueJemaat || valueJemaat.length === 0) {
+        selectJemaat.addClass('input-red');
+        checkNullInput = "Kode Jemaat";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueType || valueType.length === 0) {
+        selectType.addClass('input-red');
+        checkNullInput = "Tipe User";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueEmail || valueEmail.length === 0) {
+        inputEmail.addClass('input-red');
+        checkNullInput = "Email";
+        subtitleNullInput = "";
+        result = false;
+      } else {
+        if (!regex.test(valueEmail)) {
+          inputEmail.addClass('input-red');
+          checkNullInput = "Email";
+          subtitleNullInput = "Email Invalid"
+          result = false;
+        }
+      }
+
+      if (!result) {
+        toastAction.showToastAlert(toastAlert, "Form Add", subtitleNullInput, "Mohon lengkapi data formulir bagian " + '"' + checkNullInput + '"', "info");
+        toastAction.hideToastAlert(toastAlert);
+      }
+
+      return result;
+    };
+
+    function validasiInputUserForm() {
+      var result = true;
+
+      var inputNama = formEditUser.find("#nama_lengkap");
+      var selectType = formEditUser.find("#user_type");
+      var selectJemaat = formEditUser.find("#select_jemaat");
+      var inputEmail = formEditUser.find("#email");
+      var inputPassword = formEditUser.find("#password");
+
+      var valueNama = inputNama.val();
+      var valueType = selectType.val();
+      var valueJemaat = selectJemaat.val();
+      var valueEmail = inputEmail.val();
+      var valuePassword = inputPassword.val();
+
+      var checkNullInput;
+      var subtitleNullInput;
+
+      if (!valuePassword || valuePassword.length === 0) {
+        inputPassword.addClass('input-red');
+        checkNullInput = "Password";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueEmail || valueEmail.length === 0) {
+        inputEmail.addClass('input-red');
+        checkNullInput = "Email";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueJemaat || valueJemaat.length === 0) {
+        selectJemaat.addClass('input-red');
+        checkNullInput = "Kode Jemaat";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueType || valueType.length === 0) {
+        selectType.addClass('input-red');
+        checkNullInput = "Tipe User";
+        subtitleNullInput = "";
+        result = false;
+      }
+      if (!valueNama || valueNama.length === 0) {
+        inputNama.addClass('input-red');
+        checkNullInput = "Nama User";
+        subtitleNullInput = "";
+        result = false;
+      }
+
+      if (!result) {
+        toastAction.showToastAlert(toastAlert, "Form User", subtitleNullInput, "Mohon lengkapi data formulir bagian " + '"' + checkNullInput + '"', "info");
+        toastAction.hideToastAlert(toastAlert);
+      }
+
+      return result;
+    };
+
+    function onChangeCheck(event) {
+      var inputId = event.target;
+      var valueInput = inputId.value;
+
+      if (valueInput || valueInput.length > 0) {
+        inputId.classList.remove('input-red');
+      } else {
+        inputId.classList.add('input-red');
+      }
+    }
+
+    function resetFormAdd() {
+      var allInput = formAddUser.find("input");
+      var allSelect = formAddUser.find("select");
+      allInput.val('');
+      allSelect.val('');
+
+      allInput.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+      allSelect.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+    }
+
+    function resetFormEdit() {
+      var allInput = formEditUser.find("input");
+      var allSelect = formEditUser.find("select");
+
+      allInput.val('');
+      allSelect.val('');
+
+      allInput.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+      allSelect.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+    }
+
+    function resetFormEditPanding() {
+      var allInput = formEditPandingUser.find("input");
+      var allSelect = formEditPandingUser.find("select");
+
+      allInput.val('');
+      allSelect.val('');
+
+      allInput.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+      allSelect.each(function (index, element) {
+        $(element).removeClass("input-red");
+      });
+    }
+
+    function openModalEdit(event) {
+      resetFormEdit();
+      setLoading.showLoading();
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+
+      if (target.length) {
+        var rowId = target.attr("id");
+
+        const db = firebase.firestore();
+        var docRefrensi = db.collection(collectionsName.users).doc(rowId);
+        var getDocRefrensi = docRefrensi.get();
+
+        getDocRefrensi.then(function (doc) {
+          modalEditUser.modal("show");
+          var data = doc.data();
+
+          var inputNama = formEditUser.find("#nama_lengkap");
+          var selectTipe = formEditUser.find("#user_type");
+          var selectJemaat = formEditUser.find("#select_jemaat");
+          var inputEmail = formEditUser.find("#email");
+          var inputPassword = formEditUser.find("#password");
+          var labelIdEdit = formEditUser.find("#edit_label_id_user");
+          var badgeStatusEdit = formEditUser.find("#badge_status_edit_user");
+
+          inputNama.val(data.nama_lengkap);
+          selectTipe.val(data.user_type);
+          selectJemaat.val(data.kode_jemaat);
+          inputEmail.val(data.email);
+          inputPassword.val(data.password);
+          labelIdEdit.html(data.id);
+
+          if (data.flag_active == "1") {
+            badgeStatusEdit.html("Active");
+            badgeStatusEdit.addClass("bg-label-success");
+          } else {
+            badgeStatusEdit.html("InActive");
+            badgeStatusEdit.addClass("bg-label-warning");
+          }
+
+          setLoading.hideLoading();
+        });
+      } else {
+        setLoading.hideLoading();
+      }
+    }
+
+    formEditUser.find("#btn_simpan_user").click(function (e) {
+      e.preventDefault();
+      if (validasiInputUserForm()) {
+        modalConfirmEdit.modal("show");
+      }
+    });
+
+    modalConfirmEdit.find("#confirm_yes_edit").click(function (e) {
+      e.preventDefault();
+      modalConfirmEdit.modal("hide");
+      modalEditUser.modal("hide");
+      setLoading.showLoading();
+
+      try {
+        var inputNama = formEditUser.find("#nama_lengkap");
+        var selectType = formEditUser.find("#user_type");
+        var selectJemaat = formEditUser.find("#select_jemaat");
+
+        var valueNama = inputNama.val();
+        var valueType = selectType.val();
+        var valueJemaat = selectJemaat.val();
+
+        var idUser = formEditUser.find("#edit_label_id_user").html();
+        const db = firebase.firestore();
+        var docRefrensi = db.collection(collectionsName.users);
+        docRefrensi.doc(idUser).update({
+          "nama_lengkap": valueNama,
+          "user_type": valueType,
+          "kode_jemaat": valueJemaat,
+        }).then(() => {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Edit Form", "success", "Data user telah berhasil diperbaharui", "success");
+          toastAction.hideToastAlert(toastAlert);
+        });
+      } catch (e) {
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER033-EDIT-USER-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+
+    formAddUser.find("#btn_tambahkan_user").click(function (e) {
+      e.preventDefault();
+      if (validasiInputUserFormAdd(1)) {
+        modalConfirmAdd.modal("show");
+      }
+    });
+
+    modalConfirmAdd.find("#confirm_yes_add").click(function (e) {
+      e.preventDefault();
+      modalConfirmAdd.modal("hide");
+      modalAddUser.modal("hide");
+      setLoading.showLoading();
+
+      try {
+        var selectType = formAddUser.find("#user_type");
+        var selectJemaat = formAddUser.find("#select_jemaat");
+        var inputEmail = formAddUser.find("#email");
+
+        var valueType = selectType.val();
+        var valueJemaat = selectJemaat.val();
+        var valueEmail = inputEmail.val();
+
+        const db = firebase.firestore();
+        var docRefrensi = db.collection(collectionsName.panding_user);
+        docRefrensi.doc(valueEmail).set({
+          "user_type": valueType,
+          "kode_jemaat": valueJemaat,
+          "email": valueEmail,
+          "status": "2", // Status 2 default as panding
+        }).then(() => {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Add Form", "success", "Data user telah berhasil ditambahkan", "success");
+          toastAction.hideToastAlert(toastAlert);
+        });
+      } catch (e) {
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER032-ADD-USER-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+
+    function openModalEditPanding(event) {
+      resetFormEditPanding();
+      setLoading.showLoading();
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+
+      if (target.length) {
+        var rowId = target.attr("id");
+
+        const db = firebase.firestore();
+        var docRefrensi = db.collection(collectionsName.panding_user).doc(rowId);
+        var getDocRefrensi = docRefrensi.get();
+
+
+        getDocRefrensi.then(function (doc) {
+          modalEditPandingUser.modal("show");
+          var data = doc.data();
+
+          var inputNama = formEditPandingUser.find("#nama_lengkap");
+          var selectType = formEditPandingUser.find("#user_type");
+          var selectJemaat = formEditPandingUser.find("#select_jemaat");
+          var inputEmail = formEditPandingUser.find("#email");
+
+          inputNama.val(data.nama_lengkap);
+          selectType.val(data.user_type);
+          selectJemaat.val(data.kode_jemaat);
+          inputEmail.val(data.email);
+
+          setLoading.hideLoading();
+        });
+      } else {
+        setLoading.hideLoading();
+      }
+    }
+
+    formEditPandingUser.find("#btn_save_panding_user").click(function (e) {
+      e.preventDefault();
+      if (validasiInputUserFormAdd(2)) {
+        modalConfirmEditPanding.modal("show");
+      }
+    });
+    
+    modalConfirmEditPanding.find("#confirm_yes_edit_panding").click(function (e) {
+      e.preventDefault();
+      modalConfirmEditPanding.modal("hide");
+      modalEditPandingUser.modal("hide");
+      setLoading.showLoading();
+
+      try {
+        var selectType = formEditPandingUser.find("#user_type");
+        var selectJemaat = formEditPandingUser.find("#select_jemaat");
+        var inputEmail = formEditPandingUser.find("#email");
+  
+        var valueType = selectType.val();
+        var valueJemaat = selectJemaat.val();
+        var valueEmail = inputEmail.val();
+
+        const db = firebase.firestore();
+        var docRefrensi = db.collection(collectionsName.panding_user);
+        docRefrensi.doc(valueEmail).update({
+          "user_type": valueType,
+          "kode_jemaat": valueJemaat,
+        }).then(() => {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Edit Form", "success", "Data user telah berhasil diperbaharui", "success");
+          toastAction.hideToastAlert(toastAlert);
+        });
+      } catch (e) {
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER544-EDIT-USER-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+
+    var confModalDelete = $('#confirm_delete_modal');
+    var btnYesDelete = confModalDelete.find("#confirm_yes_delete");
+    var idDeleteUser = "";
+    function deleteUser(id) {
+      idDeleteUser = id;
+      confModalDelete.modal("show");
+    }
+    confModalDelete.on('hide.bs.modal', function () {
+      idDeleteUser = "";
+    });
+    btnYesDelete.click(function () {
+      var id = idDeleteUser;
+      confModalDelete.modal("hide");
+      setLoading.showLoading();
+      if (deleteDocumentById(id, collectionsName.users)) {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Table", "delete", "Data user telah berhasil dihapus", "info");
+        toastAction.hideToastAlert(toastAlert);
+      } else {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Table", "opss...", "Data user gagal untuk dihapus, hubungi admin!", "warning");
+        toastAction.hideToastAlert(toastAlert);
+      }
+    });
+  
+    var confPandingDelete = $('#confirm_delete_panding_modal');
+    var btnYesDeletePanding = confPandingDelete.find("#confirm_yes_delete_panding");
+    var idDeletePandingUser = "";
+    function deleteUserPanding(id) {
+      idDeletePandingUser = id;
+      confPandingDelete.modal("show");
+    }
+    confPandingDelete.on('hide.bs.modal', function () {
+      idDeletePandingUser = "";
+    });
+    btnYesDeletePanding.click(function () {
+      var id = idDeletePandingUser;
+      confPandingDelete.modal("hide");
+      setLoading.showLoading();
+      if (deleteDocumentById(id, collectionsName.panding_user)) {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Table", "delete", "Data user telah berhasil dihapus", "info");
+        toastAction.hideToastAlert(toastAlert);
+      } else {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Table", "opss...", "Data user gagal untuk dihapus, hubungi admin!", "warning");
+        toastAction.hideToastAlert(toastAlert);
+      }
+    });
+  
+  </script>
+  <!-- Firebase Inizialize In Last -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    const firebaseConfig = generalSetting.firebaseConfig();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    var newauth = getAuth();
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.settings({ timestampsInSnapshots: true });
+
+    var confirModal = $("#confirm_modal");
+    var btnConfirmYes = confirModal.find("#confirm_yes");
+
+    onAuthStateChanged(auth, async function (user) {
+      if (!user) {
+        redirect("auth/login.html");
+      } else {
+        var getUser = loadAllData.dataUserLogin(user);
+        getUser.then(function (doc) {
+          try {
+            var userData = doc.data();
+            if (userData.user_type.toLowerCase() == "admin") {
+              loadAllData.loadAllDataUser();
+              loadAllData.loadAllDataPanding();
+            }
+          }
+          catch (e) {
+            console.log(e);
+          }
+        });
+      }
+    });
+
+    signOutClick.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+    logout_user_navbar.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+
+    btnConfirmYes.click(function (e) {
+      logOut(e, auth, signOut, onAuthStateChanged);
+    });
+
+    const docRefJemaat = db.collection(collectionsName.kode_jemaat);
+    const docRefAllUser = db.collection(collectionsName.users);
+    const docRefPandingUser = db.collection(collectionsName.panding_user).where("status", "==", "2");
+    var loadAllData = {
+      dataUserLogin: function dataUserLogin(user) {
+        var stringUid = user.uid;
+        var userById = db.collection(collectionsName.users).doc(stringUid);
+        var getUserById = userById.get();
+
+        //Initialize components
+        var plainName = $(".plain_name");
+        var plainJemaat = $(".plain_jemaat");
+        var adminPannel = $("#admin_pannel_nav");
+        var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
+        var btnGerejaAdmin = $('<li class="menu-item">').append(
+          $('<a href="gereja.html" class="menu-link">')
+            .append($('<i class="menu-icon tf-icons bx bx-church">')).append($('<div data-i18n="Support">').text("Gereja"))
+        );
+        var btnUsrManagAdmin = $('<li class="menu-item active">').append(
+          $('<a href="user_management.html" class="menu-link">')
+            .append($('<i class="menu-icon tf-icons bx bx-list-check">')).append($('<div data-i18n="Support">').text("User Management"))
+        );
+
+        getUserById.then(function (doc) {
+          try {
+            var userData = doc.data();
+            if (userData.user_type.toLowerCase() == "user") {
+              adminPannel.remove();
+              redirect("home.html");
+            }
+
+            plainName.each(function (index, element) {
+              try {
+                $(element).html(userData.nama_lengkap);
+              } catch (e) {
+                console.log(e);
+              }
+            });
+
+            var getJemaat = docRefJemaat.doc(userData.kode_jemaat).get();
+            getJemaat.then(function (doc) {
+              try {
+                var jemaatData = doc.data();
+                plainJemaat.each(function (index, element) {
+                  $(element).html(jemaatData.nama);
+                });
+              } catch (e) {
+                console.log(e);
+              }
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        });
+
+        var selectOptAddJemaat = formAddUser.find("#select_jemaat");
+        var selectOptEditJemaat = formEditUser.find("#select_jemaat");
+        var selectOptPandingJemaat = formEditPandingUser.find("#select_jemaat");
+        docRefJemaat.onSnapshot(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            var data = doc.data();
+            selectOptEditJemaat.append($('<option>', {
+              value: data.id,
+              text: data.nama,
+            }));
+            selectOptAddJemaat.append($('<option>', {
+              value: data.id,
+              text: data.nama,
+            }));
+            selectOptPandingJemaat.append($('<option>', {
+              value: data.id,
+              text: data.nama,
+            }));
+          });
+        });
+
+        return getUserById;
+      },
+      loadAllDataUser: function loadAllDataUser() {
+        docRefAllUser.onSnapshot(function (querySnapshot) {
+          if (querySnapshot.size > 0) {
+            tbodyUser.empty();
+            try {
+              querySnapshot.forEach(function (doc) {
+                try {
+                  var data = doc.data();
+
+                  setTableData.generateTableGereja(data);
+                } catch (e) {
+                  console.log(e);
+                }
+              });
+
+              setLoading.hideLoading();
+            }
+            catch (e) {
+              setLoading.hideLoading();
+              console.log(e);
+            }
+          }
+        });
+      },
+      loadAllDataPanding: function loadAllDataPanding() {
+        docRefPandingUser.onSnapshot((querySnapshot) => {
+          if (querySnapshot.size > 0) {
+            tbodyPandingUser.empty();
+            try {
+              querySnapshot.forEach(function (doc) {
+                try {
+                  var data = doc.data();
+
+                  setTableData.generateTablePanding(data);
+                } catch (e) {
+                  console.log(e);
+                }
+              });
+
+              setLoading.hideLoading();
+            }
+            catch (e) {
+              setLoading.hideLoading();
+              console.log(e);
+            }
+          }
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

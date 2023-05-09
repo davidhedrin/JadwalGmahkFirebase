@@ -1,0 +1,912 @@
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Schadule View</title>
+
+  <meta name="description" content="" />
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+  <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../assets/css/demo.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <link rel="stylesheet" href="../assets/bx-icon/css/boxicons.css" />
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script> -->
+
+  <style>
+    .disabled-cursor:hover {
+      cursor: not-allowed;
+    }
+
+    .alertMsg {
+      position: fixed;
+      margin-top: 20px;
+      margin-right: 20px;
+      width: 320px;
+      top: 0;
+      right: 0;
+    }
+
+    .input-red {
+      border-color: red;
+    }
+
+    .containerz {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content-padding {
+      padding-right: 3rem !important;
+      padding-left: 3rem !important;
+    }
+
+    .marquee-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25px;
+      background-color: rgba(51, 51, 51, 0.5);
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    @media only screen and (max-width: 800px) {
+      .content-padding {
+        padding-right: 1.5rem !important;
+        padding-left: 1.5rem !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="stylesheet" href="../assets/css/loading.css">
+  <div class="loading">
+    <div>
+      <img src="../assets/spin.gif" width="50px">
+      <h5 style="padding-top: 10px;">loading</h5>
+    </div>
+  </div>
+
+  <div id="toast_alert" class="bs-toast toast fade alertMsg" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- show bg-info -->
+    <div class="toast-header">
+      <i class="bx bx-bell me-2"></i>
+      <div class="me-auto fw-semibold" id="title_toast"></div>
+      <small id="sub_title_toast"></small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="message_toast">
+    </div>
+  </div>
+
+  <div class="marquee-container">
+    <marquee direction="" scrollamount="5" style="color: white; font-style: italic;">*klik baris jadwal untuk melihat jelas | Selamat datang di Sneat, manage perbaktian dengan baik dan mudah</marquee>
+  </div>
+
+  <!-- Layout wrapper -->
+  <div class="py-3 content-padding">
+    <div class="app-brand justify-content-center">
+      <div class="app-brand-link gap-2">
+        <span class="app-brand-logo demo">
+          <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <path
+                d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                id="path-1"></path>
+              <path
+                d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                id="path-3"></path>
+              <path
+                d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                id="path-4"></path>
+              <path
+                d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                id="path-5"></path>
+            </defs>
+            <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                <g id="Icon" transform="translate(27.000000, 15.000000)">
+                  <g id="Mask" transform="translate(0.000000, 8.000000)">
+                    <mask id="mask-2" fill="white">
+                      <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use fill="#696cff" xlink:href="#path-1"></use>
+                    <g id="Path-3" mask="url(#mask-2)">
+                      <use fill="#696cff" xlink:href="#path-3"></use>
+                      <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3">
+                      </use>
+                    </g>
+                    <g id="Path-4" mask="url(#mask-2)">
+                      <use fill="#696cff" xlink:href="#path-4"></use>
+                      <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4">
+                      </use>
+                    </g>
+                  </g>
+                  <g id="Triangle"
+                    transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                    <use fill="#696cff" xlink:href="#path-5"></use>
+                    <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5">
+                    </use>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </span>
+        <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+      </div>
+    </div>
+    <!-- /Logo -->
+    <h5 class="mb-1 mt-3 text-center">Hallo Jemaat <span class="plain_jemaat"></span> 🚀</h5>
+    <p class="mb-0 text-center">Schadule kebaktian-perbaktian jemaat</p>
+    <p class="mb-3 text-center"><strong id="text_bulan_tahun_schadule"></strong></p>
+
+    <div class="dropdown-divider"></div>
+    <div class="nav-align-top mt-2">
+      <ul class="nav nav-pills mb-3 mt-3 nav-fill" role="tablist">
+        <li class="nav-item">
+          <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+            data-bs-target="#navs-pills-justified-home" aria-controls="navs-pills-justified-home"
+            aria-selected="true"><i class='tf-icons bx bx-church'></i> Sabtu Sabat</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+            data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile"
+            aria-selected="false"><i class="tf-icons bx bx-message-square"></i> Rabu Malam</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+            data-bs-target="#navs-pills-justified-messages" aria-controls="navs-pills-justified-messages"
+            aria-selected="false"><i class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+          <h5 class="text-center">SEKOLAH SABAT</h5>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_sabtu_sabat" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">
+                  *jadwal kebaktian jemaat masih belum dimuat
+                </td>
+              </tbody>
+            </table>
+          </div>
+
+          <h5 class="text-center mt-3">KHOTBAH</h5>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_khotbah_sabat" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">
+                  *jadwal kebaktian jemaat masih belum dimuat
+                </td>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-end mt-2">
+            <button type="button" class="btn btn-primary btn-sm"
+              onclick="downloadTable([$('#table_shadule_sabtu_sabat'), $('#table_shadule_khotbah_sabat')])"
+            >Download <i class='bx bx-download'></i></button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+          <h5 class="text-center">RABU MALAM</h5>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_rabu_malam" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">
+                  *jadwal kebaktian jemaat masih belum dimuat
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-2">
+            <button type="button" class="btn btn-primary btn-sm" onclick="downloadTable([$('#table_shadule_rabu_malam')])">
+              Download <i class='bx bx-download'></i>
+            </button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+          <h5 class="text-center">JUMAT VESPER</h5>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_vesper_malam" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">
+                  *jadwal kebaktian jemaat masih belum dimuat
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-2">
+            <button type="button" class="btn btn-primary btn-sm" onclick="downloadTable([$('#table_shadule_vesper_malam')])">
+              Download <i class='bx bx-download'></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <div class="modal fade" id="modal_info_schadule" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <div class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+                <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <defs>
+                    <path
+                      d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                      id="path-1"></path>
+                    <path
+                      d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                      id="path-3"></path>
+                    <path
+                      d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                      id="path-4"></path>
+                    <path
+                      d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                      id="path-5"></path>
+                  </defs>
+                  <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                      <g id="Icon" transform="translate(27.000000, 15.000000)">
+                        <g id="Mask" transform="translate(0.000000, 8.000000)">
+                          <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                          </mask>
+                          <use fill="#696cff" xlink:href="#path-1"></use>
+                          <g id="Path-3" mask="url(#mask-2)">
+                            <use fill="#696cff" xlink:href="#path-3"></use>
+                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3">
+                            </use>
+                          </g>
+                          <g id="Path-4" mask="url(#mask-2)">
+                            <use fill="#696cff" xlink:href="#path-4"></use>
+                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4">
+                            </use>
+                          </g>
+                        </g>
+                        <g id="Triangle"
+                          transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                          <use fill="#696cff" xlink:href="#path-5"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5">
+                          </use>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+            </div>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center" id="modal_body_info">
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="modal-footer text-center">
+          <span style="font-style: italic;">note: *bila nama-nama partisipan diatas berhalangan, mohon hubungi gembala
+            jemaat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="../assets/vendor/js/menu.js"></script>
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/dashboards-analytics.js"></script>
+  <script src="../assets/js/tableExport.min.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script src="../halpers/pubic_function.js"></script>
+  <script src="../halpers/collections.js"></script>
+
+  <script>
+    let kodeSchadule;
+    $(document).ready(function () {
+      kodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+    });
+
+    var setLoading = {
+      showLoading: function showLoading() {
+        $(".loading").attr("hidden", false);
+        $(".layout-navbar").css("z-index", 0);
+        $(".navbar").css("z-index", 0);
+      },
+      hideLoading: function hideLoading() {
+        $(".loading").attr("hidden", true);
+        $(".layout-navbar").css("z-index", "2");
+        $(".navbar").css("z-index", "2");
+      }
+    }
+
+    let docKolomJemaat;
+    var modalSchaduelInfo = $("#modal_info_schadule");
+    var modalBodySchaduleInfo = modalSchaduelInfo.find("#modal_body_info");
+    async function showInfoSchadule(event, type) {
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      if (target.length) {
+        setLoading.showLoading();
+        var currentrowId = target.attr("id");
+        var setNewRow = $("<div>");
+        var setValueRow = [];
+
+        const dt = new Date();
+        var month = dt.getMonth() + 1;
+        var year = dt.getFullYear();
+        var curTriwulan = getCurrentTriwulan();
+        const db = firebase.firestore();
+        const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+        const docRefJemaatForModal = db.collection(collectionsName.kode_jemaat);
+        var getKodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+
+        var getDataJemaatForModal = await docRefJemaatForModal.doc(getKodeSchadule).get();
+        var dataJemaatForModal = getDataJemaatForModal.data();
+        var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getKodeSchadule)
+          .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+
+        if (type == "ss") {
+          var subcollSabtuSabat = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollSabtuSabat.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "ks") {
+          var subcollKhotbahSabat = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollKhotbahSabat.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "rm") {
+          var subcollRabuMalam = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollRabuMalam.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "vm") {
+          var subcollVvesperMalam = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollVvesperMalam.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+
+        checkJadewalFromCol.onSnapshot(function (getSnapshot) {
+          let checkJadewalFirst = getSnapshot.docs[0].ref;
+
+          if (type == "ss") {
+            var collSabtuSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+            collSabtuSabat.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Sekolah Sabat"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "ks") {
+            var collKhotbahSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            collKhotbahSabat.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Khotbah Sabat"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "rm") {
+            var collRabuMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+            collRabuMalam.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+  
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Rabu Malam"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "vm") {
+            var collJumatVesper = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+            collJumatVesper.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+  
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Jumat Vesper"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+          
+          setLoading.hideLoading();
+          modalBodySchaduleInfo.empty();
+          modalSchaduelInfo.modal("show");
+        });
+      }
+    }
+  
+    function downloadTable(tables) {
+      const dt = new Date();
+      var curTriwulan = getCurrentTriwulan();
+      var year = dt.getFullYear();
+      var text = "_triwulan"+curTriwulan+"_"+year;
+      tables.forEach((table) => {
+        table.tableExport({
+          type: 'excel',
+          fileName: table[0].id + text,
+        });
+      });
+    }
+  </script>
+  <!-- Firebase Inizialize In Last -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    const firebaseConfig = generalSetting.firebaseConfig();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.settings({ timestampsInSnapshots: true });
+
+    var tableSS = $("#table_shadule_sabtu_sabat");
+    var thead_SS = tableSS.find("thead");
+    var tbodyCurTableSS = tableSS.find("tbody");
+    var tableKS = $("#table_shadule_khotbah_sabat");
+    var thead_KS = tableKS.find("thead");
+    var tbodyCurTableKS = tableKS.find("tbody");
+    var tableRM = $("#table_shadule_rabu_malam");
+    var thead_RM = tableRM.find("thead");
+    var tbodyCurTableRM = tableRM.find("tbody");
+    var tableVM = $("#table_shadule_vesper_malam");
+    var thead_VM = tableVM.find("thead");
+    var tbodyCurTableVM = tableVM.find("tbody");
+
+    let lengthColumnSS;
+    let lengthColumnKS;
+    let lengthColumnRM;
+    let lengthColumnVM;
+    var months = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
+
+    var loadAllData = {
+      loadDataHeader: function loadDataHeader(data) {
+        try {
+          var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+          var docRefKolomJemaat = collRefKolomJemaat.doc(data.kode_jemaat);
+
+          docRefKolomJemaat.onSnapshot(function (querySnapshot) {
+            if (querySnapshot.exists) {
+              try {
+                var data_tb_kolom = querySnapshot.data();
+                docKolomJemaat = docRefKolomJemaat;
+
+                var subcollSabtuSabat = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollSabtuSabat.onSnapshot(async function (subcollectionSS) {
+                  if (subcollectionSS.size > 0) {
+                    thead_SS.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionSS.forEach(function (subdocSS) {
+                      var subdataSS = subdocSS.data();
+                      setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
+                    });
+                    thead_SS.append(setColumn);
+                    lengthColumnSS = parseInt(subcollectionSS.size);
+                  } else {
+                    thead_SS.empty();
+                  }
+                });
+
+                var subcollKhotbahSabat = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollKhotbahSabat.onSnapshot(async function (subcollectionKS) {
+                  if (subcollectionKS.size > 0) {
+                    thead_KS.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionKS.forEach(function (subdocKS) {
+                      var subdataKS = subdocKS.data();
+                      setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
+                    });
+                    thead_KS.append(setColumn);
+                    lengthColumnKS = parseInt(subcollectionKS.size);
+                  } else {
+                    thead_KS.empty();
+                  }
+                });
+
+                var subcollRabuMalam = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                  if (subcollectionRM.size > 0) {
+                    thead_RM.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionRM.forEach(function (subdocRM) {
+                      var subdataRM = subdocRM.data();
+                      setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
+                    });
+                    thead_RM.append(setColumn);
+                    lengthColumnRM = parseInt(subcollectionRM.size);
+                  } else {
+                    thead_RM.empty();
+                  }
+                });
+
+                var subcollJumatVesper = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                  if (subcollectionJV.size > 0) {
+                    thead_VM.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionJV.forEach(function (subdocJV) {
+                      var subdataJV = subdocJV.data();
+                      setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
+                    });
+                    thead_VM.append(setColumn);
+                    lengthColumnVM = parseInt(subcollectionJV.size);
+                  } else {
+                    thead_VM.empty();
+                  }
+                });
+              } catch (e) {
+                console.log("Error table schadule: ", e);
+              }
+
+            } else {
+              thead_SS.empty();
+
+              thead_KS.empty();
+
+              thead_RM.empty();
+
+              thead_VM.empty();
+            }
+          });
+        } catch (e) {
+          console.log("Error column table: ", e);
+        }
+      },
+      dataSchadule: async function dataSchadule() {
+        try {
+          const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+          const docRefKodeJemaat = db.collection(collectionsName.kode_jemaat);
+          const dt = new Date();
+          var month = dt.getMonth() + 1;
+          var year = dt.getFullYear();
+          var curTriwulan = getCurrentTriwulan();
+
+          var getKodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+          var checkJadewalFromCol = docRefJadwalJemaat.where("kode_jemaat", "==", getKodeSchadule)
+            .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+          var getcheckJadwalFormCol = await checkJadewalFromCol.get();
+
+          if (getcheckJadwalFormCol.docs.length > 0) {
+            var toGetKodeJemaat = getcheckJadwalFormCol.docs[0];
+            var tpGetKodeJemaatData = toGetKodeJemaat.data();
+            var currentMonth = months[tpGetKodeJemaatData.triwulan - 1];
+            $("#text_bulan_tahun_schadule").html(currentMonth + " " + tpGetKodeJemaatData.jadwal_date_y);
+
+            var awaitKodeJemaat = await docRefKodeJemaat.doc(tpGetKodeJemaatData.kode_jemaat).get();
+            var getDataKodeJemaat = awaitKodeJemaat.data();
+            $(".plain_jemaat").each(function (index, element) {
+              $(element).html(getDataKodeJemaat.nama);
+            });;
+
+            loadAllData.loadDataHeader(tpGetKodeJemaatData);
+
+            checkJadewalFromCol.onSnapshot(function (getSnapshot) {
+              let checkJadewalFirst = getSnapshot.docs[0].ref;
+              var collSabtuSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+              collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+                tbodyCurTableSS.empty();
+                var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnSS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                  .text("*jadwal kebaktian jemaat masih belum dimuat")
+                );
+                if (querySnapGetCol.size > 0) {
+                  var getDataDocs = querySnapGetCol.docs;
+                  var getRowAsc = getDataDocs.map(function (doc) {
+                    var docData = doc.data();
+                    docData["id"] = doc.id;
+                    return docData;
+                  }).sort(function (a, b) {
+                    return a.row - b.row;
+                  });
+                  getRowAsc.forEach(function (getCol) {
+                    var subdataCol = getCol;
+                    var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                      return a.posisi - b.posisi;
+                    });
+                    var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
+                    setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                    kolomNameAsc.forEach((getName) => {
+                      setColumnBody.append($("<td>").text(getName.nama));
+                    });
+                    tbodyCurTableSS.append(setColumnBody);
+                  });
+                } else {
+                  tbodyCurTableSS.append(createRowSettingNotif);
+                }
+              });
+
+              var collKhotbahSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat).orderBy("row", "asc");
+              collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+                tbodyCurTableKS.empty();
+                var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnKS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                  .text("*jadwal kebaktian jemaat masih belum dimuat")
+                );
+                if (querySnapGetCol.size > 0) {
+                  var getDataDocs = querySnapGetCol.docs;
+                  var getRowAsc = getDataDocs.map(function (doc) {
+                    var docData = doc.data();
+                    docData["id"] = doc.id;
+                    return docData;
+                  }).sort(function (a, b) {
+                    return a.row - b.row;
+                  });
+                  getRowAsc.forEach(function (getCol) {
+                    var subdataCol = getCol;
+                    var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                      return a.posisi - b.posisi;
+                    });
+                    var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "'  onclick=\"showInfoSchadule(event, 'ks')\">>");
+                    setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                    kolomNameAsc.forEach((getName) => {
+                      setColumnBody.append($("<td>").text(getName.nama));
+                    });
+                    tbodyCurTableKS.append(setColumnBody);
+                  });
+                } else {
+                  tbodyCurTableKS.append(createRowSettingNotif);
+                }
+              });
+
+              var collRabuMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam).orderBy("row", "asc");
+              collRabuMalam.onSnapshot(function (querySnapGetCol) {
+                tbodyCurTableRM.empty();
+                var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnRM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                  .text("*jadwal kebaktian jemaat masih belum dimuat")
+                );
+                if (querySnapGetCol.size > 0) {
+                  var getDataDocs = querySnapGetCol.docs;
+                  var getRowAsc = getDataDocs.map(function (doc) {
+                    var docData = doc.data();
+                    docData["id"] = doc.id;
+                    return docData;
+                  }).sort(function (a, b) {
+                    return a.row - b.row;
+                  });
+                  getRowAsc.forEach(function (getCol) {
+                    var subdataCol = getCol;
+                    var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                      return a.posisi - b.posisi;
+                    });
+                    var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">>");
+                    setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                    kolomNameAsc.forEach((getName) => {
+                      setColumnBody.append($("<td>").text(getName.nama));
+                    });
+                    tbodyCurTableRM.append(setColumnBody);
+                  });
+                } else {
+                  tbodyCurTableRM.append(createRowSettingNotif);
+                }
+              });
+
+              var collVesperMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper).orderBy("row", "asc");
+              collVesperMalam.onSnapshot(function (querySnapGetCol) {
+                tbodyCurTableVM.empty();
+                var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnVM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                  .text("*jadwal kebaktian jemaat masih belum dimuat")
+                );
+                if (querySnapGetCol.size > 0) {
+                  var getDataDocs = querySnapGetCol.docs;
+                  var getRowAsc = getDataDocs.map(function (doc) {
+                    var docData = doc.data();
+                    docData["id"] = doc.id;
+                    return docData;
+                  }).sort(function (a, b) {
+                    return a.row - b.row;
+                  });
+                  getRowAsc.forEach(function (getCol) {
+                    var subdataCol = getCol;
+                    var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                      return a.posisi - b.posisi;
+                    });
+                    var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">>");
+                    setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                    kolomNameAsc.forEach((getName) => {
+                      setColumnBody.append($("<td>").text(getName.nama));
+                    });
+                    tbodyCurTableVM.append(setColumnBody);
+                  });
+                } else {
+                  tbodyCurTableVM.append(createRowSettingNotif);
+                }
+              });
+
+              setLoading.hideLoading();
+            });
+          } else {
+            setLoading.hideLoading();
+          }
+        } catch (e) {
+          setLoading.hideLoading();
+          console.log("Error column table: ", e);
+        }
+      }
+    }
+
+    loadAllData.dataSchadule();
+  </script>
+</body>
+
+</html>

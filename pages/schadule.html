@@ -1,0 +1,2772 @@
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+  <title>Schadule</title>
+
+  <meta name="description" content="" />
+  <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+  <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../assets/css/demo.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+  <script src="../assets/vendor/js/helpers.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <link rel="stylesheet" href="../assets/bx-icon/css/boxicons.css" />
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-analytics.js"></script>
+
+  <style>
+    .disabled-cursor:hover {
+      cursor: not-allowed;
+    }
+
+    .alertMsg {
+      position: fixed;
+      margin-top: 20px;
+      margin-right: 20px;
+      width: 320px;
+      top: 0;
+      right: 0;
+    }
+
+    .input-red {
+      border-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="stylesheet" href="../assets/css/loading.css">
+  <div class="loading">
+    <div>
+      <img src="../assets/spin.gif" width="50px">
+      <h5 style="padding-top: 10px;">loading</h5>
+    </div>
+  </div>
+
+  <div id="toast_alert" class="bs-toast toast fade alertMsg" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- show bg-info -->
+    <div class="toast-header">
+      <i class="bx bx-bell me-2"></i>
+      <div class="me-auto fw-semibold" id="title_toast"></div>
+      <small id="sub_title_toast"></small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="message_toast">
+    </div>
+  </div>
+
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="../index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+                <defs>
+                  <path
+                    d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                    id="path-1"></path>
+                  <path
+                    d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                    id="path-3"></path>
+                  <path
+                    d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                    id="path-4"></path>
+                  <path
+                    d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                    id="path-5"></path>
+                </defs>
+                <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                    <g id="Icon" transform="translate(27.000000, 15.000000)">
+                      <g id="Mask" transform="translate(0.000000, 8.000000)">
+                        <mask id="mask-2" fill="white">
+                          <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use fill="#696cff" xlink:href="#path-1"></use>
+                        <g id="Path-3" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-3"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3"></use>
+                        </g>
+                        <g id="Path-4" mask="url(#mask-2)">
+                          <use fill="#696cff" xlink:href="#path-4"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4"></use>
+                        </g>
+                      </g>
+                      <g id="Triangle"
+                        transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                        <use fill="#696cff" xlink:href="#path-5"></use>
+                        <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5"></use>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item">
+            <a href="home.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+
+          <li class="menu-item active">
+            <a href="schadule.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-notepad'></i>
+              <div data-i18n="Analytics">Schadule</div>
+            </a>
+          </li>
+
+          <!-- Components -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+          <!-- Cards -->
+          <li class="menu-item">
+            <a href="anggota_jemaat.html" class="menu-link">
+              <i class='menu-icon tf-icons bx bx-group'></i>
+              <div data-i18n="Basic">Anggota Jemaat</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="schadule_setting.html" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-copy"></i>
+              <div data-i18n="Extended UI">Schadule Setting</div>
+            </a>
+          </li>
+
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Setting</span></li>
+          <li class="menu-item">
+            <a href="account_setting.html"
+              class="menu-link">
+              <i class='menu-icon tf-icons bx bx-user'></i>
+              <div data-i18n="Support">Account</div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a href="javascript:void(0)" class="menu-link" id="signOutClick">
+              <i class='menu-icon tf-icons bx bx-log-out'></i>
+              <div data-i18n="Documentation">Logout</div>
+            </a>
+          </li>
+
+          <div id="admin_pannel_nav" class="menu-inner">
+          </div>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <!-- Search -->
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <span class="text-muted fw-light">Schadule/</span> Jadwal Kebaktian
+              </div>
+            </div>
+            <!-- /Search -->
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block plain_name">John Doe</span>
+                          <small class="text-muted plain_jemaat">...</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="account_setting.html">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">My Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="schadule.html">
+                      <i class='bx bx-notepad me-2'></i>
+                      <span class="align-middle">Schadule</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0)" id="logout_user_navbar">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--/ User -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card mb-4">
+              <div class="px-3 py-3">
+                <div class="row">
+                  <div class="col-sm-12 d-flex justify-content-between">
+                    <div>
+                      Daftar Jadwal Kebaktian
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-success btn-sm" onclick="clickCopyLinkSchadule()">
+                        <span id="text_link_register">Link Schadule </span><i class='bx bx-copy-alt'></i>
+                      </button>
+                      <span class="px-1"></span>
+                      <div class="btn-group" role="group" id="group_drop_generate">
+                        <button id="btn_group_drop_generate" type="button"
+                          class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+                          aria-expanded="false">
+                          <span id="text_denerate_schadule">Generate </span><i class='bx bx-folder-plus'></i>
+                        </button>
+                        <div id="drop_item_btn_generate" class="dropdown-menu"
+                          aria-labelledby="btn_group_drop_generate">
+                          <a class="dropdown-item" href="javascript:void(0);"
+                            onclick="generateRandomSchadule(event, 'ss')" id="sabtu_sabat"><i
+                              class='tf-icons bx bx-church'></i> Sabtu Sabat</a>
+                          <a class="dropdown-item" href="javascript:void(0);"
+                            onclick="generateRandomSchadule(event, 'rm')" id="rabu_malam"><i
+                              class="tf-icons bx bx-message-square"></i> Rabu Malam</a>
+                          <a class="dropdown-item" href="javascript:void(0);"
+                            onclick="generateRandomSchadule(event, 'vm')" id="jumat_vesper"><i
+                              class='tf-icons bx bx-message-square-dots'></i> Jumat Vesper</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="nav-align-top mb-4">
+              <marquee direction="" scrollamount="5" style="font-style: italic;">*klik baris jadwal untuk melihat jelas</marquee>
+              <div class="tab-content">
+                <div class="pb-2 text-center mb-2">
+                  <span class="plain_jemaat"></span>
+                  <div>
+                    <strong class="plain_triwulan_date"></strong>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <!-- Navbar -->
+                <ul class="nav nav-pills mb-3 mt-3 nav-fill" role="tablist">
+                  <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-home" aria-controls="navs-pills-justified-home"
+                      aria-selected="true"><i class='tf-icons bx bx-church'></i> Sabtu Sabat</button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile"
+                      aria-selected="false"><i class="tf-icons bx bx-message-square"></i> Rabu Malam</button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-messages" aria-controls="navs-pills-justified-messages"
+                      aria-selected="false"><i class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
+                  </li>
+                </ul>
+                <!-- Tab 1 -->
+                <div class="tab-pane fade active show" id="navs-pills-justified-home" role="tabpanel">
+                  <div class="dropdown-divider"></div>
+                  <h5 class="text-center mt-4">SEKOLAH SABAT</h5>
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive text-nowrap">
+                    <table id="table_shadule_sabtu_sabat" class="table table-hover">
+                      <thead>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h5 class="text-center mt-3">KHOTBAH</h5>
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive text-nowrap">
+                    <table id="table_shadule_khotbah_sabat" class="table table-hover">
+                      <thead>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button type="button" class="btn btn-primary btn-sm"
+                      onclick="downloadTable([$('#table_shadule_sabtu_sabat'), $('#table_shadule_khotbah_sabat')])">Download
+                      <i class='bx bx-download'></i></button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="openModalEditSchadule('ss')">Edit <i
+                        class='bx bx-edit-alt'></i></button>
+                  </div>
+                </div>
+                <!-- Tab 2 -->
+                <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive text-nowrap">
+                    <table id="table_shadule_rabu_malam" class="table table-hover">
+                      <thead>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button type="button" class="btn btn-primary btn-sm"
+                      onclick="downloadTable([$('#table_shadule_rabu_malam')])">Download <i
+                        class='bx bx-download'></i></button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="openModalEditSchadule('rm')">Edit <i
+                        class='bx bx-edit-alt'></i></button>
+                  </div>
+                </div>
+                <!-- Tab 3 -->
+                <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive text-nowrap">
+                    <table id="table_shadule_vesper_malam" class="table table-hover">
+                      <thead>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button type="button" class="btn btn-primary btn-sm"
+                      onclick="downloadTable([$('#table_shadule_vesper_malam')])">Download <i
+                        class='bx bx-download'></i></button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="openModalEditSchadule('vm')">Edit <i
+                        class='bx bx-edit-alt'></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-start py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                © 2023,
+                <!-- <script>
+                  document.write(new Date().getFullYear());
+                </script> -->
+                made by
+                <a href="https://davidhedrin.github.io/david-port/" target="_blank" class="footer-link fw-bolder">David
+                  Simbolon</a>
+              </div>
+              <!-- <div>
+                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
+                  Themes</a>
+              </div> -->
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <div class="modal fade" id="modalGenerateSS" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Schadule </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center">SEKOLAH SABAT</h5>
+          <div class="dropdown-divider"></div>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_sabtu_sabat_modal" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+
+          <h5 class="text-center mt-4">KHOTBAH SABAT</h5>
+          <div class="dropdown-divider"></div>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_khotbah_sabat_modal" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn_save_change_ss">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalGenerateRM" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Schadule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center">RABU MALAM</h5>
+          <div class="dropdown-divider"></div>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_rabu_malam_modal" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn_save_change_rm">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalGenerateJV" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Schadule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h5 class="text-center">JUMAT VESPER</h5>
+          <div class="dropdown-divider"></div>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_jumat_vesper_modal" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn_save_change_vm">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modaEditSchadule" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Schadule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="bodyModal">
+
+        </div>
+        <div class="modal-footer" id="footerModal">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_modal" tabindex="-1" style="display: none; z-index: 9999;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Logout
+            <i class='bx bx-log-out'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Yakin ingin keluar dari aplikasi?</span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            No
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_submit_shadule_ss" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Simpan Schadule
+            <i class='bx bx-save'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan passcode jemaat</span>
+          <p>untuk mengukuhkaan jadwal Schadule</p>
+          <input type="password" class="form-control" placeholder="masukkan passcode" id="input_passcode"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_ss">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_submit_shadule_rm" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Simpan Schadule
+            <i class='bx bx-save'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan passcode jemaat</span>
+          <p>untuk mengukuhkaan jadwal Schadule</p>
+          <input type="password" class="form-control" placeholder="masukkan passcode" id="input_passcode"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_rm">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="confirm_submit_shadule_vm" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Simpan Schadule
+            <i class='bx bx-save'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan passcode jemaat</span>
+          <p>untuk mengukuhkaan jadwal Schadule</p>
+          <input type="password" class="form-control" placeholder="masukkan passcode" id="input_passcode"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_vm">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="confirm_submit_shadule_edit" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Edit Schadule
+            <i class='bx bx-save'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan passcode jemaat</span>
+          <p>untuk mengukuhkaan jadwal Schadule</p>
+          <input type="password" class="form-control" placeholder="masukkan passcode" id="input_passcode"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_edit">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal_info_schadule" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <div class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+                <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <defs>
+                    <path
+                      d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
+                      id="path-1"></path>
+                    <path
+                      d="M5.47320593,6.00457225 C4.05321814,8.216144 4.36334763,10.0722806 6.40359441,11.5729822 C8.61520715,12.571656 10.0999176,13.2171421 10.8577257,13.5094407 L15.5088241,14.433041 L18.6192054,7.984237 C15.5364148,3.11535317 13.9273018,0.573395879 13.7918663,0.358365126 C13.5790555,0.511491653 10.8061687,2.3935607 5.47320593,6.00457225 Z"
+                      id="path-3"></path>
+                    <path
+                      d="M7.50063644,21.2294429 L12.3234468,23.3159332 C14.1688022,24.7579751 14.397098,26.4880487 13.008334,28.506154 C11.6195701,30.5242593 10.3099883,31.790241 9.07958868,32.3040991 C5.78142938,33.4346997 4.13234973,34 4.13234973,34 C4.13234973,34 2.75489982,33.0538207 2.37032616e-14,31.1614621 C-0.55822714,27.8186216 -0.55822714,26.0572515 -4.05231404e-15,25.8773518 C0.83734071,25.6075023 2.77988457,22.8248993 3.3049379,22.52991 C3.65497346,22.3332504 5.05353963,21.8997614 7.50063644,21.2294429 Z"
+                      id="path-4"></path>
+                    <path
+                      d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
+                      id="path-5"></path>
+                  </defs>
+                  <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
+                      <g id="Icon" transform="translate(27.000000, 15.000000)">
+                        <g id="Mask" transform="translate(0.000000, 8.000000)">
+                          <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                          </mask>
+                          <use fill="#696cff" xlink:href="#path-1"></use>
+                          <g id="Path-3" mask="url(#mask-2)">
+                            <use fill="#696cff" xlink:href="#path-3"></use>
+                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3">
+                            </use>
+                          </g>
+                          <g id="Path-4" mask="url(#mask-2)">
+                            <use fill="#696cff" xlink:href="#path-4"></use>
+                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4">
+                            </use>
+                          </g>
+                        </g>
+                        <g id="Triangle"
+                          transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                          <use fill="#696cff" xlink:href="#path-5"></use>
+                          <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-5">
+                          </use>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+            </div>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center" id="modal_body_info">
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="modal-footer text-center">
+          <span style="font-style: italic;">note: *bila nama-nama partisipan diatas berhalangan, mohon hubungi gembala
+            jemaat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="../assets/vendor/libs/popper/popper.js"></script>
+  <script src="../assets/vendor/js/bootstrap.js"></script>
+  <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+  <script src="../assets/vendor/js/menu.js"></script>
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/dashboards-analytics.js"></script>
+  <script src="../assets/js/tableExport.min.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <script src="../halpers/pubic_function.js"></script>
+  <script src="../halpers/collections.js"></script>
+
+  <script>
+    let userIdLogin;
+    let currentKodeSchadule;
+    var groupDropGenerate = $("#group_drop_generate");
+    var textGenerateBtn = groupDropGenerate.find("#text_denerate_schadule");
+    var dropItemBtnGenerate = groupDropGenerate.find("#drop_item_btn_generate");
+    var dropItemSabtuSabat = dropItemBtnGenerate.find("#sabtu_sabat");
+    var dropItemRabuMalam = dropItemBtnGenerate.find("#rabu_malam");
+    var dropItemJumatVesper = dropItemBtnGenerate.find("#jumat_vesper");
+
+    var toastAlert = $("#toast_alert");
+
+    $(document).ready(function () {
+      resizePageFuntion();
+    });
+    $(window).on('resize', function () {
+      resizePageFuntion();
+    });
+    function resizePageFuntion() {
+      if ($(window).width() < 768) {
+        textGenerateBtn.html("");
+        $("#text_link_register").html("");
+      } else {
+        textGenerateBtn.html("Generate ");
+        $("#text_link_register").html("Link Schadule ");
+      }
+    }
+
+    var setLoading = {
+      showLoading: function showLoading() {
+        $(".loading").attr("hidden", false);
+        $(".layout-navbar").css("z-index", 0);
+        $(".navbar").css("z-index", 0);
+      },
+      hideLoading: function hideLoading() {
+        $(".loading").attr("hidden", true);
+        $(".layout-navbar").css("z-index", "2");
+        $(".navbar").css("z-index", "2");
+      }
+    }
+
+    var modalGenerateSS = $("#modalGenerateSS");
+    var modalGenerateRM = $("#modalGenerateRM");
+    var modalGenerateJV = $("#modalGenerateJV");
+    var tableModalGenerateSS = modalGenerateSS.find("#table_shadule_sabtu_sabat_modal");
+    var tableModalGenerateKS = modalGenerateSS.find("#table_shadule_khotbah_sabat_modal");
+    var tableModalGenerateRM = modalGenerateRM.find("#table_shadule_rabu_malam_modal");
+    var tableModalGenerateVM = modalGenerateJV.find("#table_shadule_jumat_vesper_modal");
+
+    let lengthColumnSS;
+    let lengthColumnKS;
+    let lengthColumnRM;
+    let lengthColumnVM;
+
+    async function generateRandomSchadule(event, type) {
+      var btn = $(event.target);
+      var thead_SS = tableModalGenerateSS.find("thead");
+      var thead_KS = tableModalGenerateKS.find("thead");
+      var thead_RM = tableModalGenerateRM.find("thead");
+      var thead_VM = tableModalGenerateVM.find("thead");
+
+      var tbody_SS = tableModalGenerateSS.find("tbody");
+      var tbody_KS = tableModalGenerateKS.find("tbody");
+      var tbody_RM = tableModalGenerateRM.find("tbody");
+      var tbody_VM = tableModalGenerateVM.find("tbody");
+
+      thead_SS.empty();
+      thead_KS.empty();
+      thead_RM.empty();
+      thead_VM.empty();
+
+      tbody_SS.empty();
+      tbody_KS.empty();
+      tbody_RM.empty();
+      tbody_VM.empty();
+
+      if (btn.attr('disabled')) {
+        event.preventDefault();
+        return false;
+      }
+      else {
+        if (type == "ss") {
+          modalGenerateSS.modal("show");
+          modalGenerateSS.css("z-index", "1");
+        }
+        if (type == "rm") {
+          modalGenerateRM.modal("show");
+          modalGenerateRM.css("z-index", "1");
+        }
+        if (type == "vm") {
+          modalGenerateJV.modal("show");
+          modalGenerateJV.css("z-index", "1");
+        }
+
+        setLoading.showLoading();
+
+        try {
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getKodeJemaat = getDataUserLogin.kode_jemaat;
+
+          var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+
+          collRefKolomJemaat.onSnapshot(function (querySnapshot) {
+            if (querySnapshot.exists) {
+              try {
+                var data_tb_kolom = querySnapshot.data();
+
+                if (type == "ss") {
+                  var subcollSabtuSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                  subcollSabtuSabat.onSnapshot(function (subcollectionSS) {
+                    if (subcollectionSS.size > 0) {
+                      var setColumn = $("<tr class='text-nowrap'>");
+                      subcollectionSS.forEach(function (subdocSS) {
+                        var subdataSS = subdocSS.data();
+                        setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
+                      });
+                      thead_SS.append(setColumn);
+                      lengthColumnSS = parseInt(subcollectionSS.size);
+                    }
+                  });
+
+                  var subcollKhotbahSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                  subcollKhotbahSabat.onSnapshot(function (subcollectionKS) {
+                    if (subcollectionKS.size > 0) {
+                      var setColumn = $("<tr class='text-nowrap'>");
+                      subcollectionKS.forEach(function (subdocKS) {
+                        var subdataKS = subdocKS.data();
+                        setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
+                      });
+                      thead_KS.append(setColumn);
+                      lengthColumnKS = parseInt(subcollectionKS.size);
+                    }
+                  });
+                }
+
+                if (type == "rm") {
+                  var subcollRabuMalam = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                  subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                    if (subcollectionRM.size > 0) {
+                      var setColumn = $("<tr class='text-nowrap'>");
+                      subcollectionRM.forEach(function (subdocRM) {
+                        var subdataRM = subdocRM.data();
+                        setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
+                      });
+                      thead_RM.append(setColumn);
+                      lengthColumnRM = parseInt(subcollectionRM.size);
+                    }
+                  });
+                }
+
+                if (type == "vm") {
+                  var subcollJumatVesper = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                  subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                    if (subcollectionJV.size > 0) {
+                      var setColumn = $("<tr class='text-nowrap'>");
+                      subcollectionJV.forEach(function (subdocJV) {
+                        var subdataJV = subdocJV.data();
+                        setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
+                      });
+                      thead_VM.append(setColumn);
+                      lengthColumnVM = parseInt(subcollectionJV.size);
+                    }
+                  });
+                }
+              } catch (e) {
+                toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
+                toastAction.hideToastAlert(toastAlert);
+                console.error("Error table schadule: ", e);
+              }
+            }
+          });
+
+          var docRefAnggotaJemaat = db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
+          var getAllAnggotaJemaat = await docRefAnggotaJemaat.get();
+          var allDocsAnggotaJemaat = getAllAnggotaJemaat.docs;
+          function getRandomName() {
+            var result = "";
+            try {
+              var getData = allDocsAnggotaJemaat[Math.floor(Math.random() * allDocsAnggotaJemaat.length)].data();
+              result = getData.nama;
+            } catch (e) {
+              result = "";
+            }
+            return result;
+          }
+
+          var currentDate = new Date();
+          var currentMonth = currentDate.getMonth();
+          var currentYear = currentDate.getFullYear();
+          var lastDayOfOneMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+          var monthsPerGroup = 3;
+          var totalGroups = 4;
+
+          if (type == "ss") {
+            let rowTr = 1;
+            for (var i = 0; i < totalGroups; i++) {
+              var startMonth = i * monthsPerGroup;
+              var endMonth = startMonth + monthsPerGroup - 1;
+
+              if (currentMonth >= startMonth && currentMonth <= endMonth) {
+                for (var j = startMonth; j <= endMonth; j++) {
+                  var firstDayOfMonth = new Date(currentYear, j, 1);
+                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                    var currentDate = new Date(currentYear, j, k);
+                    if (currentDate.getDay() === 6) {
+                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      
+                      var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
+                      trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
+                      for (var l = 1; l < lengthColumnSS; l++) {
+                        trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      }
+                      tbody_SS.append(trNewBodySS);
+      
+                      var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
+                      trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
+                      for (var m = 1; m < lengthColumnKS; m++) {
+                        trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      }
+                      tbody_KS.append(trNewBodyKS);
+                      rowTr++;
+                    }
+                  }
+                }
+                break;
+              }
+            }
+          }
+          if (type == "rm") {
+            let rowTr = 1;
+            for (var i = 0; i < totalGroups; i++) {
+              var startMonth = i * monthsPerGroup;
+              var endMonth = startMonth + monthsPerGroup - 1;
+
+              if (currentMonth >= startMonth && currentMonth <= endMonth) {
+                for (var j = startMonth; j <= endMonth; j++) {
+                  var firstDayOfMonth = new Date(currentYear, j, 1);
+                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                    var currentDate = new Date(currentYear, j, k);
+                    if (currentDate.getDay() === 3) {
+                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      
+                      var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
+                      trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
+                      for (var l = 1; l < lengthColumnRM; l++) {
+                        trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      }
+                      tbody_RM.append(trNewBodyRM);
+                      rowTr++;
+                    }
+                  }
+                }
+                break;
+              }
+            }
+          }
+          if (type == "vm") {
+            let rowTr = 1;
+            for (var i = 0; i < totalGroups; i++) {
+              var startMonth = i * monthsPerGroup;
+              var endMonth = startMonth + monthsPerGroup - 1;
+
+              if (currentMonth >= startMonth && currentMonth <= endMonth) {
+                for (var j = startMonth; j <= endMonth; j++) {
+                  var firstDayOfMonth = new Date(currentYear, j, 1);
+                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                    var currentDate = new Date(currentYear, j, k);
+                    if (currentDate.getDay() === 5) {
+                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      
+                      var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
+                      trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
+                      for (var l = 1; l < lengthColumnVM; l++) {
+                        trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      }
+                      tbody_VM.append(trNewBodyVM);
+                      rowTr++;
+                    }
+                  }
+                }
+                break;
+              }
+            }
+          }
+
+          setLoading.hideLoading();
+          if (type == "ss") modalGenerateSS.css("z-index", "");
+          if (type == "rm") modalGenerateRM.css("z-index", "");
+          if (type == "vm") modalGenerateJV.css("z-index", "");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG654-GEN-SCH-CATCH"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error column table: ", e);
+        }
+      }
+    }
+
+    var modalConfirmSubmitSS = $("#confirm_submit_shadule_ss");
+    var yesConfirmSubmitSS = modalConfirmSubmitSS.find("#confirm_yes_submit_shadule_ss");
+    var inputPascodeSS = modalConfirmSubmitSS.find("input#input_passcode");
+    modalGenerateSS.find("#btn_save_change_ss").click(function (e) {
+      var tbody_SS = tableModalGenerateSS.find("tbody");
+      var allTrTableSS = tbody_SS.find("tr");
+
+      var tbody_KS = tableModalGenerateKS.find("tbody");
+      var allTrTableKS = tbody_KS.find("tr");
+
+      var checkAllRowInput = true;
+      allTrTableSS.each(function (idx, element) {
+        if (!checkAllInputNameSchadule($(element))) {
+          checkAllRowInput = false;
+          return false;
+        }
+      });
+      allTrTableKS.each(function (idx, element) {
+        if (!checkAllInputNameSchadule($(element))) {
+          checkAllRowInput = false;
+          return false;
+        }
+      });
+
+      if (checkAllRowInput) {
+        inputPascodeRM.removeClass('input-red');
+        modalConfirmSubmitSS.modal("show");
+      } else {
+        toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+    yesConfirmSubmitSS.click(async function (e) {
+      if ($.trim(inputPascodeSS.val()) != "") {
+        try {
+          e.preventDefault();
+          modalGenerateSS.css("z-index", "1");
+          setLoading.showLoading();
+          modalConfirmSubmitSS.modal("hide");
+
+          var tbody_SS = tableModalGenerateSS.find("tbody");
+          var allTrTableSS = tbody_SS.find("tr");
+
+          var tbody_KS = tableModalGenerateKS.find("tbody");
+          var allTrTableKS = tbody_KS.find("tr");
+
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
+          var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+          function addToJadwalSS(collSabtuSabat, collKhotbahSabat) {
+            allTrTableSS.each(async function (idx, element) {
+              try {
+                var startIdx = idx + 1;
+                var getRow = $(element);
+                var getTextTgl = getRow.find("#tgl_row_ss_" + startIdx);
+                let allListNameCol = [];
+                for (var i = 1; i < lengthColumnSS; i++) {
+                  var getInputName = getRow.find("#input_nama_row_" + i);
+                  var newObjCol = {
+                    posisi: i + 1,
+                    nama: $.trim(getInputName.val()),
+                  };
+                  allListNameCol.push(newObjCol);
+                }
+
+                var mapForAdd = {
+                  "row": startIdx,
+                  "tanggal": getTextTgl.html(),
+                  "kolom_nama": [],
+                }
+                for (var x = 0; x < allListNameCol.length; x++) {
+                  var obj = allListNameCol[x];
+                  mapForAdd["kolom_nama"].push(obj);
+                }
+                var addToCollSabtuSabat = await collSabtuSabat.add(mapForAdd);
+                var getDocRefAddSS = collSabtuSabat.doc(addToCollSabtuSabat.id);
+              } catch (e) {
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-SS"', "info");
+                toastAction.hideToastAlert(toastAlert);
+                console.error("Error save schadule SS: ", e);
+                return false;
+              }
+            });
+
+            allTrTableKS.each(async function (idx, element) {
+              try {
+                var startIdx = idx + 1;
+                var getRow = $(element);
+                var getTextTgl = getRow.find("#tgl_row_ks_" + startIdx);
+                let allListNameCol = [];
+                for (var i = 1; i < lengthColumnKS; i++) {
+                  var getInputName = getRow.find("#input_nama_row_" + i);
+                  var newObjCol = {
+                    posisi: i + 1,
+                    nama: $.trim(getInputName.val()),
+                  };
+                  allListNameCol.push(newObjCol);
+                }
+
+                var mapForAdd = {
+                  "row": startIdx,
+                  "tanggal": getTextTgl.html(),
+                  "kolom_nama": [],
+                }
+                for (var x = 0; x < allListNameCol.length; x++) {
+                  var obj = allListNameCol[x];
+                  mapForAdd["kolom_nama"].push(obj);
+                }
+                var addToCollKhotbahSabat = await collKhotbahSabat.add(mapForAdd);
+                var getDocRefAddKS = collKhotbahSabat.doc(addToCollKhotbahSabat.id);
+              } catch (e) {
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGKS001-SAVE-SCH-KS"', "info");
+                toastAction.hideToastAlert(toastAlert);
+                console.error("Error save schadule KS: ", e);
+                return false;
+              }
+            });
+          }
+
+          if (inputPascodeSS.val() == datagetCollKodeJemaat.passcode) {
+            try {
+              var docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+
+              const dt = new Date();
+              var month = dt.getMonth() + 1;
+              var year = dt.getFullYear();
+              var curTriwulan = getCurrentTriwulan();
+
+              var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+
+              if (checkJadewalFromCol.empty && checkJadewalFromCol.size < 1) {
+                var setDocJadwalJemaat = await docRefJadwalJemaat.add({
+                  "id": "-",
+                  "kode_jemaat": getDataUserLogin.kode_jemaat,
+                  "triwulan": curTriwulan,
+                  "jadwal_date_y": year,
+                  "created_by": getDataUserLogin.id,
+                  "created_date": dt,
+                });
+
+                var getDocRefJadwal = docRefJadwalJemaat.doc(setDocJadwalJemaat.id);
+                getDocRefJadwal.update({
+                  "id": setDocJadwalJemaat.id
+                });
+
+                var collSabtuSabat = getDocRefJadwal.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+                var collKhotbahSabat = getDocRefJadwal.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+                addToJadwalSS(collSabtuSabat, collKhotbahSabat);
+              } else {
+                var checkJadewalRef = checkJadewalFromCol.docs[0];
+                var collSabtuSabat = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+                var collKhotbahSabat = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+
+                var getCollSabtuSabat = await collSabtuSabat.get();
+                var getCollKhotbahSabat = await collKhotbahSabat.get();
+
+                if (!getCollSabtuSabat.size > 0 && !getCollKhotbahSabat.size > 0) {
+                  addToJadwalSS(collSabtuSabat, collKhotbahSabat);
+                } else {
+                  modalGenerateSS.modal("hide");
+                  setLoading.hideLoading();
+                  toastAction.showToastAlert(toastAlert, "Opss..", "schadule", 'Schadule sabtu sabat bulan ini sudah dimuat, tunggu pergantian triwulan atau silahkan edit dan simpan dibawah.', "info");
+                  toastAction.hideToastAlert(toastAlert);
+                  return false;
+                }
+              }
+
+              modalGenerateSS.modal("hide");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil dibuat, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            } catch (e) {
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS987-SAVE-SCH-SS"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error save schadule SS: ", e);
+            }
+          } else {
+            setLoading.hideLoading();
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          inputPascodeSS.val("");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS654-SAVE-SCH-SS"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error save schadule SS: ", e);
+        }
+      } else {
+        inputPascodeSS.addClass('input-red');
+      }
+      modalGenerateSS.css("z-index", "");
+    });
+
+    var modalConfirmSubmitRM = $("#confirm_submit_shadule_rm");
+    var yesConfirmSubmitRM = modalConfirmSubmitRM.find("#confirm_yes_submit_shadule_rm");
+    var inputPascodeRM = modalConfirmSubmitRM.find("input#input_passcode");
+    modalGenerateRM.find("#btn_save_change_rm").click(function (e) {
+      var tbodyTable = tableModalGenerateRM.find("tbody");
+      var allTrTable = tbodyTable.find("tr");
+
+      var checkAllRowInput = true;
+      allTrTable.each(function (idx, element) {
+        if (!checkAllInputNameSchadule($(element))) {
+          checkAllRowInput = false;
+          return false;
+        }
+      });
+
+      if (checkAllRowInput) {
+        inputPascodeRM.removeClass('input-red');
+        modalConfirmSubmitRM.modal("show");
+      } else {
+        toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+    yesConfirmSubmitRM.click(async function (e) {
+      if ($.trim(inputPascodeRM.val()) != "") {
+        try {
+          e.preventDefault();
+          modalGenerateRM.css("z-index", "1");
+          setLoading.showLoading();
+          modalConfirmSubmitRM.modal("hide");
+
+          var tbodyTable = tableModalGenerateRM.find("tbody");
+          var allTrTable = tbodyTable.find("tr");
+
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
+          var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+          if (inputPascodeRM.val() == datagetCollKodeJemaat.passcode) {
+            try {
+              var docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+
+              const dt = new Date();
+              var month = dt.getMonth() + 1;
+              var year = dt.getFullYear();
+              var curTriwulan = getCurrentTriwulan();
+
+              var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+
+              let collRefForCollection;
+
+              if (checkJadewalFromCol.empty && checkJadewalFromCol.size < 1) {
+                var setDocJadwalJemaat = await docRefJadwalJemaat.add({
+                  "id": "-",
+                  "kode_jemaat": getDataUserLogin.kode_jemaat,
+                  "triwulan": month,
+                  "jadwal_date_y": year,
+                  "created_by": getDataUserLogin.id,
+                  "created_date": dt,
+                });
+                var getDocRefJadwal = docRefJadwalJemaat.doc(setDocJadwalJemaat.id);
+                getDocRefJadwal.update({
+                  "id": setDocJadwalJemaat.id
+                });
+
+                collRefForCollection = getDocRefJadwal.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+              } else {
+                var checkJadewalRef = checkJadewalFromCol.docs[0];
+                collRefForCollection = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+              }
+
+              var getCollInCollRef = await collRefForCollection.get();
+              if (!getCollInCollRef.size > 0) {
+                allTrTable.each(async function (idx, element) {
+                  try {
+                    var startIdx = idx + 1;
+                    var getRow = $(element);
+                    var getTextTgl = getRow.find("#tgl_row_rm_" + startIdx);
+                    let allListNameCol = [];
+                    for (var i = 1; i < lengthColumnRM; i++) {
+                      var getInputName = getRow.find("#input_nama_row_" + i);
+                      var newObjCol = {
+                        posisi: i + 1,
+                        nama: $.trim(getInputName.val()),
+                      };
+                      allListNameCol.push(newObjCol);
+                    }
+
+                    var mapForAdd = {
+                      "row": startIdx,
+                      "tanggal": getTextTgl.html(),
+                      "kolom_nama": [],
+                    }
+                    for (var x = 0; x < allListNameCol.length; x++) {
+                      var obj = allListNameCol[x];
+                      mapForAdd["kolom_nama"].push(obj);
+                    }
+                    var addToCollSabtuSabat = await collRefForCollection.add(mapForAdd);
+                    var getDocRefAddRM = collRefForCollection.doc(addToCollSabtuSabat.id);
+                  } catch (e) {
+                    setLoading.hideLoading();
+                    toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-SS"', "info");
+                    toastAction.hideToastAlert(toastAlert);
+                    console.error("Error save schadule RM: ", e);
+                    return false;
+                  }
+                });
+              } else {
+                modalGenerateRM.modal("hide");
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Opss..", "schadule", 'Schadule rabu malam bulan ini sudah dimuat, tunggu pergantian triwulan atau silahkan edit dan simpan dibawah.', "info");
+                toastAction.hideToastAlert(toastAlert);
+                return false;
+              }
+
+              modalGenerateRM.modal("hide");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil dibuat, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            } catch (e) {
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS987-SAVE-SCH-SS"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error save schadule RM: ", e);
+            }
+          } else {
+            setLoading.hideLoading();
+            modalGenerateRM.css("z-index", "");
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          inputPascodeRM.val("");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS654-SAVE-SCH-SS"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error save schadule RM: ", e);
+        }
+      } else {
+        inputPascodeRM.addClass('input-red');
+      }
+    });
+
+    var modalConfirmSubmitVM = $("#confirm_submit_shadule_vm");
+    var yesConfirmSubmitVM = modalConfirmSubmitVM.find("#confirm_yes_submit_shadule_vm");
+    var inputPascodeVM = modalConfirmSubmitVM.find("input#input_passcode");
+    modalGenerateJV.find("#btn_save_change_vm").click(function (e) {
+      var tbodyTable = tableModalGenerateVM.find("tbody");
+      var allTrTable = tbodyTable.find("tr");
+
+      var checkAllRowInput = true;
+      allTrTable.each(function (idx, element) {
+        if (!checkAllInputNameSchadule($(element))) {
+          checkAllRowInput = false;
+          return false;
+        }
+      });
+
+      if (checkAllRowInput) {
+        inputPascodeRM.removeClass('input-red');
+        modalConfirmSubmitVM.modal("show");
+      } else {
+        toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+    yesConfirmSubmitVM.click(async function (e) {
+      if ($.trim(inputPascodeVM.val()) != "") {
+        try {
+          e.preventDefault();
+          modalGenerateJV.css("z-index", "1");
+          setLoading.showLoading();
+          modalConfirmSubmitVM.modal("hide");
+
+          var tbodyTable = tableModalGenerateVM.find("tbody");
+          var allTrTable = tbodyTable.find("tr");
+
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
+          var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+          if (inputPascodeVM.val() == datagetCollKodeJemaat.passcode) {
+            try {
+              var docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+
+              const dt = new Date();
+              var month = dt.getMonth() + 1;
+              var year = dt.getFullYear();
+              var curTriwulan = getCurrentTriwulan();
+
+              var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+
+              let collRefForCollection;
+
+              if (checkJadewalFromCol.empty && checkJadewalFromCol.size < 1) {
+                var setDocJadwalJemaat = await docRefJadwalJemaat.add({
+                  "id": "-",
+                  "kode_jemaat": getDataUserLogin.kode_jemaat,
+                  "triwulan": curTriwulan,
+                  "jadwal_date_y": year,
+                  "created_by": getDataUserLogin.id,
+                  "created_date": dt,
+                });
+                var getDocRefJadwal = docRefJadwalJemaat.doc(setDocJadwalJemaat.id);
+                getDocRefJadwal.update({
+                  "id": setDocJadwalJemaat.id
+                });
+
+                collRefForCollection = getDocRefJadwal.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+              } else {
+                var checkJadewalRef = checkJadewalFromCol.docs[0];
+                collRefForCollection = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+              }
+
+              var getCollInCollRef = await collRefForCollection.get();
+              if (!getCollInCollRef.size > 0) {
+                allTrTable.each(async function (idx, element) {
+                  try {
+                    var startIdx = idx + 1;
+                    var getRow = $(element);
+                    var getTextTgl = getRow.find("#tgl_row_vm_" + startIdx);
+                    let allListNameCol = [];
+                    for (var i = 1; i < lengthColumnVM; i++) {
+                      var getInputName = getRow.find("#input_nama_row_" + i);
+                      var newObjCol = {
+                        posisi: i + 1,
+                        nama: $.trim(getInputName.val()),
+                      };
+                      allListNameCol.push(newObjCol);
+                    }
+
+                    var mapForAdd = {
+                      "row": startIdx,
+                      "tanggal": getTextTgl.html(),
+                      "kolom_nama": [],
+                    }
+                    for (var x = 0; x < allListNameCol.length; x++) {
+                      var obj = allListNameCol[x];
+                      mapForAdd["kolom_nama"].push(obj);
+                    }
+                    var addToCollSabtuSabat = await collRefForCollection.add(mapForAdd);
+                    var getDocRefAddVM = collRefForCollection.doc(addToCollSabtuSabat.id);
+                  } catch (e) {
+                    setLoading.hideLoading();
+                    toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-SS"', "info");
+                    toastAction.hideToastAlert(toastAlert);
+                    console.error("Error save schadule VM: ", e);
+                    return false;
+                  }
+                });
+              } else {
+                modalGenerateJV.modal("hide");
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Opss..", "schadule", 'Schadule jumat vesper bulan ini sudah dimuat, tunggu pergantian triwulan atau silahkan edit dan simpan dibawah.', "info");
+                toastAction.hideToastAlert(toastAlert);
+                return false;
+              }
+
+              modalGenerateJV.modal("hide");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil dibuat, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            } catch (e) {
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS987-SAVE-SCH-SS"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error save schadule VM: ", e);
+            }
+          } else {
+            setLoading.hideLoading();
+            modalGenerateJV.css("z-index", "");
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          inputPascodeVM.val("");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS654-SAVE-SCH-SS"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error save schadule VM: ", e);
+        }
+      } else {
+        inputPascodeVM.addClass('input-red');
+      }
+    });
+
+    var modalEditSchadule = $("#modaEditSchadule");
+    var bodyModalEditScaduel = modalEditSchadule.find("#bodyModal");
+    var foterModalEditScaduel = modalEditSchadule.find("#footerModal");
+    async function openModalEditSchadule(type) {
+      modalEditSchadule.modal("show");
+      bodyModalEditScaduel.empty();
+      foterModalEditScaduel.empty();
+      const dt = new Date();
+      var year = dt.getFullYear();
+      var curTriwulan = getCurrentTriwulan();
+      var getDataUserLogin = await getUserLogin(userIdLogin);
+
+      const db = firebase.firestore();
+      const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+      var docRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getDataUserLogin.kode_jemaat);
+      var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+      .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+
+      if (type == "ss") {
+        var createTableSS = $("<div class='table-responsive text-nowrap'>");
+        var tableSS = $("<table id='table_shadule_edit_ss' class='table table-hover'>");
+        var theadRowSS = $("<tr class='text-nowrap'>");
+        var theadSS = $("<thead>");
+        var tbodySS = $("<tbody>");
+        var docRefSS = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+        docRefSS.onSnapshot((querySnapshot)=>{
+          if(querySnapshot.size > 0){
+            var allDosc = querySnapshot.docs;
+            var arrayKolom = allDosc.map((data)=>{
+              return data.data();
+            }).sort((a, b)=>{
+              return a.posisi - b.posisi;
+            });
+            arrayKolom.forEach((getData)=>{
+              theadRowSS.append($("<th>").text(getData.nama_kolom));
+            });
+          }
+        });
+
+        var createTableKS = $("<div class='table-responsive text-nowrap'>");
+        var tableKS = $("<table id='table_shadule_edit_ks' class='table table-hover'>");
+        var theadRowKS = $("<tr class='text-nowrap'>");
+        var theadKS = $("<thead>");
+        var tbodyKS = $("<tbody>");
+        var docRefKS = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+        docRefKS.onSnapshot((querySnapshot)=>{
+          if(querySnapshot.size > 0){
+            var allDosc = querySnapshot.docs;
+            var arrayKolom = allDosc.map((data)=>{
+              return data.data();
+            }).sort((a, b)=>{
+              return a.posisi - b.posisi;
+            });
+            arrayKolom.forEach((getData)=>{
+              theadRowKS.append($("<th>").text(getData.nama_kolom));
+            });
+          }
+        });
+
+        checkJadewalFromCol.onSnapshot(function (snapshot) {
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+
+            var collSabtuSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+            collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                let rowTr = 1;
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
+                  setColumnBody.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(subdataCol.tanggal));
+                  for (var i = 0; i < kolomNameAsc.length; i++) {
+                    var idx = i+1;
+                    var getName = kolomNameAsc[i];
+                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  }
+                  tbodySS.append(setColumnBody);
+                  rowTr++;
+                });
+              }
+            });
+
+            var collKhotbahSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                let rowTr = 1;
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
+                  setColumnBody.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(subdataCol.tanggal));
+                  for (var i = 0; i < kolomNameAsc.length; i++) {
+                    var idx = i+1;
+                    var getName = kolomNameAsc[i];
+                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  }
+                  tbodyKS.append(setColumnBody);
+                  rowTr++;
+                });
+              }
+            });
+          }
+        });
+
+        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Sabtu Sabat"));
+        bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
+        theadSS.append(theadRowSS);
+        createTableSS.append(tableSS
+          .append(theadSS).append(tbodySS)
+        );
+        bodyModalEditScaduel.append(createTableSS);
+        
+        bodyModalEditScaduel.append($("<h5 class='text-center mt-4'>").text("Khotbah Sabat"));
+        bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
+        theadKS.append(theadRowKS);
+        createTableKS.append(tableKS
+          .append(theadKS).append(tbodyKS)
+        );
+        bodyModalEditScaduel.append(createTableKS);
+
+        var createBtnSumbit = $("<button type='button' class='btn btn-primary' onclick=\"openModaEditSchadule(['table_shadule_edit_ss', 'table_shadule_edit_ks'], 'ss')\">").text("Save Change");
+        var createBtnClose = $("<button type='button' class='btn btn-outline-secondary' data-bs-dismiss='modal'>").text("Close");
+        foterModalEditScaduel.append(createBtnClose).append(createBtnSumbit);
+      }
+      if(type == "rm"){
+        var createTable = $("<div class='table-responsive text-nowrap'>");
+        var table = $("<table id='table_shadule_edit_rm' class='table table-hover'>");
+        var theadRow = $("<tr class='text-nowrap'>");
+        var thead = $("<thead>");
+        var tbody = $("<tbody>");
+        var docRef = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+        docRef.onSnapshot((querySnapshot)=>{
+          if(querySnapshot.size > 0){
+            var allDosc = querySnapshot.docs;
+            var arrayKolom = allDosc.map((data)=>{
+              return data.data();
+            }).sort((a, b)=>{
+              return a.posisi - b.posisi;
+            });
+            arrayKolom.forEach((getData)=>{
+              theadRow.append($("<th>").text(getData.nama_kolom));
+            });
+          }
+        });
+
+        checkJadewalFromCol.onSnapshot(function (snapshot) {
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+
+            var collRabuMalam = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam).orderBy("row", "asc");
+            collRabuMalam.onSnapshot(function (querySnapGetCol) {
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                let rowTr = 1;
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
+                  setColumnBody.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(subdataCol.tanggal));
+                  for (var i = 0; i < kolomNameAsc.length; i++) {
+                    var idx = i+1;
+                    var getName = kolomNameAsc[i];
+                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  }
+                  tbody.append(setColumnBody);
+                  rowTr++;
+                });
+              }
+            });
+          }
+        });
+
+        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Rabu Malam"));
+        bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
+        thead.append(theadRow);
+        createTable.append(table
+          .append(thead).append(tbody)
+        );
+        bodyModalEditScaduel.append(createTable);
+        
+        var createBtnSumbit = $("<button type='button' class='btn btn-primary' onclick=\"openModaEditSchadule(['table_shadule_edit_rm'], 'rm')\">").text("Save Change");
+        var createBtnClose = $("<button type='button' class='btn btn-outline-secondary' data-bs-dismiss='modal'>").text("Close");
+        foterModalEditScaduel.append(createBtnClose).append(createBtnSumbit);
+      }
+      if(type == "vm"){
+        var createTable = $("<div class='table-responsive text-nowrap'>");
+        var table = $("<table id='table_shadule_edit_vm' class='table table-hover'>");
+        var theadRow = $("<tr class='text-nowrap'>");
+        var thead = $("<thead>");
+        var tbody = $("<tbody>");
+        var docRef = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+        docRef.onSnapshot((querySnapshot)=>{
+          if(querySnapshot.size > 0){
+            var allDosc = querySnapshot.docs;
+            var arrayKolom = allDosc.map((data)=>{
+              return data.data();
+            }).sort((a, b)=>{
+              return a.posisi - b.posisi;
+            });
+            arrayKolom.forEach((getData)=>{
+              theadRow.append($("<th>").text(getData.nama_kolom));
+            });
+          }
+        });
+
+        checkJadewalFromCol.onSnapshot(function (snapshot) {
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+
+            var collJumatVesper = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper).orderBy("row", "asc");
+            collJumatVesper.onSnapshot(function (querySnapGetCol) {
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                let rowTr = 1;
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
+                  setColumnBody.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(subdataCol.tanggal));
+                  for (var i = 0; i < kolomNameAsc.length; i++) {
+                    var idx = i+1;
+                    var getName = kolomNameAsc[i];
+                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  }
+                  tbody.append(setColumnBody);
+                  rowTr++;
+                });
+              }
+            });
+          }
+        });
+
+        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Rabu Malam"));
+        bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
+        thead.append(theadRow);
+        createTable.append(table
+          .append(thead).append(tbody)
+        );
+        bodyModalEditScaduel.append(createTable);
+        
+        var createBtnSumbit = $("<button type='button' class='btn btn-primary' onclick=\"openModaEditSchadule(['table_shadule_edit_vm'], 'vm')\">").text("Save Change");
+        var createBtnClose = $("<button type='button' class='btn btn-outline-secondary' data-bs-dismiss='modal'>").text("Close");
+        foterModalEditScaduel.append(createBtnClose).append(createBtnSumbit);
+      }
+    }
+
+    var modalConfirmSubmitEdit = $("#confirm_submit_shadule_edit");
+    var yesConfirmSubmitEdit = modalConfirmSubmitEdit.find("#confirm_yes_submit_shadule_edit");
+    var inputPascodeEdit = modalConfirmSubmitEdit.find("input#input_passcode");
+    let tablesForUpdate;
+    let typeOf;
+    function openModaEditSchadule(tables, type){
+      tablesForUpdate = tables;
+      typeOf = type
+      var checkAllRowInput = true;
+      tables.forEach((tbl)=>{
+        var table = $("#"+tbl);
+        var tbodyTable = table.find("tbody");
+        var allTrTable = tbodyTable.find("tr");
+        
+        allTrTable.each(function (idx, element) {
+          if (!checkAllInputNameSchadule($(element))) {
+            checkAllRowInput = false;
+            return false;
+          }
+        });
+      });
+
+      if (checkAllRowInput) {
+        inputPascodeEdit.removeClass('input-red');
+        modalConfirmSubmitEdit.modal("show");
+      } else {
+        toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    }
+    
+    yesConfirmSubmitEdit.click(async (e)=>{
+      if ($.trim(inputPascodeEdit.val()) != "") {
+        e.preventDefault();
+        modalEditSchadule.css("z-index", "1");
+        setLoading.showLoading();
+        modalConfirmSubmitEdit.modal("hide");
+
+        try{
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
+          var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+          var docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+    
+          const dt = new Date();
+          var month = dt.getMonth() + 1;
+          var year = dt.getFullYear();
+          var curTriwulan = getCurrentTriwulan();
+          
+          if (inputPascodeEdit.val() == datagetCollKodeJemaat.passcode) {
+            var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+            .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+      
+            var checkJadewalRef = checkJadewalFromCol.docs[0];
+      
+            if(typeOf == "ss"){
+              var collSabtuSabat = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+              var collKhotbahSabat = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+              
+              for(var i = 0; i < tablesForUpdate.length; i++){
+                var table = $("#"+tablesForUpdate[i]);
+                var tbody = table.find("tbody");
+                var allTrTable = tbody.find("tr");
+                
+                if(i == 0){
+                  await deleteFirestoreCollection(collSabtuSabat);
+                }else{
+                  await deleteFirestoreCollection(collKhotbahSabat);
+                }
+
+                allTrTable.each(async function (idx, element) {
+                  try {
+                    var startIdx = idx + 1;
+                    var getRow = $(element);
+                    var getTextTgl = i == 0 ? getRow.find("#tgl_row_ss_" + startIdx) : getRow.find("#tgl_row_ks_" + startIdx);
+                    let allListNameCol = [];
+                    var allTdLength = getRow.find("td");
+                    for (var j = 1; j < allTdLength.length; j++) {
+                      var getInputName = getRow.find("#input_nama_row_" + j);
+                      var newObjCol = {
+                        posisi: j + 1,
+                        nama: $.trim(getInputName.val()),
+                      };
+                      allListNameCol.push(newObjCol);
+                    }
+
+                    var mapForAdd = {
+                      "row": startIdx,
+                      "tanggal": getTextTgl.html(),
+                      "kolom_nama": [],
+                    }
+                    for (var x = 0; x < allListNameCol.length; x++) {
+                      var obj = allListNameCol[x];
+                      mapForAdd["kolom_nama"].push(obj);
+                    }
+
+                    if(i == 0){
+                      await collSabtuSabat.add(mapForAdd);
+                    }else{
+                      await collKhotbahSabat.add(mapForAdd);
+                    }
+                  } catch (e) {
+                    setLoading.hideLoading();
+                    toastAction.showToastAlert(toastAlert, "Edit Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-EDIT-SS"', "info");
+                    toastAction.hideToastAlert(toastAlert);
+                    console.log("Error save schadule SS: "+ e);
+                    return false;
+                  }
+                });
+              }
+              
+              modalEditSchadule.modal("hide");
+              modalEditSchadule.css("z-index", "");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil diperbaharui, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            }
+            if(typeOf == "rm"){
+              var collExecutes = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+              
+              var table = $("#"+tablesForUpdate[0]);
+              var tbody = table.find("tbody");
+              var allTrTable = tbody.find("tr");
+              
+              await deleteFirestoreCollection(collExecutes);
+              
+              allTrTable.each(async function (idx, element) {
+                try {
+                  var startIdx = idx + 1;
+                  var getRow = $(element);
+                  var getTextTgl = getRow.find("#tgl_row_rm_" + startIdx);
+                  let allListNameCol = [];
+                  var allTdLength = getRow.find("td");
+                  for (var i = 1; i < allTdLength.length; i++) {
+                    var getInputName = getRow.find("#input_nama_row_" + i);
+                    var newObjCol = {
+                      posisi: i + 1,
+                      nama: $.trim(getInputName.val()),
+                    };
+                    allListNameCol.push(newObjCol);
+                  }
+
+                  var mapForAdd = {
+                    "row": startIdx,
+                    "tanggal": getTextTgl.html(),
+                    "kolom_nama": [],
+                  }
+                  for (var x = 0; x < allListNameCol.length; x++) {
+                    var obj = allListNameCol[x];
+                    mapForAdd["kolom_nama"].push(obj);
+                  }
+
+                  await collExecutes.add(mapForAdd);
+                } catch (e) {
+                  setLoading.hideLoading();
+                  toastAction.showToastAlert(toastAlert, "Edit Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-EDIT-RM"', "info");
+                  toastAction.hideToastAlert(toastAlert);
+                  console.log("Error save schadule RM: "+ e);
+                  return false;
+                }
+              });
+              
+              modalEditSchadule.modal("hide");
+              modalEditSchadule.css("z-index", "");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil diperbaharui, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            }
+            if(typeOf == "vm"){
+              var collExecutes = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+              
+              var table = $("#"+tablesForUpdate[0]);
+              var tbody = table.find("tbody");
+              var allTrTable = tbody.find("tr");
+              
+              await deleteFirestoreCollection(collExecutes);
+              
+              allTrTable.each(async function (idx, element) {
+                try {
+                  var startIdx = idx + 1;
+                  var getRow = $(element);
+                  var getTextTgl = getRow.find("#tgl_row_vm_" + startIdx);
+                  let allListNameCol = [];
+                  var allTdLength = getRow.find("td");
+                  for (var i = 1; i < allTdLength.length; i++) {
+                    var getInputName = getRow.find("#input_nama_row_" + i);
+                    var newObjCol = {
+                      posisi: i + 1,
+                      nama: $.trim(getInputName.val()),
+                    };
+                    allListNameCol.push(newObjCol);
+                  }
+
+                  var mapForAdd = {
+                    "row": startIdx,
+                    "tanggal": getTextTgl.html(),
+                    "kolom_nama": [],
+                  }
+                  for (var x = 0; x < allListNameCol.length; x++) {
+                    var obj = allListNameCol[x];
+                    mapForAdd["kolom_nama"].push(obj);
+                  }
+
+                  await collExecutes.add(mapForAdd);
+                } catch (e) {
+                  setLoading.hideLoading();
+                  toastAction.showToastAlert(toastAlert, "Edit Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-EDIT-VM"', "info");
+                  toastAction.hideToastAlert(toastAlert);
+                  console.log("Error save schadule VM: "+ e);
+                  return false;
+                }
+              });
+              
+              modalEditSchadule.modal("hide");
+              modalEditSchadule.css("z-index", "");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil diperbaharui, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            }
+          } else {
+            setLoading.hideLoading();
+            modalEditSchadule.css("z-index", "");
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          
+          inputPascodeEdit.val("");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS881-SAVE-SCH-EDIT"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error save schadule: ", e);
+        }
+      } else {
+        inputPascodeEdit.addClass('input-red');
+      }
+    });
+
+    function checkAllInputNameSchadule(getRow) {
+      var result = true;
+
+      try {
+        getRow.each((i, e)=>{
+          var getInputName = $(e).find('input[type="text"]');
+          getInputName.each((j, f)=>{
+            var input = $(f);
+            if ($.trim(input.val()) == "") {
+              result = false;
+              return false;
+            }
+          });
+        });
+      } catch (e) {
+        toastAction.showToastAlert(toastAlert, "Colomn Name", "", 'Something when wrong, Call admin with code "ERG123-VALIDATE-SCH-COLL"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        console.error("Error column name: ", e);
+      }
+
+      return result;
+    }
+
+    function onChangeCheck(event) {
+      var inputId = event.target;
+      var valueInput = inputId.value;
+
+      if (valueInput || valueInput.length > 0) {
+        inputId.classList.remove('input-red');
+      } else {
+        inputId.classList.add('input-red');
+      }
+    }
+
+    function clickCopyLinkSchadule() {
+      if ($.trim(currentKodeSchadule)) {
+        var textToCopy = getLinkPageUrlParam("schadule_view.html") + "?" + customParam.kode_schadule + "=" + currentKodeSchadule;
+
+        var textarea = document.createElement("textarea");
+        textarea.value = textToCopy;
+        document.body.appendChild(textarea);
+
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+
+        document.execCommand('copy');
+
+        document.body.removeChild(textarea);
+        toastAction.showToastAlert(toastAlert, "Schadule", "copy", "Link schadule jemaat telah disalin", "success");
+        toastAction.hideToastAlert(toastAlert);
+      } else {
+        toastAction.showToastAlert(toastAlert, "Schadule", "copy", "Schadule jemaat bulan ini belum dibuat", "info");
+        toastAction.hideToastAlert(toastAlert);
+      }
+    }
+
+    let docKolomJemaat;
+    var modalSchaduelInfo = $("#modal_info_schadule");
+    var modalBodySchaduleInfo = modalSchaduelInfo.find("#modal_body_info");
+    async function showInfoSchadule(event, type) {
+      var row = $(event.target);
+      var target = row.is('tr') ? row : row.closest('tr');
+      if (target.length) {
+        setLoading.showLoading();
+        var currentrowId = target.attr("id");
+        var setNewRow = $("<div>");
+        var setValueRow = [];
+
+        const dt = new Date();
+        var month = dt.getMonth() + 1;
+        var year = dt.getFullYear();
+        const db = firebase.firestore();
+        const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+        const docRefJemaatForModal = db.collection(collectionsName.kode_jemaat);
+        var curTriwulan = getCurrentTriwulan();
+
+        var getDataJemaatForModal = await docRefJemaatForModal.doc(currentKodeSchadule).get();
+        var dataJemaatForModal = getDataJemaatForModal.data();
+        var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", currentKodeSchadule)
+          .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+
+        if (type == "ss") {
+          var subcollSabtuSabat = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollSabtuSabat.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "ks") {
+          var subcollKhotbahSabat = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollKhotbahSabat.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "rm") {
+          var subcollRabuMalam = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollRabuMalam.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+        if (type == "vm") {
+          var subcollVvesperMalam = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollVvesperMalam.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataSS = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataSS.nama_kolom,
+                  posisi: subdataSS.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
+
+        checkJadewalFromCol.onSnapshot(function (getSnapshot) {
+          let checkJadewalFirst = getSnapshot.docs[0].ref;
+
+          if (type == "ss") {
+            var collSabtuSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+            collSabtuSabat.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Sekolah Sabat"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "ks") {
+            var collKhotbahSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            collKhotbahSabat.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Khotbah Sabat"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "rm") {
+            var collRabuMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+            collRabuMalam.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Rabu Malam"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          if (type == "vm") {
+            var collJumatVesper = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+            collJumatVesper.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Jumat Vesper"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
+          setLoading.hideLoading();
+          modalBodySchaduleInfo.empty();
+          modalSchaduelInfo.modal("show");
+        });
+      }
+    }
+
+    function downloadTable(tables) {
+      const dt = new Date();
+      var curTriwulan = getCurrentTriwulan();
+      var year = dt.getFullYear();
+      var text = "_triwulan"+curTriwulan+"_"+year;
+      tables.forEach((table) => {
+        table.tableExport({
+          type: 'excel',
+          fileName: table[0].id + text,
+        });
+      });
+    }
+  </script>
+  <!-- Firebase Inizialize In Last -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+    const firebaseConfig = generalSetting.firebaseConfig();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.settings({ timestampsInSnapshots: true });
+
+    var confirModal = $("#confirm_modal");
+    var btnConfirmYes = confirModal.find("#confirm_yes");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        redirect("auth/login.html");
+      } else {
+        var getDataUserLogin = await getUserLogin(user.uid);
+        currentKodeSchadule = getDataUserLogin.kode_jemaat;
+        if (getDataUserLogin.flag_active == "1") {
+          loadAllData(user);
+        } else {
+          logOut(user, auth, signOut, onAuthStateChanged);
+        }
+      }
+    });
+
+    signOutClick.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+    logout_user_navbar.addEventListener("click", (e) => {
+      confirModal.modal('show');
+    });
+
+    btnConfirmYes.click(function (e) {
+      logOut(e, auth, signOut, onAuthStateChanged);
+    });
+
+    var months = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'];
+    var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+    async function loadAllData(user) {
+      var stringUid = user.uid;
+      var userById = db.collection(collectionsName.users).doc(stringUid);
+      var getUserById = userById.get();
+      var getAwaitUser = await getUserById;
+      var getDataAwaitUser = getAwaitUser.data();
+      userIdLogin = stringUid;
+
+      const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+      const dt = new Date();
+      var month = dt.getMonth() + 1;
+      var year = dt.getFullYear();
+      var currentMonth = months[dt.getMonth()];
+      var curTriwulan = getCurrentTriwulan();
+
+      var docRefJemaat = db.collection(collectionsName.kode_jemaat);
+
+      //Initialize components
+      var plainName = $(".plain_name");
+      var plainJemaat = $(".plain_jemaat");
+      var adminPannel = $("#admin_pannel_nav");
+      var plainCurTriwulan = $(".plain_triwulan_date");
+      var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
+      var btnGerejaAdmin = $('<li class="menu-item">').append(
+        $('<a href="gereja.html" class="menu-link">')
+          .append($('<i class="menu-icon tf-icons bx bx-church">')).append($('<div data-i18n="Support">').text("Gereja"))
+      );
+      var btnUsrManagAdmin = $('<li class="menu-item">').append(
+        $('<a href="user_management.html" class="menu-link">')
+          .append($('<i class="menu-icon tf-icons bx bx-list-check">')).append($('<div data-i18n="Support">').text("User Management"))
+      );
+
+      var tableSS = $("#table_shadule_sabtu_sabat");
+      var thead_SS = tableSS.find("thead");
+      var tbodyCurTableSS = tableSS.find("tbody");
+      var tableKS = $("#table_shadule_khotbah_sabat");
+      var thead_KS = tableKS.find("thead");
+      var tbodyCurTableKS = tableKS.find("tbody");
+      var tableRM = $("#table_shadule_rabu_malam");
+      var thead_RM = tableRM.find("thead");
+      var tbodyCurTableRM = tableRM.find("tbody");
+      var tableVM = $("#table_shadule_vesper_malam");
+      var thead_VM = tableVM.find("thead");
+      var tbodyCurTableVM = tableVM.find("tbody");
+
+      getUserById.then(function (doc) {
+        var userData = doc.data();
+        if (userData.user_type.toLowerCase() == "admin") {
+          adminPannel.append(lblAdmin).append(btnGerejaAdmin).append(btnUsrManagAdmin);
+        } else {
+          adminPannel.remove();
+        }
+
+        plainName.each(function (index, element) {
+          $(element).html(userData.nama_lengkap);
+        });
+
+        var getJemaat = docRefJemaat.doc(userData.kode_jemaat).get();
+        getJemaat.then(function (doc) {
+          var jemaatData = doc.data();
+          plainJemaat.each(function (index, element) {
+            $(element).html(jemaatData.nama);
+          });
+          plainCurTriwulan.each(function (index, element) {
+            $(element).html("Triwulan " + curTriwulan + " - " + year);
+          });
+        });
+
+        var docRefKolomJemaat = collRefKolomJemaat.doc(userData.kode_jemaat);
+        try {
+          var createRowSettingNotifSS = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
+            .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=ss'>").text("Schadule Setting")))));
+          var createRowSettingNotifKS = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
+            .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=ss'>").text("Schadule Setting")))));
+          var createRowSettingNotifRM = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
+            .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=rm'>").text("Schadule Setting")))));
+          var createRowSettingNotifVM = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
+            .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=vm'>").text("Schadule Setting")))));
+
+          docRefKolomJemaat.onSnapshot(function (querySnapshot) {
+            if (querySnapshot.exists) {
+              try {
+                var data_tb_kolom = querySnapshot.data();
+                let ssHasColomn;
+                let ksHasColomn;
+                docKolomJemaat = docRefKolomJemaat;
+
+                var subcollSabtuSabat = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollSabtuSabat.onSnapshot(async function (subcollectionSS) {
+                  if (subcollectionSS.size > 0) {
+                    thead_SS.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionSS.forEach(function (subdocSS) {
+                      var subdataSS = subdocSS.data();
+                      setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
+                    });
+                    thead_SS.append(setColumn);
+                    ssHasColomn = true;
+                  } else {
+                    thead_SS.empty();
+                    thead_SS.append(createRowSettingNotifSS);
+                    ssHasColomn = false;
+                  }
+                });
+
+                var subcollKhotbahSabat = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollKhotbahSabat.onSnapshot(async function (subcollectionKS) {
+                  if (subcollectionKS.size > 0) {
+                    thead_KS.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionKS.forEach(function (subdocKS) {
+                      var subdataKS = subdocKS.data();
+                      setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
+                    });
+                    thead_KS.append(setColumn);
+                    ksHasColomn = true;
+                  } else {
+                    thead_KS.empty();
+                    thead_KS.append(createRowSettingNotifKS);
+                    ksHasColomn = false;
+                  }
+
+
+                  if (ssHasColomn && ksHasColomn) {
+                    dropItemSabtuSabat.attr('disabled', false).css('cursor', 'pointer');
+                  } else {
+                    dropItemSabtuSabat.attr('disabled', true).css('cursor', 'not-allowed');
+                  }
+                });
+
+                var subcollRabuMalam = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                  if (subcollectionRM.size > 0) {
+                    thead_RM.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionRM.forEach(function (subdocRM) {
+                      var subdataRM = subdocRM.data();
+                      setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
+                    });
+                    thead_RM.append(setColumn);
+                    dropItemRabuMalam.attr('disabled', false).css('cursor', 'pointer');
+                  } else {
+                    thead_RM.empty();
+                    thead_RM.append(createRowSettingNotifRM);
+                    dropItemRabuMalam.attr('disabled', true).css('cursor', 'not-allowed');
+                  }
+                });
+
+                var subcollJumatVesper = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                  if (subcollectionJV.size > 0) {
+                    thead_VM.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionJV.forEach(function (subdocJV) {
+                      var subdataJV = subdocJV.data();
+                      setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
+                    });
+                    thead_VM.append(setColumn);
+                    dropItemJumatVesper.attr('disabled', false).css('cursor', 'pointer');
+                  } else {
+                    thead_VM.empty();
+                    thead_VM.append(createRowSettingNotifVM);
+                    dropItemJumatVesper.attr('disabled', true).css('cursor', 'not-allowed');
+                  }
+                });
+              } catch (e) {
+                toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
+                toastAction.hideToastAlert(toastAlert);
+                console.error("Error table schadule: ", e);
+              }
+            } else {
+              thead_SS.empty();
+              thead_SS.append(createRowSettingNotifSS);
+
+              thead_KS.empty();
+              thead_KS.append(createRowSettingNotifKS);
+
+              thead_RM.empty();
+              thead_RM.append(createRowSettingNotifRM);
+
+              thead_VM.empty();
+              thead_VM.append(createRowSettingNotifVM);
+
+              setLoading.hideLoading();
+            }
+          });
+        } catch (e) {
+          toastAction.showToastAlert(toastAlert, "General Schadule", "", 'Something when wrong, Call admin with code "ERG001-GEN-SCH-CATCH"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error column table: ", e);
+        }
+      });
+
+      var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataAwaitUser.kode_jemaat)
+        .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+
+      checkJadewalFromCol.onSnapshot(function (snapshot) {
+        if (snapshot.docs.length > 0) {
+          let checkJadewalFirst;
+          snapshot.forEach(function (doc) {
+            checkJadewalFirst = doc;
+            var dataDocs = doc.data();
+            return;
+          });
+
+          var collSabtuSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+          collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+            tbodyCurTableSS.empty();
+            if (querySnapGetCol.size > 0) {
+              var getDataDocs = querySnapGetCol.docs;
+              var getRowAsc = getDataDocs.map(function (doc) {
+                var docData = doc.data();
+                docData["id"] = doc.id;
+                return docData;
+              }).sort(function (a, b) {
+                return a.row - b.row;
+              });
+              getRowAsc.forEach(function (getCol) {
+                var subdataCol = getCol;
+                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                  return a.posisi - b.posisi;
+                });
+                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
+                setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                kolomNameAsc.forEach((getName) => {
+                  setColumnBody.append($("<td>").text(getName.nama));
+                });
+                tbodyCurTableSS.append(setColumnBody);
+              });
+            }
+          });
+
+          var collKhotbahSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+          collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+            tbodyCurTableKS.empty();
+            if (querySnapGetCol.size > 0) {
+              var getDataDocs = querySnapGetCol.docs;
+              var getRowAsc = getDataDocs.map(function (doc) {
+                var docData = doc.data();
+                docData["id"] = doc.id;
+                return docData;
+              }).sort(function (a, b) {
+                return a.row - b.row;
+              });
+              getRowAsc.forEach(function (getCol) {
+                var subdataCol = getCol;
+                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                  return a.posisi - b.posisi;
+                });
+                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ks')\">");
+                setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                kolomNameAsc.forEach((getName) => {
+                  setColumnBody.append($("<td>").text(getName.nama));
+                });
+                tbodyCurTableKS.append(setColumnBody);
+              });
+            }
+          });
+
+          var collRabuMalam = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+          collRabuMalam.onSnapshot(function (querySnapGetCol) {
+            tbodyCurTableRM.empty();
+            if (querySnapGetCol.size > 0) {
+              var getDataDocs = querySnapGetCol.docs;
+              var getRowAsc = getDataDocs.map(function (doc) {
+                var docData = doc.data();
+                docData["id"] = doc.id;
+                return docData;
+              }).sort(function (a, b) {
+                return a.row - b.row;
+              });
+              getRowAsc.forEach(function (getCol) {
+                var subdataCol = getCol;
+                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                  return a.posisi - b.posisi;
+                });
+                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">");
+                setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                kolomNameAsc.forEach((getName) => {
+                  setColumnBody.append($("<td>").text(getName.nama));
+                });
+                tbodyCurTableRM.append(setColumnBody);
+              });
+            }
+          });
+
+          var collJumatVesper = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+          collJumatVesper.onSnapshot(function (querySnapGetCol) {
+            tbodyCurTableVM.empty();
+            if (querySnapGetCol.size > 0) {
+              var getDataDocs = querySnapGetCol.docs;
+              var getRowAsc = getDataDocs.map(function (doc) {
+                var docData = doc.data();
+                docData["id"] = doc.id;
+                return docData;
+              }).sort(function (a, b) {
+                return a.row - b.row;
+              });
+              getRowAsc.forEach(function (getCol) {
+                var subdataCol = getCol;
+                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                  return a.posisi - b.posisi;
+                });
+                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">");
+                setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                kolomNameAsc.forEach((getName) => {
+                  setColumnBody.append($("<td>").text(getName.nama));
+                });
+                tbodyCurTableVM.append(setColumnBody);
+              });
+            }
+          });
+
+          setLoading.hideLoading();
+        } else {
+          setLoading.hideLoading();
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
