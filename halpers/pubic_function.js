@@ -184,3 +184,33 @@ function getCurrentTriwulan() {
 
   return daysInCurrentGroup;
 }
+
+function checkMonthEndOfTriwulan() {
+  var result = false;
+
+  var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
+  var kelompok = [
+    bulan.slice(0, 3),
+    bulan.slice(3, 6),
+    bulan.slice(6, 9),
+    bulan.slice(9, 12)
+  ];
+
+  var sekarang = new Date();
+  var bulanSekarang = bulan[sekarang.getMonth()];
+  var kelompokSekarang = 0;
+
+  for (var i = 0; i < kelompok.length; i++) {
+    if (kelompok[i].indexOf(bulanSekarang) !== -1) {
+      kelompokSekarang = i + 1;
+      break;
+    }
+  }
+  
+  if (kelompokSekarang !== 0 && kelompok[kelompokSekarang - 1][2] === bulanSekarang) {
+    result = true;
+  }
+
+  return result;
+}

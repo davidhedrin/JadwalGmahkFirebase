@@ -271,9 +271,15 @@
             <div class="card mb-4">
               <div class="px-3 py-3">
                 <div class="row">
-                  <div class="col-sm-12 d-flex justify-content-between">
+                  <div class="col-sm-12 d-flex align-items-center gap-4 justify-content-between">
                     <div>
-                      Daftar Jadwal Kebaktian
+                      <select class="form-select" id="select_triwulan_schadule" aria-label="Default select example">
+                        <option selected>Pilih Triwulan</option>
+                        <option value="1">Triwulan 1</option>
+                        <option value="2">Triwulan 2</option>
+                        <option value="3">Triwulan 3</option>
+                        <option value="4">Triwulan 4</option>
+                      </select>
                     </div>
                     <div>
                       <button type="button" class="btn btn-success btn-sm" onclick="clickCopyLinkSchadule()">
@@ -448,6 +454,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <div>
+            <label class="mb-1" for="triwulan_ss">Triwulan:</label>
+            <select class="form-select mb-4 select_schadule_now" id="triwulan_ss" aria-label="Default select example">
+              <option selected>Pilih Triwulan</option>
+              <option value="1">Triwulan 1</option>
+              <option value="2">Triwulan 2</option>
+              <option value="3">Triwulan 3</option>
+              <option value="4">Triwulan 4</option>
+            </select>
+          </div>
           <h5 class="text-center">SEKOLAH SABAT</h5>
           <div class="dropdown-divider"></div>
           <div class="table-responsive text-nowrap">
@@ -486,6 +502,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <div>
+            <label class="mb-1" for="triwulan_rm">Triwulan:</label>
+            <select class="form-select mb-4 select_schadule_now" id="triwulan_rm" aria-label="Default select example">
+              <option selected>Pilih Triwulan</option>
+              <option value="1">Triwulan 1</option>
+              <option value="2">Triwulan 2</option>
+              <option value="3">Triwulan 3</option>
+              <option value="4">Triwulan 4</option>
+            </select>
+          </div>
           <h5 class="text-center">RABU MALAM</h5>
           <div class="dropdown-divider"></div>
           <div class="table-responsive text-nowrap">
@@ -513,6 +539,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <div>
+            <label class="mb-1" for="triwulan_vm">Triwulan:</label>
+            <select class="form-select mb-4 select_schadule_now" id="triwulan_vm" aria-label="Default select example">
+              <option selected>Pilih Triwulan</option>
+              <option value="1">Triwulan 1</option>
+              <option value="2">Triwulan 2</option>
+              <option value="3">Triwulan 3</option>
+              <option value="4">Triwulan 4</option>
+            </select>
+          </div>
           <h5 class="text-center">JUMAT VESPER</h5>
           <div class="dropdown-divider"></div>
           <div class="table-responsive text-nowrap">
@@ -1585,6 +1621,7 @@
         var theadRowSS = $("<tr class='text-nowrap'>");
         var theadSS = $("<thead>");
         var tbodySS = $("<tbody>");
+        let lengthColumnEditSS;
         var docRefSS = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
         docRefSS.onSnapshot((querySnapshot)=>{
           if(querySnapshot.size > 0){
@@ -1597,6 +1634,7 @@
             arrayKolom.forEach((getData)=>{
               theadRowSS.append($("<th>").text(getData.nama_kolom));
             });
+            lengthColumnEditSS = parseInt(querySnapshot.size);
           }
         });
 
@@ -1605,6 +1643,7 @@
         var theadRowKS = $("<tr class='text-nowrap'>");
         var theadKS = $("<thead>");
         var tbodyKS = $("<tbody>");
+        let lengthColumnEditKS;
         var docRefKS = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
         docRefKS.onSnapshot((querySnapshot)=>{
           if(querySnapshot.size > 0){
@@ -1617,6 +1656,7 @@
             arrayKolom.forEach((getData)=>{
               theadRowKS.append($("<th>").text(getData.nama_kolom));
             });
+            lengthColumnEditKS = parseInt(querySnapshot.size);
           }
         });
 
@@ -1648,10 +1688,16 @@
                   });
                   var setColumnBody = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
                   setColumnBody.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(subdataCol.tanggal));
-                  for (var i = 0; i < kolomNameAsc.length; i++) {
-                    var idx = i+1;
-                    var getName = kolomNameAsc[i];
-                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  for (var i = 1; i < lengthColumnEditSS; i++) {
+                    var idx = i-1;
+                    var forAppend;
+                    try{
+                      var getName = kolomNameAsc[idx];
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />");
+                    }catch(e){
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
+                    }
+                    setColumnBody.append($("<td>").append(forAppend));
                   }
                   tbodySS.append(setColumnBody);
                   rowTr++;
@@ -1678,10 +1724,16 @@
                   });
                   var setColumnBody = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
                   setColumnBody.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(subdataCol.tanggal));
-                  for (var i = 0; i < kolomNameAsc.length; i++) {
-                    var idx = i+1;
-                    var getName = kolomNameAsc[i];
-                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  for (var i = 1; i < lengthColumnEditKS; i++) {
+                    var idx = i-1;
+                    var forAppend;
+                    try{
+                      var getName = kolomNameAsc[idx];
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />");
+                    }catch(e){
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
+                    }
+                    setColumnBody.append($("<td>").append(forAppend));
                   }
                   tbodyKS.append(setColumnBody);
                   rowTr++;
@@ -1717,6 +1769,7 @@
         var theadRow = $("<tr class='text-nowrap'>");
         var thead = $("<thead>");
         var tbody = $("<tbody>");
+        let lengthColumnEdit;
         var docRef = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
         docRef.onSnapshot((querySnapshot)=>{
           if(querySnapshot.size > 0){
@@ -1729,6 +1782,7 @@
             arrayKolom.forEach((getData)=>{
               theadRow.append($("<th>").text(getData.nama_kolom));
             });
+            lengthColumnEdit = parseInt(querySnapshot.size);
           }
         });
 
@@ -1760,10 +1814,16 @@
                   });
                   var setColumnBody = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
                   setColumnBody.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(subdataCol.tanggal));
-                  for (var i = 0; i < kolomNameAsc.length; i++) {
-                    var idx = i+1;
-                    var getName = kolomNameAsc[i];
-                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  for (var i = 1; i < lengthColumnEdit; i++) {
+                    var idx = i-1;
+                    var forAppend;
+                    try{
+                      var getName = kolomNameAsc[idx];
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")
+                    }catch(e){
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
+                    }
+                    setColumnBody.append($("<td>").append(forAppend));
                   }
                   tbody.append(setColumnBody);
                   rowTr++;
@@ -1791,6 +1851,7 @@
         var theadRow = $("<tr class='text-nowrap'>");
         var thead = $("<thead>");
         var tbody = $("<tbody>");
+        let lengthColumnEdit;
         var docRef = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
         docRef.onSnapshot((querySnapshot)=>{
           if(querySnapshot.size > 0){
@@ -1803,6 +1864,7 @@
             arrayKolom.forEach((getData)=>{
               theadRow.append($("<th>").text(getData.nama_kolom));
             });
+            lengthColumnEdit = parseInt(querySnapshot.size);
           }
         });
 
@@ -1834,10 +1896,16 @@
                   });
                   var setColumnBody = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
                   setColumnBody.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(subdataCol.tanggal));
-                  for (var i = 0; i < kolomNameAsc.length; i++) {
-                    var idx = i+1;
-                    var getName = kolomNameAsc[i];
-                    setColumnBody.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + idx + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")));
+                  for (var i = 1; i < lengthColumnEdit; i++) {
+                    var idx = i-1;
+                    var forAppend;
+                    try{
+                      var getName = kolomNameAsc[idx];
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")
+                    }catch(e){
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
+                    }
+                    setColumnBody.append($("<td>").append(forAppend));
                   }
                   tbody.append(setColumnBody);
                   rowTr++;
@@ -2465,6 +2533,7 @@
       var plainJemaat = $(".plain_jemaat");
       var adminPannel = $("#admin_pannel_nav");
       var plainCurTriwulan = $(".plain_triwulan_date");
+      var selectSchaduleNow = $(".select_schadule_now");
       var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
       var btnGerejaAdmin = $('<li class="menu-item">').append(
         $('<a href="gereja.html" class="menu-link">')
@@ -2487,6 +2556,11 @@
       var tableVM = $("#table_shadule_vesper_malam");
       var thead_VM = tableVM.find("thead");
       var tbodyCurTableVM = tableVM.find("tbody");
+
+      $("#select_triwulan_schadule").val(curTriwulan);
+      selectSchaduleNow.each(function (index, element) {
+        $(element).val(curTriwulan);
+      });
 
       getUserById.then(function (doc) {
         var userData = doc.data();
