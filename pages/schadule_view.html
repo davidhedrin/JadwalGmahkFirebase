@@ -161,8 +161,17 @@
     </div>
     <!-- /Logo -->
     <h5 class="mb-1 mt-3 text-center">Hallo Jemaat <span class="plain_jemaat"></span> 🚀</h5>
-    <p class="mb-0 text-center">Schadule kebaktian-perbaktian jemaat</p>
-    <p class="mb-3 text-center"><strong id="text_bulan_tahun_schadule"></strong></p>
+    <p class="mb-1 text-center">Schadule kebaktian-perbaktian jemaat</p>
+    <!-- <p class="mb-1 text-center"><strong id="text_bulan_tahun_schadule"></strong></p> -->
+    
+    <div class="d-flex justify-content-center mb-3">
+      <select class="form-select" id="select_triwulan_schadule" aria-label="Default select example" style="width: 250px;">
+        <option value="1">Triwulan 1</option>
+        <option value="2">Triwulan 2</option>
+        <option value="3">Triwulan 3</option>
+        <option value="4">Triwulan 4</option>
+      </select>
+    </div>
 
     <div class="dropdown-divider"></div>
     <div class="nav-align-top mt-2">
@@ -618,6 +627,7 @@
     const db = firebase.firestore();
     db.settings({ timestampsInSnapshots: true });
 
+    var selectSchaduleNowPage = $("#select_triwulan_schadule");
     var tableSS = $("#table_shadule_sabtu_sabat");
     var thead_SS = tableSS.find("thead");
     var tbodyCurTableSS = tableSS.find("tbody");
@@ -744,6 +754,8 @@
           var year = dt.getFullYear();
           var curTriwulan = getCurrentTriwulan();
 
+          selectSchaduleNowPage.val(curTriwulan);
+
           var getKodeSchadule = getParameterUrlByName(customParam.kode_schadule);
           var checkJadewalFromCol = docRefJadwalJemaat.where("kode_jemaat", "==", getKodeSchadule)
             .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
@@ -753,7 +765,7 @@
             var toGetKodeJemaat = getcheckJadwalFormCol.docs[0];
             var tpGetKodeJemaatData = toGetKodeJemaat.data();
             var currentMonth = months[tpGetKodeJemaatData.triwulan - 1];
-            $("#text_bulan_tahun_schadule").html(currentMonth + " " + tpGetKodeJemaatData.jadwal_date_y);
+            $("#text_bulan_tahun_schadule").html("Triwulan " +curTriwulan + " - " + tpGetKodeJemaatData.jadwal_date_y);
 
             var awaitKodeJemaat = await docRefKodeJemaat.doc(tpGetKodeJemaatData.kode_jemaat).get();
             var getDataKodeJemaat = awaitKodeJemaat.data();
@@ -906,6 +918,202 @@
     }
 
     loadAllData.dataSchadule();
+    
+    selectSchaduleNowPage.on("change", async function(e){
+      e.preventDefault();
+      setLoading.showLoading();
+      var selectedValue = parseInt($(this).val());
+      
+      try {
+        const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+        const docRefKodeJemaat = db.collection(collectionsName.kode_jemaat);
+        const dt = new Date();
+        var month = dt.getMonth() + 1;
+        var year = dt.getFullYear();
+        var curTriwulan = getCurrentTriwulan();
+
+        var getKodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+        var checkJadewalFromCol = docRefJadwalJemaat.where("kode_jemaat", "==", getKodeSchadule)
+          .where("triwulan", "==", selectedValue).where("jadwal_date_y", "==", year);
+        var getcheckJadwalFormCol = await checkJadewalFromCol.get();
+
+        if (getcheckJadwalFormCol.docs.length > 0) {
+          var toGetKodeJemaat = getcheckJadwalFormCol.docs[0];
+          var tpGetKodeJemaatData = toGetKodeJemaat.data();
+          var currentMonth = months[tpGetKodeJemaatData.triwulan - 1];
+          $("#text_bulan_tahun_schadule").html("Triwulan " +curTriwulan + " - " + tpGetKodeJemaatData.jadwal_date_y);
+
+          var awaitKodeJemaat = await docRefKodeJemaat.doc(tpGetKodeJemaatData.kode_jemaat).get();
+          var getDataKodeJemaat = awaitKodeJemaat.data();
+          $(".plain_jemaat").each(function (index, element) {
+            $(element).html(getDataKodeJemaat.nama);
+          });;
+
+          loadAllData.loadDataHeader(tpGetKodeJemaatData);
+
+          checkJadewalFromCol.onSnapshot(function (getSnapshot) {
+            let checkJadewalFirst = getSnapshot.docs[0].ref;
+            var collSabtuSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+            collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableSS.empty();
+              var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnSS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                .text("*jadwal kebaktian jemaat masih belum dimuat")
+              );
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableSS.append(setColumnBody);
+                });
+              } else {
+                tbodyCurTableSS.append(createRowSettingNotif);
+              }
+            });
+
+            var collKhotbahSabat = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat).orderBy("row", "asc");
+            collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableKS.empty();
+              var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnKS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                .text("*jadwal kebaktian jemaat masih belum dimuat")
+              );
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "'  onclick=\"showInfoSchadule(event, 'ks')\">>");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableKS.append(setColumnBody);
+                });
+              } else {
+                tbodyCurTableKS.append(createRowSettingNotif);
+              }
+            });
+
+            var collRabuMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam).orderBy("row", "asc");
+            collRabuMalam.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableRM.empty();
+              var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnRM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                .text("*jadwal kebaktian jemaat masih belum dimuat")
+              );
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">>");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableRM.append(setColumnBody);
+                });
+              } else {
+                tbodyCurTableRM.append(createRowSettingNotif);
+              }
+            });
+
+            var collVesperMalam = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper).orderBy("row", "asc");
+            collVesperMalam.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableVM.empty();
+              var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnVM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                .text("*jadwal kebaktian jemaat masih belum dimuat")
+              );
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">>");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableVM.append(setColumnBody);
+                });
+              } else {
+                tbodyCurTableVM.append(createRowSettingNotif);
+              }
+            });
+
+            setLoading.hideLoading();
+          });
+        } else {
+          var createRowSettingNotifSS = $('<tr>').append($('<td colspan="' + lengthColumnSS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+            .text("*jadwal kebaktian jemaat masih belum dimuat")
+          );
+          var createRowSettingNotifKS = $('<tr>').append($('<td colspan="' + lengthColumnKS + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+            .text("*jadwal kebaktian jemaat masih belum dimuat")
+          );
+          var createRowSettingNotifRM = $('<tr>').append($('<td colspan="' + lengthColumnRM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+            .text("*jadwal kebaktian jemaat masih belum dimuat")
+          );
+          var createRowSettingNotifVM = $('<tr>').append($('<td colspan="' + lengthColumnVM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+            .text("*jadwal kebaktian jemaat masih belum dimuat")
+          );
+
+          tbodyCurTableSS.empty();
+          tbodyCurTableKS.empty();
+          tbodyCurTableRM.empty();
+          tbodyCurTableVM.empty();
+
+          tbodyCurTableSS.append(createRowSettingNotifSS);
+          tbodyCurTableKS.append(createRowSettingNotifKS);
+          tbodyCurTableRM.append(createRowSettingNotifRM);
+          tbodyCurTableVM.append(createRowSettingNotifVM);
+
+          setLoading.hideLoading();
+        }
+      } catch (e) {
+        setLoading.hideLoading();
+        console.log("Error column table: ", e);
+      }
+    });
   </script>
 </body>
 

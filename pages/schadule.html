@@ -274,7 +274,6 @@
                   <div class="col-sm-12 d-flex align-items-center gap-4 justify-content-between">
                     <div>
                       <select class="form-select" id="select_triwulan_schadule" aria-label="Default select example">
-                        <option selected>Pilih Triwulan</option>
                         <option value="1">Triwulan 1</option>
                         <option value="2">Triwulan 2</option>
                         <option value="3">Triwulan 3</option>
@@ -455,13 +454,8 @@
         </div>
         <div class="modal-body">
           <div>
-            <label class="mb-1" for="triwulan_ss">Triwulan:</label>
+            <label class="mb-1" for="triwulan_ss">Pilih Triwulan:</label>
             <select class="form-select mb-4 select_schadule_now" id="triwulan_ss" aria-label="Default select example">
-              <option selected>Pilih Triwulan</option>
-              <option value="1">Triwulan 1</option>
-              <option value="2">Triwulan 2</option>
-              <option value="3">Triwulan 3</option>
-              <option value="4">Triwulan 4</option>
             </select>
           </div>
           <h5 class="text-center">SEKOLAH SABAT</h5>
@@ -503,13 +497,8 @@
         </div>
         <div class="modal-body">
           <div>
-            <label class="mb-1" for="triwulan_rm">Triwulan:</label>
+            <label class="mb-1" for="triwulan_rm">Pilih Triwulan:</label>
             <select class="form-select mb-4 select_schadule_now" id="triwulan_rm" aria-label="Default select example">
-              <option selected>Pilih Triwulan</option>
-              <option value="1">Triwulan 1</option>
-              <option value="2">Triwulan 2</option>
-              <option value="3">Triwulan 3</option>
-              <option value="4">Triwulan 4</option>
             </select>
           </div>
           <h5 class="text-center">RABU MALAM</h5>
@@ -540,13 +529,8 @@
         </div>
         <div class="modal-body">
           <div>
-            <label class="mb-1" for="triwulan_vm">Triwulan:</label>
+            <label class="mb-1" for="triwulan_vm">Pilih Triwulan:</label>
             <select class="form-select mb-4 select_schadule_now" id="triwulan_vm" aria-label="Default select example">
-              <option selected>Pilih Triwulan</option>
-              <option value="1">Triwulan 1</option>
-              <option value="2">Triwulan 2</option>
-              <option value="3">Triwulan 3</option>
-              <option value="4">Triwulan 4</option>
             </select>
           </div>
           <h5 class="text-center">JUMAT VESPER</h5>
@@ -1236,15 +1220,17 @@
               var month = dt.getMonth() + 1;
               var year = dt.getFullYear();
               var curTriwulan = getCurrentTriwulan();
+              var selectedTriwulan = modalGenerateSS.find("#triwulan_ss").val();
+              var valSelecTriwulan = parseInt(selectedTriwulan);
 
               var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
-                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+                .where("triwulan", "==", valSelecTriwulan).where("jadwal_date_y", "==", year).get();
 
               if (checkJadewalFromCol.empty && checkJadewalFromCol.size < 1) {
                 var setDocJadwalJemaat = await docRefJadwalJemaat.add({
                   "id": "-",
                   "kode_jemaat": getDataUserLogin.kode_jemaat,
-                  "triwulan": curTriwulan,
+                  "triwulan": valSelecTriwulan,
                   "jadwal_date_y": year,
                   "created_by": getDataUserLogin.id,
                   "created_date": dt,
@@ -1353,9 +1339,11 @@
               var month = dt.getMonth() + 1;
               var year = dt.getFullYear();
               var curTriwulan = getCurrentTriwulan();
+              var selectedTriwulan = modalGenerateRM.find("#triwulan_rm").val();
+              var valSelecTriwulan = parseInt(selectedTriwulan);
 
               var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
-                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+                .where("triwulan", "==", valSelecTriwulan).where("jadwal_date_y", "==", year).get();
 
               let collRefForCollection;
 
@@ -1363,7 +1351,7 @@
                 var setDocJadwalJemaat = await docRefJadwalJemaat.add({
                   "id": "-",
                   "kode_jemaat": getDataUserLogin.kode_jemaat,
-                  "triwulan": month,
+                  "triwulan": valSelecTriwulan,
                   "jadwal_date_y": year,
                   "created_by": getDataUserLogin.id,
                   "created_date": dt,
@@ -1499,9 +1487,11 @@
               var month = dt.getMonth() + 1;
               var year = dt.getFullYear();
               var curTriwulan = getCurrentTriwulan();
+              var selectedTriwulan = modalGenerateJV.find("#triwulan_vm").val();
+              var valSelecTriwulan = parseInt(selectedTriwulan);
 
               var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
-                .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+                .where("triwulan", "==", valSelecTriwulan).where("jadwal_date_y", "==", year).get();
 
               let collRefForCollection;
 
@@ -1509,7 +1499,7 @@
                 var setDocJadwalJemaat = await docRefJadwalJemaat.add({
                   "id": "-",
                   "kode_jemaat": getDataUserLogin.kode_jemaat,
-                  "triwulan": curTriwulan,
+                  "triwulan": valSelecTriwulan,
                   "jadwal_date_y": year,
                   "created_by": getDataUserLogin.id,
                   "created_date": dt,
@@ -2508,6 +2498,7 @@
       logOut(e, auth, signOut, onAuthStateChanged);
     });
 
+    var selectSchaduleNowPage = $("#select_triwulan_schadule");
     var months = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'];
     var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
@@ -2533,7 +2524,7 @@
       var plainJemaat = $(".plain_jemaat");
       var adminPannel = $("#admin_pannel_nav");
       var plainCurTriwulan = $(".plain_triwulan_date");
-      var selectSchaduleNow = $(".select_schadule_now");
+      var selectSchaduleNowModal = $(".select_schadule_now");
       var lblAdmin = $('<li class="menu-header small text-uppercase">').append($('<span class="menu-header-text">').text("Admin"));
       var btnGerejaAdmin = $('<li class="menu-item">').append(
         $('<a href="gereja.html" class="menu-link">')
@@ -2557,9 +2548,15 @@
       var thead_VM = tableVM.find("thead");
       var tbodyCurTableVM = tableVM.find("tbody");
 
-      $("#select_triwulan_schadule").val(curTriwulan);
-      selectSchaduleNow.each(function (index, element) {
-        $(element).val(curTriwulan);
+      var checkLastMonthTriwulan = checkMonthEndOfTriwulan();
+      selectSchaduleNowPage.val(curTriwulan);
+      selectSchaduleNowModal.each(function (index, element) {
+        var select = $(element);
+        select.append($("<option>", {value: curTriwulan, text: "Triwulan "+curTriwulan, selected: true}));
+        if(checkLastMonthTriwulan){
+          var nextTribulan = parseInt(curTriwulan) + 1;
+          select.append($("<option>", {value: nextTribulan, text: "Triwulan "+nextTribulan}));
+        }
       });
 
       getUserById.then(function (doc) {
@@ -2718,128 +2715,284 @@
         .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
 
       checkJadewalFromCol.onSnapshot(function (snapshot) {
-        if (snapshot.docs.length > 0) {
-          let checkJadewalFirst;
-          snapshot.forEach(function (doc) {
-            checkJadewalFirst = doc;
-            var dataDocs = doc.data();
-            return;
-          });
-
-          var collSabtuSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
-          collSabtuSabat.onSnapshot(function (querySnapGetCol) {
-            tbodyCurTableSS.empty();
-            if (querySnapGetCol.size > 0) {
-              var getDataDocs = querySnapGetCol.docs;
-              var getRowAsc = getDataDocs.map(function (doc) {
-                var docData = doc.data();
-                docData["id"] = doc.id;
-                return docData;
-              }).sort(function (a, b) {
-                return a.row - b.row;
-              });
-              getRowAsc.forEach(function (getCol) {
-                var subdataCol = getCol;
-                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
-                  return a.posisi - b.posisi;
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+  
+            var collSabtuSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+            collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableSS.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
                 });
-                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
-                setColumnBody.append($("<td>").text(subdataCol.tanggal));
-                kolomNameAsc.forEach((getName) => {
-                  setColumnBody.append($("<td>").text(getName.nama));
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableSS.append(setColumnBody);
                 });
-                tbodyCurTableSS.append(setColumnBody);
-              });
-            }
-          });
-
-          var collKhotbahSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
-          collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
-            tbodyCurTableKS.empty();
-            if (querySnapGetCol.size > 0) {
-              var getDataDocs = querySnapGetCol.docs;
-              var getRowAsc = getDataDocs.map(function (doc) {
-                var docData = doc.data();
-                docData["id"] = doc.id;
-                return docData;
-              }).sort(function (a, b) {
-                return a.row - b.row;
-              });
-              getRowAsc.forEach(function (getCol) {
-                var subdataCol = getCol;
-                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
-                  return a.posisi - b.posisi;
+              }
+            });
+  
+            var collKhotbahSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableKS.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
                 });
-                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ks')\">");
-                setColumnBody.append($("<td>").text(subdataCol.tanggal));
-                kolomNameAsc.forEach((getName) => {
-                  setColumnBody.append($("<td>").text(getName.nama));
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ks')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableKS.append(setColumnBody);
                 });
-                tbodyCurTableKS.append(setColumnBody);
-              });
-            }
-          });
-
-          var collRabuMalam = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
-          collRabuMalam.onSnapshot(function (querySnapGetCol) {
-            tbodyCurTableRM.empty();
-            if (querySnapGetCol.size > 0) {
-              var getDataDocs = querySnapGetCol.docs;
-              var getRowAsc = getDataDocs.map(function (doc) {
-                var docData = doc.data();
-                docData["id"] = doc.id;
-                return docData;
-              }).sort(function (a, b) {
-                return a.row - b.row;
-              });
-              getRowAsc.forEach(function (getCol) {
-                var subdataCol = getCol;
-                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
-                  return a.posisi - b.posisi;
+              }
+            });
+  
+            var collRabuMalam = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+            collRabuMalam.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableRM.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
                 });
-                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">");
-                setColumnBody.append($("<td>").text(subdataCol.tanggal));
-                kolomNameAsc.forEach((getName) => {
-                  setColumnBody.append($("<td>").text(getName.nama));
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableRM.append(setColumnBody);
                 });
-                tbodyCurTableRM.append(setColumnBody);
-              });
-            }
-          });
-
-          var collJumatVesper = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
-          collJumatVesper.onSnapshot(function (querySnapGetCol) {
-            tbodyCurTableVM.empty();
-            if (querySnapGetCol.size > 0) {
-              var getDataDocs = querySnapGetCol.docs;
-              var getRowAsc = getDataDocs.map(function (doc) {
-                var docData = doc.data();
-                docData["id"] = doc.id;
-                return docData;
-              }).sort(function (a, b) {
-                return a.row - b.row;
-              });
-              getRowAsc.forEach(function (getCol) {
-                var subdataCol = getCol;
-                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
-                  return a.posisi - b.posisi;
+              }
+            });
+  
+            var collJumatVesper = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+            collJumatVesper.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableVM.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
                 });
-                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">");
-                setColumnBody.append($("<td>").text(subdataCol.tanggal));
-                kolomNameAsc.forEach((getName) => {
-                  setColumnBody.append($("<td>").text(getName.nama));
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableVM.append(setColumnBody);
                 });
-                tbodyCurTableVM.append(setColumnBody);
-              });
-            }
-          });
-
-          setLoading.hideLoading();
-        } else {
-          setLoading.hideLoading();
-        }
-      });
+              }
+            });
+  
+            setLoading.hideLoading();
+          } else {
+            setLoading.hideLoading();
+          }
+        });
     }
+
+    selectSchaduleNowPage.on("change", async function(e){
+      e.preventDefault();
+      setLoading.showLoading();
+      var selectedValue = parseInt($(this).val());
+      var getDataUserLogin = await getUserLogin(userIdLogin);
+      const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+
+      const dt = new Date();
+      var month = dt.getMonth() + 1;
+      var year = dt.getFullYear();
+      
+      var tableSS = $("#table_shadule_sabtu_sabat");
+      var thead_SS = tableSS.find("thead");
+      var tbodyCurTableSS = tableSS.find("tbody");
+      var tableKS = $("#table_shadule_khotbah_sabat");
+      var thead_KS = tableKS.find("thead");
+      var tbodyCurTableKS = tableKS.find("tbody");
+      var tableRM = $("#table_shadule_rabu_malam");
+      var thead_RM = tableRM.find("thead");
+      var tbodyCurTableRM = tableRM.find("tbody");
+      var tableVM = $("#table_shadule_vesper_malam");
+      var thead_VM = tableVM.find("thead");
+      var tbodyCurTableVM = tableVM.find("tbody");
+
+      var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+        .where("triwulan", "==", selectedValue).where("jadwal_date_y", "==", year);
+
+      checkJadewalFromCol.onSnapshot(function (snapshot) {
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+  
+            var collSabtuSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat).orderBy("row", "asc");
+            collSabtuSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableSS.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ss')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableSS.append(setColumnBody);
+                });
+              }
+            });
+  
+            var collKhotbahSabat = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            collKhotbahSabat.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableKS.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'ks')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableKS.append(setColumnBody);
+                });
+              }
+            });
+  
+            var collRabuMalam = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+            collRabuMalam.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableRM.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'rm')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableRM.append(setColumnBody);
+                });
+              }
+            });
+  
+            var collJumatVesper = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+            collJumatVesper.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTableVM.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'vm')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTableVM.append(setColumnBody);
+                });
+              }
+            });
+          
+            setLoading.hideLoading();
+          } else {
+            tbodyCurTableSS.empty();
+            tbodyCurTableKS.empty();
+            tbodyCurTableRM.empty();
+            tbodyCurTableVM.empty();
+            
+            setLoading.hideLoading();
+          }
+        });
+    });
   </script>
 </body>
 
