@@ -1017,122 +1017,123 @@
 
         return getJemaatDoc;
       },
-      dataAnggotaJemaat: function dataAnggotaJemaat(getUserById) {
-        getUserById.then(function (doc) {
-          var subcollAnggota = doc.collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
-          var idKodeJemaat = doc.id;
-          subcollAnggota.get().then(function (querySnapshot) {
-            var dataUser = [];
-            if (querySnapshot.size > 0) {
-              tbodyAnggota.empty();
-              querySnapshot.forEach(function (doc) {
-                var getData = doc.data();
-                dataUser.push(getData);
-              });
+      dataAnggotaJemaat: async function dataAnggotaJemaat(getUserById) {
+        var getDocUsers = await getUserById;
+        var subcollAnggota = getDocUsers.collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
+        var idKodeJemaat = getDocUsers.id;
+        var table = $("#tb_anggota_jemaat");
+        subcollAnggota.get().then(function (querySnapshot) {
+          var dataUser = [];
+          if (querySnapshot.size > 0) {
+            tbodyAnggota.empty();
+            querySnapshot.forEach(function (doc) {
+              var getData = doc.data();
+              dataUser.push(getData);
+            });
 
-              var table = $("#tb_anggota_jemaat").DataTable({
-                data: dataUser,
-                columns: [
-                  { title: "Nama Lengkap", data: "nama" },
-                  { title: "Alamat", data: "alamat" },
-                  { title: "No Ponsel", data: "no_ponsel" },
-                  { 
-                    title: "Jenis Kelamin",
-                    data: "jenis_kelamin",
-                    render: function(data, type, row){
-                      return row.jenis_kelamin == "1" ? "Laki-laki" : "Perempuan"
+            table.DataTable({
+              data: dataUser,
+              columns: [
+                { title: "Nama Lengkap", data: "nama" },
+                { title: "Alamat", data: "alamat" },
+                { title: "No Ponsel", data: "no_ponsel" },
+                { 
+                  title: "Jenis Kelamin",
+                  data: "jenis_kelamin",
+                  render: function(data, type, row){
+                    return row.jenis_kelamin == "1" ? "Laki-laki" : "Perempuan"
+                  }
+                },
+                { 
+                  title: "Tanggal Lahir",
+                  data: "tgl_lahir",
+                  render: function(data, type, row){
+                    var setLahir = "-";
+                    try {
+                      var dateLahir = row.tgl_lahir.toDate();
+                      var day = dateLahir.getDate();
+                      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                      var month = months[dateLahir.getMonth()];
+                      var year = dateLahir.getFullYear();
+                      setLahir = day + " " + month + " " + year;
+                    } catch (e) {
+                      setLahir = "?";
+                      console.log("error: convert tanggal lahir " + row.nama);
                     }
+                    return setLahir;
                   },
-                  { 
-                    title: "Tanggal Lahir",
-                    data: "tgl_lahir",
-                    render: function(data, type, row){
-                      var setLahir = "-";
-                      try {
-                        var dateLahir = row.tgl_lahir.toDate();
-                        var day = dateLahir.getDate();
-                        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                        var month = months[dateLahir.getMonth()];
-                        var year = dateLahir.getFullYear();
-                        setLahir = day + " " + month + " " + year;
-                      } catch (e) {
-                        setLahir = "?";
-                        console.log("error: convert tanggal lahir " + row.nama);
-                      }
-                      return setLahir;
-                    },
-                    createdCell: function(td, cellData, rowData, row, col) {
-                      if (col === 4) {
-                        $(td).attr("id", "tgl_lahir_" + rowData.id);
-                      }
-                    }
-                  },
-                  { 
-                    title: "Baptisan", 
-                    data: "status_baptisan",
-                    render: function(data, type, row){
-                      var statusBaptis = data == "1" ? "success" : "warning";
-                      var setStatusBaptis = data == "1" ? "Sudah" : "Belum";
-                      var render = `
-                        <a href="javascript:void(0)" onclick="activeInactiveBaptisan(event, '`+ idKodeJemaat + `')">
-                          <span class="text-`+ statusBaptis + `">` + setStatusBaptis + `</span>
-                        </a>
-                      `;
-                      return render;
-                    },
-                    createdCell: function(td, cellData, rowData, row, col) {
-                      var statusBaptis = rowData.status_baptisan == "1" ? "success" : "warning";
-                      if (col === 5) {
-                        $(td).attr("id", "baptisan_" + rowData.id)
-                        .attr("class", "text-" + statusBaptis)
-                        .attr("status", rowData.status_baptisan);
-                      }
-                    }
-                  },
-                  { 
-                    title: "Action", 
-                    data: "id",
-                    render: function(data, type, row){
-                      var render = `
-                        <div class="dropdown">
-                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bx bx-dots-vertical-rounded"></i>
-                          </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="openModalEdit(event)">
-                              <i class="bx bx-edit-alt me-1"></i>
-                              Edit
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="deleteGereja('`+ data + `')">
-                              <i class="bx bx-trash me-1"></i>
-                              Delete
-                            </a>
-                          </div>
-                        </div>
-                        <td id='action_` + data + `' class='text-center row_action'>
-                        </td>
-                      `;
-                      return render;
-                    },
-                    createdCell: function(td, cellData, rowData, row, col) {
-                      if (col === 6) {
-                        $(td).attr("id", "action_" + rowData.id)
-                        .attr("class", "text-center row_action");
-                      }
+                  createdCell: function(td, cellData, rowData, row, col) {
+                    if (col === 4) {
+                      $(td).attr("id", "tgl_lahir_" + rowData.id);
                     }
                   }
-                ],
-                createdRow: function(row, dataUser, dataIndex) {
-                  $(row).attr("id", dataUser.id);
+                },
+                { 
+                  title: "Baptisan", 
+                  data: "status_baptisan",
+                  render: function(data, type, row){
+                    var statusBaptis = data == "1" ? "success" : "warning";
+                    var setStatusBaptis = data == "1" ? "Sudah" : "Belum";
+                    var render = `
+                      <a href="javascript:void(0)" onclick="activeInactiveBaptisan(event, '`+ idKodeJemaat + `')">
+                        <span class="text-`+ statusBaptis + `">` + setStatusBaptis + `</span>
+                      </a>
+                    `;
+                    return render;
+                  },
+                  createdCell: function(td, cellData, rowData, row, col) {
+                    var statusBaptis = rowData.status_baptisan == "1" ? "success" : "warning";
+                    if (col === 5) {
+                      $(td).attr("id", "baptisan_" + rowData.id)
+                      .attr("class", "text-" + statusBaptis)
+                      .attr("status", rowData.status_baptisan);
+                    }
+                  }
+                },
+                { 
+                  title: "Action", 
+                  data: "id",
+                  render: function(data, type, row){
+                    var render = `
+                      <div class="dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bx bx-dots-vertical-rounded"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="javascript:void(0);" onclick="openModalEdit(event)">
+                            <i class="bx bx-edit-alt me-1"></i>
+                            Edit
+                          </a>
+                          <a class="dropdown-item" href="javascript:void(0);" onclick="deleteGereja('`+ data + `')">
+                            <i class="bx bx-trash me-1"></i>
+                            Delete
+                          </a>
+                        </div>
+                      </div>
+                      <td id='action_` + data + `' class='text-center row_action'>
+                      </td>
+                    `;
+                    return render;
+                  },
+                  createdCell: function(td, cellData, rowData, row, col) {
+                    if (col === 6) {
+                      $(td).attr("id", "action_" + rowData.id)
+                      .attr("class", "text-center row_action");
+                    }
+                  }
                 }
-              });
-            }
+              ],
+              createdRow: function(row, dataUser, dataIndex) {
+                $(row).attr("id", dataUser.id);
+              }
+            });
+          }
 
-            $(".loading").attr("hidden", true);
-            $(".layout-navbar").css("z-index", "2");
-            $(".navbar").css("z-index", "2");
-          });
+          $(".loading").attr("hidden", true);
+          $(".layout-navbar").css("z-index", "2");
+          $(".navbar").css("z-index", "2");
         });
+      
       }
     }
 
