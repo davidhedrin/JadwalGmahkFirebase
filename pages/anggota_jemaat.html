@@ -909,13 +909,15 @@
     });
 
     async function clickCopyLinkRegis() {
+      setLoading.showLoading();
       var getDataUserLogin = await getUserLogin(userIdLogin);
       var getKodeJemaat = getDataUserLogin.kode_jemaat;
 
-      var textToCopy = getLinkPageUrlParam("jemaat_register.html") + "?kode_jemaat=" + getKodeJemaat;
+      var longUrl = getLinkPageUrlParam("jemaat_register.html") + "?kode_jemaat=" + getKodeJemaat;
+      var shortUrl = await generateSortUrlTiny(longUrl);
 
       var textarea = document.createElement("textarea");
-      textarea.value = textToCopy;
+      textarea.value = shortUrl;
       document.body.appendChild(textarea);
 
       textarea.select();
@@ -926,6 +928,8 @@
       document.body.removeChild(textarea);
       toastAction.showToastAlert(toastAlert, "Link Daftar", "copy", "Link pendaftaran jemaat telah disalin", "info");
       toastAction.hideToastAlert(toastAlert);
+
+      setLoading.hideLoading();
     }
   </script>
   <!-- Firebase Inizialize In Last -->

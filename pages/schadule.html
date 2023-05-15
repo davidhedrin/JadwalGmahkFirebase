@@ -2194,12 +2194,15 @@
       }
     }
 
-    function clickCopyLinkSchadule() {
+    async function clickCopyLinkSchadule() {
       if ($.trim(currentKodeSchadule)) {
-        var textToCopy = getLinkPageUrlParam("schadule_view.html") + "?" + customParam.kode_schadule + "=" + currentKodeSchadule;
+        setLoading.showLoading();
+
+        var longUrl = getLinkPageUrlParam("schadule_view.html") + "?" + customParam.kode_schadule + "=" + currentKodeSchadule;
+        var shortUrl = await generateSortUrlTiny(longUrl);
 
         var textarea = document.createElement("textarea");
-        textarea.value = textToCopy;
+        textarea.value = shortUrl;
         document.body.appendChild(textarea);
 
         textarea.select();
@@ -2210,6 +2213,8 @@
         document.body.removeChild(textarea);
         toastAction.showToastAlert(toastAlert, "Schadule", "copy", "Link schadule jemaat telah disalin", "success");
         toastAction.hideToastAlert(toastAlert);
+        
+        setLoading.hideLoading();
       } else {
         toastAction.showToastAlert(toastAlert, "Schadule", "copy", "Schadule jemaat bulan ini belum dibuat", "info");
         toastAction.hideToastAlert(toastAlert);

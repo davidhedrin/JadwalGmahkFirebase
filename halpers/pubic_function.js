@@ -214,3 +214,49 @@ function checkMonthEndOfTriwulan() {
 
   return result;
 }
+
+async function generateSortUrlBitly(longUrl){
+  var result;
+  var accessToken = "7c855523e509ac672bdef5451e1d47879fe74fef";
+  
+  try {
+    var response = await $.ajax({
+      url: "https://api-ssl.bitly.com/v4/shorten",
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + accessToken,
+        "Content-Type": "application/json"
+      },
+      data: JSON.stringify({
+        "long_url": longUrl
+      })
+    });
+    
+    var shortUrl = response.link;
+    result = shortUrl;
+  }
+  catch (e) {
+    console.log("Error generateSortUrlBitly(): " + e);
+  }
+
+  return result;
+}
+
+async function generateSortUrlTiny(longUrl){
+  var result;
+
+  try {
+    var response = await $.ajax({
+      url: "https://tinyurl.com/api-create.php?url=" + longUrl,
+      method: "GET"
+    });
+    
+    var shortUrl = response;
+    result = shortUrl;
+  }
+  catch (e) {
+    console.log("Error generateSortUrlTiny(): " + e);
+  }
+
+  return result;
+}
