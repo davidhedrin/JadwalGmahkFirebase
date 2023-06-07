@@ -2226,6 +2226,7 @@
     var modalSchaduelInfo = $("#modal_info_schadule");
     var modalBodySchaduleInfo = modalSchaduelInfo.find("#modal_body_info");
     async function showInfoSchadule(event, type) {
+      var selectSchadule = $("#select_triwulan_schadule");
       var row = $(event.target);
       var target = row.is('tr') ? row : row.closest('tr');
       if (target.length) {
@@ -2241,11 +2242,12 @@
         const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
         const docRefJemaatForModal = db.collection(collectionsName.kode_jemaat);
         var curTriwulan = getCurrentTriwulan();
+        var setSelectedTriwulan = parseInt(selectSchadule.val());
 
         var getDataJemaatForModal = await docRefJemaatForModal.doc(currentKodeSchadule).get();
         var dataJemaatForModal = getDataJemaatForModal.data();
         var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", currentKodeSchadule)
-          .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+          .where("triwulan", "==", setSelectedTriwulan).where("jadwal_date_y", "==", year);
 
         if (type == "ss") {
           var subcollSabtuSabat = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
