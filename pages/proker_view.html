@@ -58,6 +58,7 @@
     .content-padding {
       padding-right: 3rem !important;
       padding-left: 3rem !important;
+      padding-bottom: 4rem !important;
     }
 
     footer {
@@ -159,7 +160,7 @@
 
         <div class="collapse navbar-collapse" id="navbar_component_btn">
           <div class="navbar-nav me-auto">
-            <a class="nav-item nav-link" href="../index.html">Home</a>
+            <a class="nav-item nav-link" href="javascript:void(0)" id="btn_home_page">Home</a>
             <a class="nav-item nav-link" href="javascript:void(0)" id="btn_schadule_page">Schadule</a>
             <a class="nav-item nav-link active" href="javascript:void(0)" id="btn_proker_page">Proker</a>
           </div>
@@ -279,6 +280,32 @@
       </div>
     </div>
   </div>
+  
+  <div class="modal fade" id="modal_input_kode_jemaat" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel2">
+            Temukan Proker
+            <i class='bx bx-search-alt'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan kode jemaat</span>
+          <p>untuk menemukan proker jemaat</p>
+          <input type="text" class="form-control" placeholder="masukkan kode" id="input_kode_jemaat"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <a href="../index.html" class="btn btn-outline-secondary">
+            Kembali
+          </a>
+          <button type="button" class="btn btn-primary" id="confirm__submit_shadule_code">Temukan</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="../assets/vendor/libs/jquery/jquery.js"></script>
   <script src="../assets/vendor/libs/popper/popper.js"></script>
@@ -297,8 +324,33 @@
 
   <script>
     let kodeSchadule, signOuts, authUser;
+    var modelInputKode = $("#modal_input_kode_jemaat");
+    var btnTemukanKode = modelInputKode.find("#confirm__submit_shadule_code");
+    var toastAlert = $("#toast_alert");
+
     $(document).ready(function () {
       kodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+      
+      if(kodeSchadule == ""){
+        modelInputKode.modal("show");
+      }
+    });
+    
+    btnTemukanKode.click((e)=>{
+      var inputKode = modelInputKode.find("#input_kode_jemaat");
+      var valInputKode = inputKode.val();
+
+      if(valInputKode){
+        var currentUrl = window.location.href;
+        var baseUrl = currentUrl.split('?')[0];
+        var newUrl = baseUrl + "?kode_schadule=" + encodeURIComponent(valInputKode);
+        
+        history.replaceState({}, document.title, newUrl);
+        
+        window.location.href = newUrl;
+      }else{
+        inputKode.addClass("input-red");
+      }
     });
 
     var setLoading = {
@@ -313,12 +365,27 @@
         $(".navbar").css("z-index", "2");
       }
     }
+
+    function onChangeCheck(event) {
+      var inputId = event.target;
+      var valueInput = inputId.value;
+
+      if (valueInput || valueInput.length > 0) {
+        inputId.classList.remove('input-red');
+      } else {
+        inputId.classList.add('input-red');
+      }
+    }
     
     var navbarComp = $("#navbar_component_btn");
+    var btnHome = navbarComp.find("#btn_home_page");
     var btnScadule = navbarComp.find("#btn_schadule_page");
     var btnProker = navbarComp.find("#btn_proker_page");
     var btnBackToSchadule = $("#btn_schadule_maintance");
 
+    btnHome.click((e)=>{
+      redirect("../index.html?kode_schadule=" + kodeSchadule);
+    });
     btnScadule.click((e)=>{
       redirect("schadule_view.html?kode_schadule=" + kodeSchadule);
     });
@@ -380,6 +447,39 @@
 
       setLoading.hideLoading();
     });
+
+    var loadAllData = {
+      loadDataProker : async function loadDataProker(){
+        const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+        const dt = new Date();
+        var month = dt.getMonth() + 1;
+        var year = dt.getFullYear();
+
+        var getKodeSchadule = getParameterUrlByName(customParam.kode_schadule);
+        var curTriwulan = getCurrentTriwulan();
+
+        var checkJadewalFromCol = docRefJadwalJemaat.where("kode_jemaat", "==", getKodeSchadule)
+          .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+        var getcheckJadwalFormCol = await checkJadewalFromCol.get();
+        
+        if (getcheckJadwalFormCol.docs.length > 0) {
+
+        }else{
+          var modelInputKode = $("#modal_input_kode_jemaat");
+          if(kodeSchadule){
+            modelInputKode.find("#input_kode_jemaat").val(getKodeSchadule);
+            modelInputKode.modal("show");
+            toastAction.showToastAlert(toastAlert, "Temukan Schadule", "schadule", 'Maaf, kode jemaat tidak terdaftar/tidak ditemukan', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          kodeSchadule = "";
+        }
+      }
+    }
+
+    await loadAllData.loadDataProker();
+        
+    setLoading.hideLoading();
   </script>
 </body>
 

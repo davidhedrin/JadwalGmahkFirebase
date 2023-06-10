@@ -181,8 +181,7 @@
   </figure> -->
 
   <footer class="footer bg-light">
-    <div
-      class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
+    <div class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
       <div>
         <a href="javascript:void(0)" class="footer-text fw-bolder">Sneat</a> ©
       </div>
@@ -221,10 +220,18 @@
     var btnProker = navbarComp.find("#btn_proker_page");
 
     btnScadule.click((e)=>{
-      redirect("pages/schadule_view.html?kode_schadule=" + kodeSchadule);
+      if(kodeSchadule){
+        redirect("pages/schadule_view.html?kode_schadule=" + kodeSchadule);
+      }else{
+        redirect("pages/schadule_view.html");
+      }
     });
     btnProker.click((e)=>{
-      redirect("pages/proker_view.html?kode_schadule=" + kodeSchadule);
+      if(kodeSchadule){
+        redirect("pages/proker_view.html?kode_schadule=" + kodeSchadule);
+      }else{
+        redirect("pages/proker_view.html");
+      }
     });
 
     function logoutSneat(){
