@@ -6,7 +6,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>Schadule View</title>
+  <title>Schaduleneat | Proker View</title>
 
   <meta name="description" content="" />
   <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
@@ -60,21 +60,17 @@
       padding-left: 3rem !important;
     }
 
-    .marquee-container {
+    footer {
       position: fixed;
-      bottom: 0;
       left: 0;
+      bottom: 0;
       width: 100%;
-      height: 25px;
-      background-color: rgba(51, 51, 51, 0.5);
-      overflow: hidden;
-      z-index: 1;
     }
 
     @media only screen and (max-width: 800px) {
       .content-padding {
-        padding-right: 1.5rem !important;
-        padding-left: 1.5rem !important;
+        padding-right: 1rem !important;
+        padding-left: 1rem !important;
       }
     }
   </style>
@@ -99,11 +95,6 @@
     </div>
     <div class="toast-body" id="message_toast">
     </div>
-  </div>
-
-  <div class="marquee-container">
-    <marquee direction="" scrollamount="5" style="color: white; font-style: italic;">*klik baris jadwal untuk melihat
-      jelas | Selamat datang di Sneat, manage perbaktian dengan baik dan mudah</marquee>
   </div>
 
   <!-- Layout wrapper -->
@@ -168,6 +159,7 @@
 
         <div class="collapse navbar-collapse" id="navbar_component_btn">
           <div class="navbar-nav me-auto">
+            <a class="nav-item nav-link" href="../index.html">Home</a>
             <a class="nav-item nav-link" href="javascript:void(0)" id="btn_schadule_page">Schadule</a>
             <a class="nav-item nav-link active" href="javascript:void(0)" id="btn_proker_page">Proker</a>
           </div>
@@ -204,6 +196,20 @@
     <div class="dropdown-divider"></div> -->
   </div>
   <!-- / Layout wrapper -->
+  
+  <footer class="footer bg-light">
+    <div class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
+      <div>
+        <a href="javascript:void(0)" class="footer-text fw-bolder">Sneat</a> ©
+      </div>
+      <div>
+        <a href="javascript:void(0)" class="footer-link me-4" target="_blank">License</a>
+        <a href="javascript:void(0)" class="footer-link me-4">Help</a>
+        <a href="javascript:void(0)" class="footer-link me-4">Contact</a>
+        <a href="javascript:void(0)" class="footer-link">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </footer>
 
   <div class="modal fade" id="modal_info_schadule" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -320,7 +326,7 @@
       redirect("schadule_view.html?kode_schadule=" + kodeSchadule);
     });
     btnProker.click((e)=>{
-      e.preventDefault();
+      redirect("proker_view.html?kode_schadule=" + kodeSchadule);
     });
 
     function downloadTable(tables) {
