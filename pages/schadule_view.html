@@ -754,6 +754,7 @@
 
     var navbarComponent = $("#navbar_component_btn");
     var appendBtnLogin = $("<a href='auth/login.html' class='btn btn-primary btn-sm' id='navbar_btn_login'>").text("Login");
+      var appendBtnDashboard = $("<a href='pages/home.html' class='btn btn-primary btn-sm' id='navbar_btn_dashboard'>").text("Dashboard");
     var appendBtnRegis = $("<a href='auth/register.html' class='btn btn-outline-primary btn-sm' id='navbar_btn_register'>").text("Register");
     var appendBtnLogout = $("<button class='btn btn-outline-primary btn-sm' type='button' id='navbar_btn_logout' onclick='logoutSneat()'>").text("Logout");
     
@@ -762,11 +763,14 @@
         navbarComponent.find("#navbar_btn_login").remove();
         navbarComponent.find("#navbar_btn_register").remove();
         navbarComponent.append(appendBtnLogout);
+        navbarComponent.append($("<span class='mx-1'>"));
+        navbarComponent.append(appendBtnDashboard);
       }else{
         navbarComponent.append(appendBtnLogin);
         navbarComponent.append($("<span class='mx-1'>"));
         navbarComponent.append(appendBtnRegis);
         navbarComponent.find("#navbar_btn_logout").remove();
+        navbarComponent.find("#navbar_btn_dashboard").remove();
       }
     });
 
