@@ -294,13 +294,13 @@
                         <div id="drop_item_btn_generate" class="dropdown-menu"
                           aria-labelledby="btn_group_drop_generate">
                           <a class="dropdown-item" href="javascript:void(0);"
-                            onclick="generateRandomSchadule(event, 'ss')" id="sabtu_sabat"><i
+                            onclick="generateRandomSchadule('ss', event)" id="sabtu_sabat"><i
                               class='tf-icons bx bx-church'></i> Sabtu Sabat</a>
                           <a class="dropdown-item" href="javascript:void(0);"
-                            onclick="generateRandomSchadule(event, 'rm')" id="rabu_malam"><i
+                            onclick="generateRandomSchadule('rm', event)" id="rabu_malam"><i
                               class="tf-icons bx bx-message-square"></i> Rabu Malam</a>
                           <a class="dropdown-item" href="javascript:void(0);"
-                            onclick="generateRandomSchadule(event, 'vm')" id="jumat_vesper"><i
+                            onclick="generateRandomSchadule('vm', event)" id="jumat_vesper"><i
                               class='tf-icons bx bx-message-square-dots'></i> Jumat Vesper</a>
                         </div>
                       </div>
@@ -421,8 +421,7 @@
                   document.write(new Date().getFullYear());
                 </script> -->
                 made by
-                <a href="https://davidhedrin.github.io/david-port/" target="_blank" class="footer-link fw-bolder">David
-                  Simbolon</a>
+                <span class="footer-link fw-bolder">GengStar</span>
               </div>
               <!-- <div>
                 <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
@@ -827,12 +826,36 @@
     var tableModalGenerateRM = modalGenerateRM.find("#table_shadule_rabu_malam_modal");
     var tableModalGenerateVM = modalGenerateJV.find("#table_shadule_jumat_vesper_modal");
 
+    var findSelectTriwulanSS = modalGenerateSS.find("#triwulan_ss");
+    var findSelectTriwulanRM = modalGenerateRM.find("#triwulan_rm");
+    var findSelectTriwulanJV = modalGenerateJV.find("#triwulan_vm");
+
+    findSelectTriwulanSS.change((e)=>{
+      var selectedValue = e.target.value;
+      selectTriwulanGenerateSchadule('ss', selectedValue);
+    });
+
+    findSelectTriwulanRM.change((e)=>{
+      var selectedValue = e.target.value;
+      selectTriwulanGenerateSchadule('rm', selectedValue);
+    });
+
+    findSelectTriwulanJV.change((e)=>{
+      var selectedValue = e.target.value;
+      selectTriwulanGenerateSchadule('vm', selectedValue);
+    });
+
     let lengthColumnSS;
     let lengthColumnKS;
     let lengthColumnRM;
     let lengthColumnVM;
 
-    async function generateRandomSchadule(event, type) {
+    async function generateRandomSchadule(type, event = null) {
+      var curTriwulan = getCurrentTriwulan();
+      findSelectTriwulanSS.val(curTriwulan);
+      findSelectTriwulanRM.val(curTriwulan);
+      findSelectTriwulanJV.val(curTriwulan);
+      
       var btn = $(event.target);
       var thead_SS = tableModalGenerateSS.find("thead");
       var thead_KS = tableModalGenerateKS.find("thead");
@@ -858,233 +881,448 @@
         event.preventDefault();
         return false;
       }
-      else {
-        if (type == "ss") {
-          modalGenerateSS.modal("show");
-          modalGenerateSS.css("z-index", "1");
-        }
-        if (type == "rm") {
-          modalGenerateRM.modal("show");
-          modalGenerateRM.css("z-index", "1");
-        }
-        if (type == "vm") {
-          modalGenerateJV.modal("show");
-          modalGenerateJV.css("z-index", "1");
-        }
+      
+      if (type == "ss") {
+        modalGenerateSS.modal("show");
+        modalGenerateSS.css("z-index", "1");
+      }
+      if (type == "rm") {
+        modalGenerateRM.modal("show");
+        modalGenerateRM.css("z-index", "1");
+      }
+      if (type == "vm") {
+        modalGenerateJV.modal("show");
+        modalGenerateJV.css("z-index", "1");
+      }
 
-        setLoading.showLoading();
+      setLoading.showLoading();
 
-        try {
-          const db = firebase.firestore();
-          var getDataUserLogin = await getUserLogin(userIdLogin);
-          var getKodeJemaat = getDataUserLogin.kode_jemaat;
+      try {
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
 
-          var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+        var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
 
-          collRefKolomJemaat.onSnapshot(function (querySnapshot) {
-            if (querySnapshot.exists) {
-              try {
-                var data_tb_kolom = querySnapshot.data();
-
-                if (type == "ss") {
-                  var subcollSabtuSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
-                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
-                  subcollSabtuSabat.onSnapshot(function (subcollectionSS) {
-                    if (subcollectionSS.size > 0) {
-                      var setColumn = $("<tr class='text-nowrap'>");
-                      subcollectionSS.forEach(function (subdocSS) {
-                        var subdataSS = subdocSS.data();
-                        setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
-                      });
-                      thead_SS.append(setColumn);
-                      lengthColumnSS = parseInt(subcollectionSS.size);
-                    }
-                  });
-
-                  var subcollKhotbahSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
-                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
-                  subcollKhotbahSabat.onSnapshot(function (subcollectionKS) {
-                    if (subcollectionKS.size > 0) {
-                      var setColumn = $("<tr class='text-nowrap'>");
-                      subcollectionKS.forEach(function (subdocKS) {
-                        var subdataKS = subdocKS.data();
-                        setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
-                      });
-                      thead_KS.append(setColumn);
-                      lengthColumnKS = parseInt(subcollectionKS.size);
-                    }
-                  });
-                }
-
-                if (type == "rm") {
-                  var subcollRabuMalam = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
-                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
-                  subcollRabuMalam.onSnapshot(function (subcollectionRM) {
-                    if (subcollectionRM.size > 0) {
-                      var setColumn = $("<tr class='text-nowrap'>");
-                      subcollectionRM.forEach(function (subdocRM) {
-                        var subdataRM = subdocRM.data();
-                        setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
-                      });
-                      thead_RM.append(setColumn);
-                      lengthColumnRM = parseInt(subcollectionRM.size);
-                    }
-                  });
-                }
-
-                if (type == "vm") {
-                  var subcollJumatVesper = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
-                    .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
-                  subcollJumatVesper.onSnapshot(function (subcollectionJV) {
-                    if (subcollectionJV.size > 0) {
-                      var setColumn = $("<tr class='text-nowrap'>");
-                      subcollectionJV.forEach(function (subdocJV) {
-                        var subdataJV = subdocJV.data();
-                        setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
-                      });
-                      thead_VM.append(setColumn);
-                      lengthColumnVM = parseInt(subcollectionJV.size);
-                    }
-                  });
-                }
-              } catch (e) {
-                toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
-                toastAction.hideToastAlert(toastAlert);
-                console.error("Error table schadule: ", e);
-              }
-            }
-          });
-
-          var docRefAnggotaJemaat = db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
-          var getAllAnggotaJemaat = await docRefAnggotaJemaat.get();
-          var allDocsAnggotaJemaat = getAllAnggotaJemaat.docs;
-          function getRandomName() {
-            var result = "";
+        collRefKolomJemaat.onSnapshot(function (querySnapshot) {
+          if (querySnapshot.exists) {
             try {
-              var getData = allDocsAnggotaJemaat[Math.floor(Math.random() * allDocsAnggotaJemaat.length)].data();
-              result = getData.nama;
+              var data_tb_kolom = querySnapshot.data();
+
+              if (type == "ss") {
+                var subcollSabtuSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollSabtuSabat.onSnapshot(function (subcollectionSS) {
+                  if (subcollectionSS.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionSS.forEach(function (subdocSS) {
+                      var subdataSS = subdocSS.data();
+                      setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
+                    });
+                    thead_SS.append(setColumn);
+                    lengthColumnSS = parseInt(subcollectionSS.size);
+                  }
+                });
+
+                var subcollKhotbahSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollKhotbahSabat.onSnapshot(function (subcollectionKS) {
+                  if (subcollectionKS.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionKS.forEach(function (subdocKS) {
+                      var subdataKS = subdocKS.data();
+                      setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
+                    });
+                    thead_KS.append(setColumn);
+                    lengthColumnKS = parseInt(subcollectionKS.size);
+                  }
+                });
+              }
+
+              if (type == "rm") {
+                var subcollRabuMalam = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                  if (subcollectionRM.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionRM.forEach(function (subdocRM) {
+                      var subdataRM = subdocRM.data();
+                      setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
+                    });
+                    thead_RM.append(setColumn);
+                    lengthColumnRM = parseInt(subcollectionRM.size);
+                  }
+                });
+              }
+
+              if (type == "vm") {
+                var subcollJumatVesper = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                  if (subcollectionJV.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionJV.forEach(function (subdocJV) {
+                      var subdataJV = subdocJV.data();
+                      setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
+                    });
+                    thead_VM.append(setColumn);
+                    lengthColumnVM = parseInt(subcollectionJV.size);
+                  }
+                });
+              }
             } catch (e) {
-              result = "";
-            }
-            return result;
-          }
-
-          var currentDate = new Date();
-          var currentMonth = currentDate.getMonth();
-          var currentYear = currentDate.getFullYear();
-          var lastDayOfOneMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-          var monthsPerGroup = 3;
-          var totalGroups = 4;
-
-          if (type == "ss") {
-            let rowTr = 1;
-            for (var i = 0; i < totalGroups; i++) {
-              var startMonth = i * monthsPerGroup;
-              var endMonth = startMonth + monthsPerGroup - 1;
-
-              if (currentMonth >= startMonth && currentMonth <= endMonth) {
-                for (var j = startMonth; j <= endMonth; j++) {
-                  var firstDayOfMonth = new Date(currentYear, j, 1);
-                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
-                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
-                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
-                    var currentDate = new Date(currentYear, j, k);
-                    if (currentDate.getDay() === 6) {
-                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      
-                      var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
-                      trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
-                      for (var l = 1; l < lengthColumnSS; l++) {
-                        trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
-                      }
-                      tbody_SS.append(trNewBodySS);
-      
-                      var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
-                      trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
-                      for (var m = 1; m < lengthColumnKS; m++) {
-                        trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
-                      }
-                      tbody_KS.append(trNewBodyKS);
-                      rowTr++;
-                    }
-                  }
-                }
-                break;
-              }
+              toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error table schadule: ", e);
             }
           }
-          if (type == "rm") {
-            let rowTr = 1;
-            for (var i = 0; i < totalGroups; i++) {
-              var startMonth = i * monthsPerGroup;
-              var endMonth = startMonth + monthsPerGroup - 1;
+        });
 
-              if (currentMonth >= startMonth && currentMonth <= endMonth) {
-                for (var j = startMonth; j <= endMonth; j++) {
-                  var firstDayOfMonth = new Date(currentYear, j, 1);
-                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
-                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
-                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
-                    var currentDate = new Date(currentYear, j, k);
-                    if (currentDate.getDay() === 3) {
-                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      
-                      var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
-                      trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
-                      for (var l = 1; l < lengthColumnRM; l++) {
-                        trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
-                      }
-                      tbody_RM.append(trNewBodyRM);
-                      rowTr++;
-                    }
-                  }
-                }
-                break;
-              }
-            }
+        var docRefAnggotaJemaat = db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
+        var getAllAnggotaJemaat = await docRefAnggotaJemaat.get();
+        var allDocsAnggotaJemaat = getAllAnggotaJemaat.docs;
+        function getRandomName() {
+          var result = "";
+          try {
+            var getData = allDocsAnggotaJemaat[Math.floor(Math.random() * allDocsAnggotaJemaat.length)].data();
+            result = getData.nama;
+          } catch (e) {
+            result = "";
           }
-          if (type == "vm") {
-            let rowTr = 1;
-            for (var i = 0; i < totalGroups; i++) {
-              var startMonth = i * monthsPerGroup;
-              var endMonth = startMonth + monthsPerGroup - 1;
-
-              if (currentMonth >= startMonth && currentMonth <= endMonth) {
-                for (var j = startMonth; j <= endMonth; j++) {
-                  var firstDayOfMonth = new Date(currentYear, j, 1);
-                  var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
-                  var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
-                  for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
-                    var currentDate = new Date(currentYear, j, k);
-                    if (currentDate.getDay() === 5) {
-                      var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-      
-                      var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
-                      trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
-                      for (var l = 1; l < lengthColumnVM; l++) {
-                        trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
-                      }
-                      tbody_VM.append(trNewBodyVM);
-                      rowTr++;
-                    }
-                  }
-                }
-                break;
-              }
-            }
-          }
-
-          setLoading.hideLoading();
-          if (type == "ss") modalGenerateSS.css("z-index", "");
-          if (type == "rm") modalGenerateRM.css("z-index", "");
-          if (type == "vm") modalGenerateJV.css("z-index", "");
-        } catch (e) {
-          setLoading.hideLoading();
-          toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG654-GEN-SCH-CATCH"', "info");
-          toastAction.hideToastAlert(toastAlert);
-          console.error("Error column table: ", e);
+          return result;
         }
+
+        var currentDate = new Date();
+        var currentMonth = currentDate.getMonth();
+        var currentYear = currentDate.getFullYear();
+        var lastDayOfOneMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        var monthsPerGroup = 3;
+        var totalGroups = 4;
+
+        if (type == "ss") {
+          let rowTr = 1;
+          for (var i = 0; i < totalGroups; i++) {
+            var startMonth = i * monthsPerGroup;
+            var endMonth = startMonth + monthsPerGroup - 1;
+
+            if (currentMonth >= startMonth && currentMonth <= endMonth) {
+              for (var j = startMonth; j <= endMonth; j++) {
+                var firstDayOfMonth = new Date(currentYear, j, 1);
+                var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                  var currentDate = new Date(currentYear, j, k);
+                  if (currentDate.getDay() === 6) {
+                    var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+                    var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
+                    trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
+                    for (var l = 1; l < lengthColumnSS; l++) {
+                      trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                    }
+                    tbody_SS.append(trNewBodySS);
+    
+                    var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
+                    trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
+                    for (var m = 1; m < lengthColumnKS; m++) {
+                      trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                    }
+                    tbody_KS.append(trNewBodyKS);
+                    rowTr++;
+                  }
+                }
+              }
+              break;
+            }
+          }
+        }
+        
+        if (type == "rm") {
+          let rowTr = 1;
+          for (var i = 0; i < totalGroups; i++) {
+            var startMonth = i * monthsPerGroup;
+            var endMonth = startMonth + monthsPerGroup - 1;
+
+            if (currentMonth >= startMonth && currentMonth <= endMonth) {
+              for (var j = startMonth; j <= endMonth; j++) {
+                var firstDayOfMonth = new Date(currentYear, j, 1);
+                var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                  var currentDate = new Date(currentYear, j, k);
+                  if (currentDate.getDay() === 3) {
+                    var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+                    var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
+                    trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
+                    for (var l = 1; l < lengthColumnRM; l++) {
+                      trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                    }
+                    tbody_RM.append(trNewBodyRM);
+                    rowTr++;
+                  }
+                }
+              }
+              break;
+            }
+          }
+        }
+        
+        if (type == "vm") {
+          let rowTr = 1;
+          for (var i = 0; i < totalGroups; i++) {
+            var startMonth = i * monthsPerGroup;
+            var endMonth = startMonth + monthsPerGroup - 1;
+
+            if (currentMonth >= startMonth && currentMonth <= endMonth) {
+              for (var j = startMonth; j <= endMonth; j++) {
+                var firstDayOfMonth = new Date(currentYear, j, 1);
+                var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                  var currentDate = new Date(currentYear, j, k);
+                  if (currentDate.getDay() === 5) {
+                    var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+                    var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
+                    trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
+                    for (var l = 1; l < lengthColumnVM; l++) {
+                      trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                    }
+                    tbody_VM.append(trNewBodyVM);
+                    rowTr++;
+                  }
+                }
+              }
+              break;
+            }
+          }
+        }
+
+        setLoading.hideLoading();
+        if (type == "ss") modalGenerateSS.css("z-index", "");
+        if (type == "rm") modalGenerateRM.css("z-index", "");
+        if (type == "vm") modalGenerateJV.css("z-index", "");
+      } catch (e) {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG654-GEN-SCH-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        console.error("Error column table: ", e);
+      }
+    }
+
+    async function selectTriwulanGenerateSchadule(type, triwullan = null){
+      var thead_SS = tableModalGenerateSS.find("thead");
+      var thead_KS = tableModalGenerateKS.find("thead");
+      var thead_RM = tableModalGenerateRM.find("thead");
+      var thead_VM = tableModalGenerateVM.find("thead");
+
+      var tbody_SS = tableModalGenerateSS.find("tbody");
+      var tbody_KS = tableModalGenerateKS.find("tbody");
+      var tbody_RM = tableModalGenerateRM.find("tbody");
+      var tbody_VM = tableModalGenerateVM.find("tbody");
+
+      thead_SS.empty();
+      thead_KS.empty();
+      thead_RM.empty();
+      thead_VM.empty();
+
+      tbody_SS.empty();
+      tbody_KS.empty();
+      tbody_RM.empty();
+      tbody_VM.empty();
+      
+      if (type == "ss") {
+        modalGenerateSS.modal("show");
+        modalGenerateSS.css("z-index", "1");
+      }
+      if (type == "rm") {
+        modalGenerateRM.modal("show");
+        modalGenerateRM.css("z-index", "1");
+      }
+      if (type == "vm") {
+        modalGenerateJV.modal("show");
+        modalGenerateJV.css("z-index", "1");
+      }
+
+      setLoading.showLoading();
+
+      try{
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
+
+        var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+
+        collRefKolomJemaat.onSnapshot(function (querySnapshot) {
+          if (querySnapshot.exists) {
+            try {
+              var data_tb_kolom = querySnapshot.data();
+
+              if (type == "ss") {
+                var subcollSabtuSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollSabtuSabat.onSnapshot(function (subcollectionSS) {
+                  if (subcollectionSS.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionSS.forEach(function (subdocSS) {
+                      var subdataSS = subdocSS.data();
+                      setColumn.append($("<th id='" + subdataSS.id + "' colomnrow='" + subdataSS.posisi + "'>").text(subdataSS.nama_kolom));
+                    });
+                    thead_SS.append(setColumn);
+                    lengthColumnSS = parseInt(subcollectionSS.size);
+                  }
+                });
+
+                var subcollKhotbahSabat = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollKhotbahSabat.onSnapshot(function (subcollectionKS) {
+                  if (subcollectionKS.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionKS.forEach(function (subdocKS) {
+                      var subdataKS = subdocKS.data();
+                      setColumn.append($("<th id='" + subdataKS.id + "' colomnrow='" + subdataKS.posisi + "'>").text(subdataKS.nama_kolom));
+                    });
+                    thead_KS.append(setColumn);
+                    lengthColumnKS = parseInt(subcollectionKS.size);
+                  }
+                });
+              }
+
+              if (type == "rm") {
+                var subcollRabuMalam = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollRabuMalam.onSnapshot(function (subcollectionRM) {
+                  if (subcollectionRM.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionRM.forEach(function (subdocRM) {
+                      var subdataRM = subdocRM.data();
+                      setColumn.append($("<th id='" + subdataRM.id + "' colomnrow='" + subdataRM.posisi + "'>").text(subdataRM.nama_kolom));
+                    });
+                    thead_RM.append(setColumn);
+                    lengthColumnRM = parseInt(subcollectionRM.size);
+                  }
+                });
+              }
+
+              if (type == "vm") {
+                var subcollJumatVesper = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollJumatVesper.onSnapshot(function (subcollectionJV) {
+                  if (subcollectionJV.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionJV.forEach(function (subdocJV) {
+                      var subdataJV = subdocJV.data();
+                      setColumn.append($("<th id='" + subdataJV.id + "' colomnrow='" + subdataJV.posisi + "'>").text(subdataJV.nama_kolom));
+                    });
+                    thead_VM.append(setColumn);
+                    lengthColumnVM = parseInt(subcollectionJV.size);
+                  }
+                });
+              }
+            } catch (e) {
+              toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error table schadule: ", e);
+            }
+          }
+        });
+
+        var docRefAnggotaJemaat = db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat);
+        var getAllAnggotaJemaat = await docRefAnggotaJemaat.get();
+        var allDocsAnggotaJemaat = getAllAnggotaJemaat.docs;
+        function getRandomName() {
+          var result = "";
+          try {
+            var getData = allDocsAnggotaJemaat[Math.floor(Math.random() * allDocsAnggotaJemaat.length)].data();
+            result = getData.nama;
+          } catch (e) {
+            result = "";
+          }
+          return result;
+        }
+
+        var year = new Date().getFullYear();
+        var startMonth = (triwullan - 1) * 3;
+        var endMonth = startMonth + 2;
+
+        if (type == "ss") {
+          let rowTr = 1;
+          for (var month = startMonth; month <= endMonth; month++) {
+            for (var day = 1; day <= 31; day++) {
+              var currentDate = new Date(year, month, day);
+              if (currentDate.getMonth() === month && currentDate.getDay() === 6) {
+                var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
+                trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
+                for (var l = 1; l < lengthColumnSS; l++) {
+                  trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                }
+                tbody_SS.append(trNewBodySS);
+
+                var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
+                trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
+                for (var m = 1; m < lengthColumnKS; m++) {
+                  trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                }
+                tbody_KS.append(trNewBodyKS);
+                rowTr++;
+              }
+            }
+          }
+        }
+        
+        if (type == "rm") {
+          let rowTr = 1;
+          for (var month = startMonth; month <= endMonth; month++) {
+            for (var day = 1; day <= 31; day++) {
+              var currentDate = new Date(year, month, day);
+              if (currentDate.getMonth() === month && currentDate.getDay() === 3) {
+                var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
+                trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
+                for (var l = 1; l < lengthColumnRM; l++) {
+                  trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                }
+                tbody_RM.append(trNewBodyRM);
+                rowTr++;
+              }
+            }
+          }
+        }
+        
+        if (type == "vm") {
+          let rowTr = 1;
+          for (var month = startMonth; month <= endMonth; month++) {
+            for (var day = 1; day <= 31; day++) {
+              var currentDate = new Date(year, month, day);
+              if (currentDate.getMonth() === month && currentDate.getDay() === 5) {
+                var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
+                trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
+                for (var l = 1; l < lengthColumnVM; l++) {
+                  trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                }
+                tbody_VM.append(trNewBodyVM);
+                rowTr++;
+              }
+            }
+          }
+        }
+        
+        setLoading.hideLoading();
+        if (type == "ss") modalGenerateSS.css("z-index", "");
+        if (type == "rm") modalGenerateRM.css("z-index", "");
+        if (type == "vm") modalGenerateJV.css("z-index", "");
+      } catch (e) {
+        setLoading.hideLoading();
+        toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG656-GEN-SCH-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        console.error("Error column table: ", e);
       }
     }
 
