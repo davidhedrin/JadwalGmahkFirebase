@@ -293,6 +293,11 @@
                       aria-selected="false" onclick="onclickSchaduleTab('Jumat Versper')"><i
                         class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
                   </li>
+                  <li class="nav-item">
+                    <button id="btn_tab_pa" type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-pa" aria-controls="navs-pills-justified-pa"
+                      aria-selected="false" onclick="onclickSchaduleTab('Pemuda Advent')"><i class='tf-icons bx bx-street-view'></i> Pemuda Advent</button>
+                  </li>
                 </ul>
                 <div class="d-flex justify-content-center text-center">
                   <!-- <span class="text-secondary">
@@ -606,6 +611,86 @@
                     </div>
                   </div>
                 </div>
+                <div class="tab-pane fade" id="navs-pills-justified-pa" role="tabpanel">
+                  <h5>Kolom Schadule PEMUDA ADVENT</h5>
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive mt-3">
+                    <table id="table_column_pemuda_advent" class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th>Posisi</th>
+                          <th class="text-nowrap">Kolom-N</th>
+                          <th class="text-nowrap">Nama Kolom</th>
+                          <th class="text-nowrap text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr id="colomn_row_1" colomnrow="1">
+                          <td>
+                            <i class='bx bxs-chevrons-up disabled-cursor'></i><i class='bx bxs-chevrons-down disabled-cursor'></i>
+                          </td>
+                          <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
+                          <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-secondary disabled-cursor">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr id="colomn_row_2" colomnrow="2">
+                          <td>
+                            <a href="javascript:;" onclick='upPositionRow(event, "table_column_pemuda_advent")'><i class='bx bxs-chevrons-up'></i></a><a href="javascript:;" onclick='downPositionRow(event, "table_column_pemuda_advent")'><i class='bx bxs-chevrons-down'></i></a>
+                          </td>
+                          <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
+                          <td class="text-nowrap">
+                            <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
+                          </td>
+                          <td>
+                            <div class="d-flex justify-content-center">
+                              <a href="javascript:;" class="text-danger" onclick="actionDeleteRow(event, 'table_column_pemuda_advent')">
+                                <i class="bx bx-trash me-1"></i>
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="row mb-4 mt-3">
+                    <div class="col-12">
+                      <div class="input-group text-end" style="z-index: 1; width: 130px;">
+                        <input min="1" value="1" type="number" id="input_number_count_add_PA" class="form-control" />
+                        <button class="btn btn-primary btn-sm" type="button" onclick="btnAddNewRowTbl($('#input_number_count_add_PA'), 'table_column_pemuda_advent')">
+                          <i class='bx bx-plus'></i>
+                        </button>
+                      </div>
+                      <!-- <button type="button" class="btn btn-primary me-2">Simpan</button> -->
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div class="mb-3 col-12">
+                    <div class="alert alert-info">
+                      <h6 class="alert-heading mb-1">Jika data kolom jadwal <span class="fw-bold">Pemuda Advent</span> sudah sesuai,</h6>
+                      <p class="mb-0">Masukkan passcode jemaat untuk mengukuhkan kolom schadule jadwal!</p>
+                    </div>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" name="checkBoxReqPA" id="checkBoxReqPA">
+                    <label class="form-check-label" for="checkBoxReqPA">Saya staff jemaat <span class="fw-bold plain_jemaat"></span> mengkonfirmasi perubahan jadwal</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <input type="password" id="passcode_jemaatPA" class="form-control" placeholder="masukkan passcode jemaat">
+                    </div>
+                    <div class="mt-3">
+                      <button type="button" class="btn btn-primary me-2" onclick="saveChangeShcadulePA('table_column_pemuda_advent', $('#checkBoxReqPA'), $('#passcode_jemaatPA'))">Simpan</button>
+                      <button type="reset" class="btn btn-outline-secondary" disabled>Batal</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -714,6 +799,7 @@
     var navsPillSS = divNavsAllTabs.find("#navs-pills-justified-ss");
     var navsPillRM = divNavsAllTabs.find("#navs-pills-justified-rm");
     var navsPillVM = divNavsAllTabs.find("#navs-pills-justified-vm");
+    var navsPillPA = divNavsAllTabs.find("#navs-pills-justified-pa");
     
     var tableSS = navsPillSS.find("#table_column_sekolah_sabat");
     var tbody_SS = tableSS.find("tbody");
@@ -723,11 +809,14 @@
     var tbody_RM = tableRM.find("tbody");
     var tableVM = navsPillVM.find("#table_column_vesper_malam");
     var tbody_VM = tableVM.find("tbody");
+    var tablePA = navsPillPA.find("#table_column_pemuda_advent");
+    var tbody_PA = tablePA.find("tbody");
 
     let setDefaultRowSS = [];
     let setDefaultRowKS = [];
     let setDefaultRowRM = [];
     let setDefaultRowVM = [];
+    let setDefaultRowPA = [];
 
     $(document).ready(function () {
       var activeTabSchadule = getParameterUrlByName('active_tab');
@@ -765,6 +854,9 @@
       tbody_VM.find("tr").each(function() {
         setDefaultRowVM.push($(this).clone());
       });
+      tbody_PA.find("tr").each(function() {
+        setDefaultRowPA.push($(this).clone());
+      });
     });
 
     function generateDefaultRowTable(tableName){
@@ -777,11 +869,6 @@
         </td>
         <td id="kolom_text_1" class="text-nowrap" data-colomn="1">Kolom-<span class="lable_nomor">1</span></td>
         <td class="text-nowrap"><span id="input_nama_row_1">Tanggal</span></td>
-        <td>
-          <div class="form-check d-flex justify-content-center">
-            <input class="form-check-input disabled-cursor" type="checkbox" id="checked_show_colomn_row_1" checked disabled>
-          </div>
-        </td>
         <td>
           <div class="d-flex justify-content-center">
             <a href="javascript:;" class="text-secondary disabled-cursor">
@@ -800,11 +887,6 @@
         <td id="kolom_text_2" class="text-nowrap" data-colomn="2">Kolom-<span class="lable_nomor">2</span></td>
         <td class="text-nowrap">
           <input type="text" class="form-control" placeholder="masukkan nama kolom" id="input_nama_row_2">
-        </td>
-        <td>
-          <div class="form-check d-flex justify-content-center">
-            <input class="form-check-input" type="checkbox" id="checked_show_colomn_row_2" checked>
-          </div>
         </td>
         <td>
           <div class="d-flex justify-content-center">
@@ -1007,16 +1089,16 @@
             var rowCountSS = allTrRowSS.length;
             var rowCountKS = allTrRowKS.length;
     
-            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+            var getKolomJemaat = await collRefKolomJemaat.get();
     
-            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
-            var getKolomJemaat = await docRefKolomJemaat.get();
+            // var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
     
-            if(!getKolomJemaat.empty){
-              var kolomJemaatDoc = getKolomJemaat.docs[0];
-              var kolomJemaatRef = kolomJemaatDoc.ref;
-              const collectionSS = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
-              const collectionKS = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
+            if(getKolomJemaat.exists){
+              // var kolomJemaatDoc = getKolomJemaat.docs[0];
+              // var kolomJemaatRef = kolomJemaatDoc.ref;
+              const collectionSS = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collSabtuSabat);
+              const collectionKS = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collKhotbahSabat);
 
               deleteFirestoreCollection(collectionSS).then(function(){
                 if(rowCountSS > 1 && checkValAllInputColName(allInputColSS)){
@@ -1130,15 +1212,15 @@
             const allInputCol = table.find('tr input:text');
             var rowCount = allTrRow.length;
     
-            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+            var getKolomJemaat = await collRefKolomJemaat.get();
     
-            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
-            var getKolomJemaat = await docRefKolomJemaat.get();
+            // var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
     
-            if(!getKolomJemaat.empty){
-              var kolomJemaatDoc = getKolomJemaat.docs[0];
-              var kolomJemaatRef = kolomJemaatDoc.ref;
-              const setCollection = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
+            if(getKolomJemaat.exists){
+              // var kolomJemaatDoc = getKolomJemaat.docs[0];
+              // var kolomJemaatRef = kolomJemaatDoc.ref;
+              const setCollection = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collRabuMalam);
 
               deleteFirestoreCollection(setCollection).then(function(){
                 if(rowCount > 1 && checkValAllInputColName(allInputCol)){
@@ -1216,15 +1298,15 @@
             const allInputCol = table.find('tr input:text');
             var rowCount = allTrRow.length;
     
-            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat);
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+            var getKolomJemaat = await collRefKolomJemaat.get();
     
-            var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
-            var getKolomJemaat = await docRefKolomJemaat.get();
+            // var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
     
-            if(!getKolomJemaat.empty){
-              var kolomJemaatDoc = getKolomJemaat.docs[0];
-              var kolomJemaatRef = kolomJemaatDoc.ref;
-              const setCollection = kolomJemaatRef.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
+            if(getKolomJemaat.exists){
+              // var kolomJemaatDoc = getKolomJemaat.docs[0];
+              // var kolomJemaatRef = kolomJemaatDoc.ref;
+              const setCollection = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collJumatVesper);
 
               deleteFirestoreCollection(setCollection).then(function(){
                 if(rowCount > 1 && checkValAllInputColName(allInputCol)){
@@ -1285,6 +1367,89 @@
       }
     }
   
+    async function saveChangeShcadulePA(idTable, eventCheckbox, eventInputPascode){
+      try{
+        setLoading.showLoading();
+        const db = firebase.firestore();
+        var getDataUserLogin = await getUserLogin(userIdLogin);
+        var getKodeJemaat = getDataUserLogin.kode_jemaat;
+        
+        var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getKodeJemaat).get();
+        var datagetCollKodeJemaat = getCollKodeJemaat.data();
+        
+        if(eventCheckbox.prop('checked')){
+          if(eventInputPascode.val() == datagetCollKodeJemaat.passcode){
+            const table = $("#" + idTable).find("tbody");
+            const allTrRow = table.find('tr');
+            const allInputCol = table.find('tr input:text');
+            var rowCount = allTrRow.length;
+            
+            var collRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getKodeJemaat);
+            var getKolomJemaat = await collRefKolomJemaat.get();
+            // var docRefKolomJemaat = collRefKolomJemaat.where(collumnsName.tb_kolom_jemaat.col_jemaat_id, "==", getKodeJemaat);
+    
+            if(getKolomJemaat.exists){
+              const setCollection = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+              
+              deleteFirestoreCollection(setCollection).then(function(){
+                if(rowCount > 1 && checkValAllInputColName(allInputCol)){
+                  allTrRow.each(function(){
+                    var getIdxColRow = $(this);
+                    var idxColomnRow = parseInt(getIdxColRow.attr("colomnrow"));
+                    var valInputName = "";
+                    if(idxColomnRow == 1){
+                      valInputName = getIdxColRow.find("#input_nama_row_"+idxColomnRow).html();
+                    }else{
+                      valInputName  = getIdxColRow.find("input#input_nama_row_"+idxColomnRow).val();
+                    }
+                    if($.trim(valInputName) != ''){
+                      setCollection.add({
+                        "id" : '-',
+                        "posisi" : idxColomnRow,
+                        "nama_kolom" : valInputName,
+                        "createBy" : getDataUserLogin.email,
+                        "createDate" : firebase.firestore.Timestamp.fromDate(new Date()),
+                      }).then((doc)=>{
+                        setCollection.doc(doc.id).update({
+                          "id": doc.id,
+                        });
+                      });
+                    }
+                  });
+                }else{
+                  tbody_PA.empty();
+                  var setDefaultTable = generateDefaultRowTable("table_column_pemuda_advent");
+                  $.each(setDefaultTable, function(index, element) {
+                    tbody_PA.append(element);
+                  });
+                }
+                
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Schadule", "success", 'Kolom kebaktian Sabtu Sabat berhasil dikukuhkan', "success");
+                toastAction.hideToastAlert(toastAlert);
+                eventInputPascode.val("");
+                eventCheckbox.prop('checked', false);
+              });
+            }
+            setLoading.hideLoading();
+          }else{
+            setLoading.hideLoading();
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+        }else{
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Staff", "konfirmasi", 'Silahkan setujui kolom staff, sebagai tanda pengukuhan perubahan schadule', "info");
+          toastAction.hideToastAlert(toastAlert);
+        }
+      }catch(e){
+        setLoading.hideLoading();
+        console.log(e);
+        toastAction.showToastAlert(toastAlert, "Form", "", 'Something when wrong, Call admin with code "ER002-ADD-AGT-CATCH"', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    }
   </script>
   <!-- Firebase Inizialize In Last -->
   <script type="module">
@@ -1475,6 +1640,19 @@
                       var subdataJV = subdocJV.data();
                       var setRow = generateRow(subdataJV, "table_column_vesper_malam");
                       tbody_VM.append(setRow);
+                    });
+                  }
+                });
+                
+                var subcollPemudaAdvent = doc_tb_kolom.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollPemudaAdvent.onSnapshot(function (subcollectionPA) {
+                  if (subcollectionPA.size > 0) {
+                    tbody_PA.empty();
+                    subcollectionPA.forEach(function (subdocPA) {
+                      var subdataPA = subdocPA.data();
+                      var setRow = generateRow(subdataPA, "table_column_pemuda_advent");
+                      tbody_PA.append(setRow);
                     });
                   }
                 });

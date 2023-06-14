@@ -12,6 +12,7 @@ var collInCollsName = {
         collKhotbahSabat : "khotbah_sabat",
         collRabuMalam : "rabu_malam",
         collJumatVesper : "jumat_vesper",
+        collPemudaAdvent : "pemuda_advent"
     },
     tb_kode_jemaat : {
         collAnggotaJemaat : "anggota_jemaat",
