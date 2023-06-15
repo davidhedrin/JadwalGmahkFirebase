@@ -194,22 +194,27 @@
       <ul class="nav nav-pills mb-3 mt-3 nav-fill" role="tablist">
         <li class="nav-item">
           <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-            data-bs-target="#navs-pills-justified-home" aria-controls="navs-pills-justified-home"
+            data-bs-target="#navs-pills-justified-ss" aria-controls="navs-pills-justified-ss"
             aria-selected="true"><i class='tf-icons bx bx-church'></i> Sabtu Sabat</button>
         </li>
         <li class="nav-item">
           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-            data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile"
+            data-bs-target="#navs-pills-justified-rm" aria-controls="navs-pills-justified-rm"
             aria-selected="false"><i class="tf-icons bx bx-message-square"></i> Rabu Malam</button>
         </li>
         <li class="nav-item">
           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-            data-bs-target="#navs-pills-justified-messages" aria-controls="navs-pills-justified-messages"
+            data-bs-target="#navs-pills-justified-vm" aria-controls="navs-pills-justified-vm"
             aria-selected="false"><i class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+            data-bs-target="#navs-pills-justified-pa" aria-controls="navs-pills-justified-pa"
+            aria-selected="false"><i class='tf-icons bx bx-street-view'></i> Pemuda Advent</button>
         </li>
       </ul>
       <div class="tab-content">
-        <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+        <div class="tab-pane fade show active" id="navs-pills-justified-ss" role="tabpanel">
           <h5 class="text-center">SEKOLAH SABAT</h5>
           <div class="table-responsive text-nowrap">
             <table id="table_shadule_sabtu_sabat" class="table table-hover">
@@ -242,7 +247,7 @@
                 class='bx bx-download'></i></button>
           </div>
         </div>
-        <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+        <div class="tab-pane fade" id="navs-pills-justified-rm" role="tabpanel">
           <h5 class="text-center">RABU MALAM</h5>
           <div class="table-responsive text-nowrap">
             <table id="table_shadule_rabu_malam" class="table table-hover">
@@ -262,7 +267,7 @@
             </button>
           </div>
         </div>
-        <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+        <div class="tab-pane fade" id="navs-pills-justified-vm" role="tabpanel">
           <h5 class="text-center">JUMAT VESPER</h5>
           <div class="table-responsive text-nowrap">
             <table id="table_shadule_vesper_malam" class="table table-hover">
@@ -278,6 +283,26 @@
           <div class="text-end mt-2">
             <button type="button" class="btn btn-primary btn-sm"
               onclick="downloadTable([$('#table_shadule_vesper_malam')])">
+              Download <i class='bx bx-download'></i>
+            </button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="navs-pills-justified-pa" role="tabpanel">
+          <h5 class="text-center">PEMUDA ADVENT</h5>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_pemuda_advent" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">
+                  *jadwal kebaktian jemaat masih belum dimuat
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-end mt-2">
+            <button type="button" class="btn btn-primary btn-sm"
+              onclick="downloadTable([$('#table_shadule_pemuda_advent')])">
               Download <i class='bx bx-download'></i>
             </button>
           </div>
@@ -581,6 +606,22 @@
             }
           });
         }
+        if (type == "pa") {
+          var subcollPemudaAdvent = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollPemudaAdvent.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataPA = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataPA.nama_kolom,
+                  posisi: subdataPA.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
 
         checkJadewalFromCol.onSnapshot(function (getSnapshot) {
           let checkJadewalFirst = getSnapshot.docs[0].ref;
@@ -713,6 +754,38 @@
             });
           }
 
+          if (type == "pa") {
+            var collPemudaAdvent = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+            collPemudaAdvent.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Jumat Vesper"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
           setLoading.hideLoading();
           modalBodySchaduleInfo.empty();
           modalSchaduelInfo.modal("show");
@@ -787,11 +860,15 @@
     var tableVM = $("#table_shadule_vesper_malam");
     var thead_VM = tableVM.find("thead");
     var tbodyCurTableVM = tableVM.find("tbody");
+    var tablePA = $("#table_shadule_pemuda_advent");
+    var thead_PA = tablePA.find("thead");
+    var tbodyCurTablePA = tablePA.find("tbody");
 
     let lengthColumnSS;
     let lengthColumnKS;
     let lengthColumnRM;
     let lengthColumnVM;
+    let lengthColumnPA;
     var months = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -874,6 +951,23 @@
                     thead_VM.empty();
                   }
                 });
+
+                var subcollPemudaAdvent = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollPemudaAdvent.onSnapshot(function (subcollectionPA) {
+                  if (subcollectionPA.size > 0) {
+                    thead_PA.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionPA.forEach(function (subdocPA) {
+                      var subdataPA = subdocPA.data();
+                      setColumn.append($("<th id='" + subdataPA.id + "' colomnrow='" + subdataPA.posisi + "'>").text(subdataPA.nama_kolom));
+                    });
+                    thead_PA.append(setColumn);
+                    lengthColumnPA = parseInt(subcollectionPA.size);
+                  } else {
+                    thead_PA.empty();
+                  }
+                });
               } catch (e) {
                 console.log("Error table schadule: ", e);
               }
@@ -886,6 +980,8 @@
               thead_RM.empty();
 
               thead_VM.empty();
+
+              thead_PA.empty();
             }
           });
         } catch (e) {
@@ -1049,6 +1145,38 @@
                   });
                 } else {
                   tbodyCurTableVM.append(createRowSettingNotif);
+                }
+              });
+
+              var collPemudaAdvent = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent).orderBy("row", "asc");
+              collPemudaAdvent.onSnapshot(function (querySnapGetCol) {
+                tbodyCurTablePA.empty();
+                var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnPA + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                  .text("*jadwal kebaktian jemaat masih belum dimuat")
+                );
+                if (querySnapGetCol.size > 0) {
+                  var getDataDocs = querySnapGetCol.docs;
+                  var getRowAsc = getDataDocs.map(function (doc) {
+                    var docData = doc.data();
+                    docData["id"] = doc.id;
+                    return docData;
+                  }).sort(function (a, b) {
+                    return a.row - b.row;
+                  });
+                  getRowAsc.forEach(function (getCol) {
+                    var subdataCol = getCol;
+                    var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                      return a.posisi - b.posisi;
+                    });
+                    var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'pa')\">>");
+                    setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                    kolomNameAsc.forEach((getName) => {
+                      setColumnBody.append($("<td>").text(getName.nama));
+                    });
+                    tbodyCurTablePA.append(setColumnBody);
+                  });
+                } else {
+                  tbodyCurTablePA.append(createRowSettingNotif);
                 }
               });
 
@@ -1236,6 +1364,38 @@
               }
             });
 
+            var collPemudaAdvent = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent).orderBy("row", "asc");
+            collPemudaAdvent.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTablePA.empty();
+              var createRowSettingNotif = $('<tr>').append($('<td colspan="' + lengthColumnVM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+                .text("*jadwal kebaktian jemaat masih belum dimuat")
+              );
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'pa')\">>");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTablePA.append(setColumnBody);
+                });
+              } else {
+                tbodyCurTablePA.append(createRowSettingNotif);
+              }
+            });
+
             setLoading.hideLoading();
           });
         } else {
@@ -1251,16 +1411,21 @@
           var createRowSettingNotifVM = $('<tr>').append($('<td colspan="' + lengthColumnVM + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
             .text("*jadwal kebaktian jemaat masih belum dimuat")
           );
+          var createRowSettingNotifPA = $('<tr>').append($('<td colspan="' + lengthColumnPA + '" class="text-center" style="color: rgb(167, 167, 167); font-style: italic;">')
+            .text("*jadwal kebaktian jemaat masih belum dimuat")
+          );
 
           tbodyCurTableSS.empty();
           tbodyCurTableKS.empty();
           tbodyCurTableRM.empty();
           tbodyCurTableVM.empty();
+          tbodyCurTablePA.empty();
 
           tbodyCurTableSS.append(createRowSettingNotifSS);
           tbodyCurTableKS.append(createRowSettingNotifKS);
           tbodyCurTableRM.append(createRowSettingNotifRM);
           tbodyCurTableVM.append(createRowSettingNotifVM);
+          tbodyCurTablePA.append(createRowSettingNotifPA);
 
           setLoading.hideLoading();
         }

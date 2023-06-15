@@ -43,7 +43,7 @@
       text-align: center;
     }
 
-    .header-nav-image{
+    .header-nav-image {
       position: relative;
     }
 
@@ -57,7 +57,7 @@
       padding-left: 3rem !important;
     }
 
-    #carouselExample{
+    .carouselExample {
       position: relative;
     }
 
@@ -66,19 +66,20 @@
       left: 0;
       bottom: 0;
       width: 100%;
+      z-index: 9999999;
     }
 
-    .carousel-img{
+    .carousel-img {
       object-fit: cover;
       object-position: center calc(100% - 50%);
       height: 600px;
     }
 
-    .contens-all{
-      padding-bottom: 6rem !important;
+    .contens-all {
+      padding-bottom: 4rem !important;
     }
 
-    .inner-content{
+    .inner-content {
       padding: 0 4rem;
     }
 
@@ -86,15 +87,17 @@
       .container .icon-loading {
         width: 40px;
       }
-      .content-padding{
+
+      .content-padding {
         padding-right: 1rem !important;
         padding-left: 1rem !important;
       }
-      .carousel-img{
+
+      .carousel-img {
         height: 350px;
       }
-      
-      .inner-content{
+
+      .inner-content {
         padding: 0 1.5rem;
       }
     }
@@ -165,10 +168,11 @@
                 <span class="app-brand-text demo text-body fw-bolder" style="font-size: 19px;">Sneat</span>
               </div>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_component_btn">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbar_component_btn">
               <span class="navbar-toggler-icon"></span>
             </button>
-    
+
             <div class="collapse navbar-collapse" id="navbar_component_btn">
               <div class="navbar-nav me-auto">
                 <a class="nav-item nav-link active" href="index.html">Home</a>
@@ -179,20 +183,21 @@
           </div>
         </nav>
       </div>
-      
-      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+
+      <div id="carouselExample" class="carousel slide carouselExample" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
             <img class="carousel-img d-block w-100" src="assets/img/backgrounds/caros3.jpg" alt="Third slide">
             <div class="carousel-caption d-none d-md-block">
-              <a href="pages/schadule_view.html" class="btn btn-primary mb-1">Cari Schadule <i class='bx bx-right-arrow-alt'></i></a>
+              <a href="pages/schadule_view.html" class="btn btn-primary mb-1">Cari Schadule <i
+                  class='bx bx-right-arrow-alt'></i></a>
               <p>Temukan schaduel dengan kode jemaat anda</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  
+
     <div class="inner-content">
       <figure class="text-center mt-5">
         <blockquote class="blockquote">
@@ -202,7 +207,7 @@
           Kelola dokumen-dokument dan informasi GMHAK dengan mudah dan cepat
         </figcaption>
       </figure>
-    
+
       <div class="row py-4 mt-5 d-flex justify-content-center">
         <div class="col-md-2 mb-5 text-center">
           <i class='bx bx-receipt mb-2' style="font-size: 48px;"></i>
@@ -233,7 +238,7 @@
           </div>
         </div>
       </div>
-   
+
       <figure class="text-center py-3">
         <blockquote class="blockquote">
           <h2 class="mb-0" style="font-weight: bold;">Bagaimana ini bekerja</h2>
@@ -246,18 +251,20 @@
       <div class="card mb-5">
         <div class="row g-0">
           <div class="col-md-6">
-            <img class="card-img card-img-left" src="assets/img/index/schadule_view.png" style="border: 1px solid rgb(19, 128, 201);" alt="Card image">
+            <img class="card-img card-img-left" src="assets/img/index/schadule_view.png"
+              style="border: 1px solid rgb(19, 128, 201);" alt="Card image">
           </div>
           <div class="col-md-6">
             <div class="card-body">
               <h3 class="card-title">Schadule View</h3>
               <p class="card-text">
-                Menampilkan semua schadule daftar jadwal kebaktian perbaktian jemaat 
-                mulai dari Sabtu sabat, Rabu Malam, dan Jumat Vesper. Pantau dan amati berdasarkan 
+                Menampilkan semua schadule daftar jadwal kebaktian perbaktian jemaat
+                mulai dari Sabtu sabat, Rabu Malam, dan Jumat Vesper. Pantau dan amati berdasarkan
                 triwulan yang diinginkan. Lihat secara deatil dengan menekan baris yang diinginkan.
               </p>
               <p class="card-text">
-                <a href="pages/schadule_view.html" class="text-muted">temukan schaduel <i class='bx bx-right-arrow-alt'></i></a>
+                <a href="pages/schadule_view.html" class="text-muted">temukan schaduel <i
+                    class='bx bx-right-arrow-alt'></i></a>
               </p>
             </div>
           </div>
@@ -270,24 +277,82 @@
               <h3 class="card-title">Member Admin</h3>
               <p class="card-text">
                 Kelola semua kebutuhan kebaktian perbaktian. Menentukan kolom jadwal schadule sesuai kebutuhan.
-                Mendaftarkan semua anggota jemaat yang ada agar mempermudah pembuatan jadwal schadule. 
+                Mendaftarkan semua anggota jemaat yang ada agar mempermudah pembuatan jadwal schadule.
                 Mengatur semua menjadi mudah dan cepat.
               </p>
               <p class="card-text">
-                <a href="pages/auth/login.html" class="text-muted">login sebagai admin <i class='bx bx-right-arrow-alt'></i></a>
+                <a href="pages/auth/login.html" class="text-muted">login sebagai admin <i
+                    class='bx bx-right-arrow-alt'></i></a>
               </p>
             </div>
           </div>
           <div class="col-md-6">
-            <img class="card-img card-img-left" src="assets/img/index/dashboard_view.png" style="border: 1px solid rgb(19, 128, 201);" alt="Card image">
+            <img class="card-img card-img-left" src="assets/img/index/dashboard_view.png"
+              style="border: 1px solid rgb(19, 128, 201);" alt="Card image">
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui-bg-overlay-container">
+      <div class="ui-bg-overlay bg-dark opacity-75"></div>
+      <div class="inner-content py-5">
+        <figure class="text-center mb-4">
+          <blockquote class="blockquote">
+            <h2 class="mb-0" style="font-weight: bold; color: white;">Testimonials</h2>
+          </blockquote>
+          <figcaption class="blockquote-footer" style="font-size: medium; color: white;">
+            Apa tanggapan mereka tentang Sneat
+          </figcaption>
+        </figure>
+
+        <div id="carousel_testimoni" class="carousel slide carouselExample" data-bs-ride="carousel">
+          <ol class="carousel-indicators" id="indicators_carosel">
+            <li data-bs-target="#carousel_testimoni" data-bs-slide-to="0" class="active" aria-current="true"></li>
+          </ol>
+          <div class="carousel-inner pb-5">
+            <div class="carousel-item active" id="default_testim_caros">
+              <div class="row d-flex justify-content-center">
+                <div class="col-md-5">
+                  <div class="card">
+                    <div class="row g-0">
+                      <div class="col-md-4">
+                        <img class="card-img card-img-left" src="assets/img/avatars/1.png" alt="Card image">
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title text-dark mb-0" id="title_card_testim">David Hedrin Simbolon</h5>
+                          <small id="jemaat_card_testim">GMAHK - Kayu Tinggi</small>
+                          <p class="card-text mt-2" id="quote_card_testim">
+                            This is a wider card with supporting text below as a natural lead-in to additional content. This content
+                            is a
+                            little bit longer.
+                          </p>
+                          <p class="card-text mb-0"><small class="text-muted" id="last_modify_card_testim">Last updated 3 mins ago</small></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carousel_testimoni" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carousel_testimoni" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
         </div>
       </div>
     </div>
   </div>
 
   <footer class="footer bg-light">
-    <div class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
+    <div
+      class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
       <div>
         <a href="javascript:void(0)" class="footer-text fw-bolder">Sneat</a> ©
       </div>
@@ -320,27 +385,27 @@
     $(document).ready(function () {
       kodeSchadule = getParameterUrlByName(customParam.kode_schadule);
     });
-    
+
     var navbarComp = $("#navbar_component_btn");
     var btnScadule = navbarComp.find("#btn_schadule_page");
     var btnProker = navbarComp.find("#btn_proker_page");
 
-    btnScadule.click((e)=>{
-      if(kodeSchadule){
+    btnScadule.click((e) => {
+      if (kodeSchadule) {
         redirect("pages/schadule_view.html?kode_schadule=" + kodeSchadule);
-      }else{
+      } else {
         redirect("pages/schadule_view.html");
       }
     });
-    btnProker.click((e)=>{
-      if(kodeSchadule){
+    btnProker.click((e) => {
+      if (kodeSchadule) {
         redirect("pages/proker_view.html?kode_schadule=" + kodeSchadule);
-      }else{
+      } else {
         redirect("pages/proker_view.html");
       }
     });
 
-    function logoutSneat(){
+    function logoutSneat() {
       signOuts(authUser);
     }
   </script>

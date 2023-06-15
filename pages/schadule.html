@@ -302,6 +302,9 @@
                           <a class="dropdown-item" href="javascript:void(0);"
                             onclick="generateRandomSchadule('vm', event)" id="jumat_vesper"><i
                               class='tf-icons bx bx-message-square-dots'></i> Jumat Vesper</a>
+                          <a class="dropdown-item" href="javascript:void(0);"
+                            onclick="generateRandomSchadule('pa', event)" id="pemuda_advent"><i
+                              class='tf-icons bx bx-street-view'></i> Pemuda Advent</a>
                         </div>
                       </div>
                     </div>
@@ -323,22 +326,27 @@
                 <ul class="nav nav-pills mb-3 mt-3 nav-fill" role="tablist">
                   <li class="nav-item">
                     <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                      data-bs-target="#navs-pills-justified-home" aria-controls="navs-pills-justified-home"
+                      data-bs-target="#navs-pills-justified-ss" aria-controls="navs-pills-justified-ss"
                       aria-selected="true"><i class='tf-icons bx bx-church'></i> Sabtu Sabat</button>
                   </li>
                   <li class="nav-item">
                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                      data-bs-target="#navs-pills-justified-profile" aria-controls="navs-pills-justified-profile"
+                      data-bs-target="#navs-pills-justified-rm" aria-controls="navs-pills-justified-rm"
                       aria-selected="false"><i class="tf-icons bx bx-message-square"></i> Rabu Malam</button>
                   </li>
                   <li class="nav-item">
                     <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                      data-bs-target="#navs-pills-justified-messages" aria-controls="navs-pills-justified-messages"
+                      data-bs-target="#navs-pills-justified-vm" aria-controls="navs-pills-justified-vm"
                       aria-selected="false"><i class='tf-icons bx bx-message-square-dots'></i> Jumat Versper</button>
+                  </li>
+                  <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                      data-bs-target="#navs-pills-justified-pa" aria-controls="navs-pills-justified-pa"
+                      aria-selected="false"><i class='tf-icons bx bx-street-view'></i> Pemuda Advent</button>
                   </li>
                 </ul>
                 <!-- Tab 1 -->
-                <div class="tab-pane fade active show" id="navs-pills-justified-home" role="tabpanel">
+                <div class="tab-pane fade active show" id="navs-pills-justified-ss" role="tabpanel">
                   <div class="dropdown-divider"></div>
                   <h5 class="text-center mt-4">SEKOLAH SABAT</h5>
                   <div class="dropdown-divider"></div>
@@ -370,7 +378,7 @@
                   </div>
                 </div>
                 <!-- Tab 2 -->
-                <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+                <div class="tab-pane fade" id="navs-pills-justified-rm" role="tabpanel">
                   <div class="dropdown-divider"></div>
                   <div class="table-responsive text-nowrap">
                     <table id="table_shadule_rabu_malam" class="table table-hover">
@@ -389,7 +397,7 @@
                   </div>
                 </div>
                 <!-- Tab 3 -->
-                <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                <div class="tab-pane fade" id="navs-pills-justified-vm" role="tabpanel">
                   <div class="dropdown-divider"></div>
                   <div class="table-responsive text-nowrap">
                     <table id="table_shadule_vesper_malam" class="table table-hover">
@@ -404,6 +412,25 @@
                       onclick="downloadTable([$('#table_shadule_vesper_malam')])">Download <i
                         class='bx bx-download'></i></button>
                     <button type="button" class="btn btn-warning btn-sm" onclick="openModalEditSchadule('vm')">Edit <i
+                        class='bx bx-edit-alt'></i></button>
+                  </div>
+                </div>
+                <!-- Tab 4 -->
+                <div class="tab-pane fade" id="navs-pills-justified-pa" role="tabpanel">
+                  <div class="dropdown-divider"></div>
+                  <div class="table-responsive text-nowrap">
+                    <table id="table_shadule_pemuda_advent" class="table table-hover">
+                      <thead>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-end mt-2">
+                    <button type="button" class="btn btn-primary btn-sm"
+                      onclick="downloadTable([$('#table_shadule_pemuda_advent')])">Download <i
+                        class='bx bx-download'></i></button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="openModalEditSchadule('pa')">Edit <i
                         class='bx bx-edit-alt'></i></button>
                   </div>
                 </div>
@@ -550,6 +577,38 @@
       </div>
     </div>
   </div>
+  
+  <div class="modal fade" id="modalGeneratePA" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Schadule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label class="mb-1" for="triwulan_pa">Pilih Triwulan:</label>
+            <select class="form-select mb-4 select_schadule_now" id="triwulan_pa" aria-label="Default select example">
+            </select>
+          </div>
+          <h5 class="text-center">PEMUDA ADVENT</h5>
+          <div class="dropdown-divider"></div>
+          <div class="table-responsive text-nowrap">
+            <table id="table_shadule_pemuda_advent_modal" class="table table-hover">
+              <thead>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btn_save_change_pa">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal fade" id="modaEditSchadule" data-bs-backdrop="static" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
@@ -662,6 +721,32 @@
             Batal
           </button>
           <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_vm">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="confirm_submit_shadule_pa" tabindex="-1" style="display: none; z-index: 9999;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Simpan Schadule
+            <i class='bx bx-save'></i>
+          </h5>
+        </div>
+        <div class="modal-body text-center">
+          <span>Masukkan passcode jemaat</span>
+          <p>untuk mengukuhkaan jadwal Schadule</p>
+          <input type="password" class="form-control" placeholder="masukkan passcode" id="input_passcode"
+            onkeyup="onChangeCheck(event)">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn btn-primary" id="confirm_yes_submit_shadule_pa">Simpan</button>
         </div>
       </div>
     </div>
@@ -786,6 +871,7 @@
     var dropItemSabtuSabat = dropItemBtnGenerate.find("#sabtu_sabat");
     var dropItemRabuMalam = dropItemBtnGenerate.find("#rabu_malam");
     var dropItemJumatVesper = dropItemBtnGenerate.find("#jumat_vesper");
+    var dropItemPemudaAdvent = dropItemBtnGenerate.find("#pemuda_advent");
 
     var toastAlert = $("#toast_alert");
 
@@ -821,14 +907,17 @@
     var modalGenerateSS = $("#modalGenerateSS");
     var modalGenerateRM = $("#modalGenerateRM");
     var modalGenerateJV = $("#modalGenerateJV");
+    var modalGeneratePA = $("#modalGeneratePA");
     var tableModalGenerateSS = modalGenerateSS.find("#table_shadule_sabtu_sabat_modal");
     var tableModalGenerateKS = modalGenerateSS.find("#table_shadule_khotbah_sabat_modal");
     var tableModalGenerateRM = modalGenerateRM.find("#table_shadule_rabu_malam_modal");
     var tableModalGenerateVM = modalGenerateJV.find("#table_shadule_jumat_vesper_modal");
+    var tableModalGeneratePA = modalGeneratePA.find("#table_shadule_pemuda_advent_modal");
 
     var findSelectTriwulanSS = modalGenerateSS.find("#triwulan_ss");
     var findSelectTriwulanRM = modalGenerateRM.find("#triwulan_rm");
     var findSelectTriwulanJV = modalGenerateJV.find("#triwulan_vm");
+    var findSelectTriwulanPA = modalGeneratePA.find("#triwulan_pa");
 
     findSelectTriwulanSS.change((e)=>{
       var selectedValue = e.target.value;
@@ -845,10 +934,16 @@
       selectTriwulanGenerateSchadule('vm', selectedValue);
     });
 
+    findSelectTriwulanPA.change((e)=>{
+      var selectedValue = e.target.value;
+      selectTriwulanGenerateSchadule('pa', selectedValue);
+    });
+
     let lengthColumnSS;
     let lengthColumnKS;
     let lengthColumnRM;
     let lengthColumnVM;
+    let lengthColumnPA;
 
     async function generateRandomSchadule(type, event = null) {
       var curTriwulan = getCurrentTriwulan();
@@ -861,21 +956,25 @@
       var thead_KS = tableModalGenerateKS.find("thead");
       var thead_RM = tableModalGenerateRM.find("thead");
       var thead_VM = tableModalGenerateVM.find("thead");
+      var thead_PA = tableModalGeneratePA.find("thead");
 
       var tbody_SS = tableModalGenerateSS.find("tbody");
       var tbody_KS = tableModalGenerateKS.find("tbody");
       var tbody_RM = tableModalGenerateRM.find("tbody");
       var tbody_VM = tableModalGenerateVM.find("tbody");
+      var tbody_PA = tableModalGeneratePA.find("tbody");
 
       thead_SS.empty();
       thead_KS.empty();
       thead_RM.empty();
       thead_VM.empty();
+      thead_PA.empty();
 
       tbody_SS.empty();
       tbody_KS.empty();
       tbody_RM.empty();
       tbody_VM.empty();
+      tbody_PA.empty();
 
       if (btn.attr('disabled')) {
         event.preventDefault();
@@ -893,6 +992,10 @@
       if (type == "vm") {
         modalGenerateJV.modal("show");
         modalGenerateJV.css("z-index", "1");
+      }
+      if (type == "pa") {
+        modalGeneratePA.modal("show");
+        modalGeneratePA.css("z-index", "1");
       }
 
       setLoading.showLoading();
@@ -967,6 +1070,22 @@
                     });
                     thead_VM.append(setColumn);
                     lengthColumnVM = parseInt(subcollectionJV.size);
+                  }
+                });
+              }
+
+              if (type == "pa") {
+                var subcollPemudaAdvent = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollPemudaAdvent.onSnapshot(function (subcollectionPA) {
+                  if (subcollectionPA.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionPA.forEach(function (subdocPA) {
+                      var subdataPA = subdocPA.data();
+                      setColumn.append($("<th id='" + subdataPA.id + "' colomnrow='" + subdataPA.posisi + "'>").text(subdataPA.nama_kolom));
+                    });
+                    thead_PA.append(setColumn);
+                    lengthColumnPA = parseInt(subcollectionPA.size);
                   }
                 });
               }
@@ -1100,10 +1219,42 @@
           }
         }
 
+        if (type == "pa") {
+          let rowTr = 1;
+          for (var i = 0; i < totalGroups; i++) {
+            var startMonth = i * monthsPerGroup;
+            var endMonth = startMonth + monthsPerGroup - 1;
+
+            if (currentMonth >= startMonth && currentMonth <= endMonth) {
+              for (var j = startMonth; j <= endMonth; j++) {
+                var firstDayOfMonth = new Date(currentYear, j, 1);
+                var firstDayOfNextMonth = new Date(currentYear, firstDayOfMonth.getMonth() + 1, 1);
+                var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+                for (var k = 1; k <= lastDayOfMonth.getDate(); k++) {
+                  var currentDate = new Date(currentYear, j, k);
+                  if (currentDate.getDay() === 6) {
+                    var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    
+                    var trNewBodyPA = $("<tr class='text-nowrap' id='tr_row_pa_" + rowTr + "' row='" + rowTr + "'>");
+                    trNewBodyPA.append($("<td id='tgl_row_pa_" + rowTr + "'>").text(formattedDate));
+                    for (var l = 1; l < lengthColumnPA; l++) {
+                      trNewBodyPA.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                    }
+                    tbody_PA.append(trNewBodyPA);
+                    rowTr++;
+                  }
+                }
+              }
+              break;
+            }
+          }
+        }
+
         setLoading.hideLoading();
         if (type == "ss") modalGenerateSS.css("z-index", "");
         if (type == "rm") modalGenerateRM.css("z-index", "");
         if (type == "vm") modalGenerateJV.css("z-index", "");
+        if (type == "pa") modalGeneratePA.css("z-index", "");
       } catch (e) {
         setLoading.hideLoading();
         toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG654-GEN-SCH-CATCH"', "info");
@@ -1117,21 +1268,25 @@
       var thead_KS = tableModalGenerateKS.find("thead");
       var thead_RM = tableModalGenerateRM.find("thead");
       var thead_VM = tableModalGenerateVM.find("thead");
+      var thead_PA = tableModalGeneratePA.find("thead");
 
       var tbody_SS = tableModalGenerateSS.find("tbody");
       var tbody_KS = tableModalGenerateKS.find("tbody");
       var tbody_RM = tableModalGenerateRM.find("tbody");
       var tbody_VM = tableModalGenerateVM.find("tbody");
+      var tbody_PA = tableModalGeneratePA.find("tbody");
 
       thead_SS.empty();
       thead_KS.empty();
       thead_RM.empty();
       thead_VM.empty();
+      thead_PA.empty();
 
       tbody_SS.empty();
       tbody_KS.empty();
       tbody_RM.empty();
       tbody_VM.empty();
+      tbody_PA.empty();
       
       if (type == "ss") {
         modalGenerateSS.modal("show");
@@ -1144,6 +1299,10 @@
       if (type == "vm") {
         modalGenerateJV.modal("show");
         modalGenerateJV.css("z-index", "1");
+      }
+      if (type == "pa") {
+        modalGeneratePA.modal("show");
+        modalGeneratePA.css("z-index", "1");
       }
 
       setLoading.showLoading();
@@ -1218,6 +1377,22 @@
                     });
                     thead_VM.append(setColumn);
                     lengthColumnVM = parseInt(subcollectionJV.size);
+                  }
+                });
+              }
+
+              if (type == "pa") {
+                var subcollPemudaAdvent = collRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollPemudaAdvent.onSnapshot(function (subcollectionPA) {
+                  if (subcollectionPA.size > 0) {
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionPA.forEach(function (subdocPA) {
+                      var subdataPA = subdocPA.data();
+                      setColumn.append($("<th id='" + subdataPA.id + "' colomnrow='" + subdataPA.posisi + "'>").text(subdataPA.nama_kolom));
+                    });
+                    thead_PA.append(setColumn);
+                    lengthColumnPA = parseInt(subcollectionPA.size);
                   }
                 });
               }
@@ -1314,10 +1489,31 @@
           }
         }
         
+        if (type == "pa") {
+          let rowTr = 1;
+          for (var month = startMonth; month <= endMonth; month++) {
+            for (var day = 1; day <= 31; day++) {
+              var currentDate = new Date(year, month, day);
+              if (currentDate.getMonth() === month && currentDate.getDay() === 6) {
+                var formattedDate = currentDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                var trNewBodyPA = $("<tr class='text-nowrap' id='tr_row_pa_" + rowTr + "' row='" + rowTr + "'>");
+                trNewBodyPA.append($("<td id='tgl_row_pa_" + rowTr + "'>").text(formattedDate));
+                for (var l = 1; l < lengthColumnPA; l++) {
+                  trNewBodyPA.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                }
+                tbody_PA.append(trNewBodyPA);
+                rowTr++;
+              }
+            }
+          }
+        }
+        
         setLoading.hideLoading();
         if (type == "ss") modalGenerateSS.css("z-index", "");
         if (type == "rm") modalGenerateRM.css("z-index", "");
         if (type == "vm") modalGenerateJV.css("z-index", "");
+        if (type == "pa") modalGeneratePA.css("z-index", "");
       } catch (e) {
         setLoading.hideLoading();
         toastAction.showToastAlert(toastAlert, "Generate Schadule", "", 'Something when wrong, Call admin with code "ERG656-GEN-SCH-CATCH"', "info");
@@ -1693,7 +1889,7 @@
       });
 
       if (checkAllRowInput) {
-        inputPascodeRM.removeClass('input-red');
+        inputPascodeVM.removeClass('input-red');
         modalConfirmSubmitVM.modal("show");
       } else {
         toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
@@ -1822,6 +2018,154 @@
         }
       } else {
         inputPascodeVM.addClass('input-red');
+      }
+    });
+
+    var modalConfirmSubmitPA = $("#confirm_submit_shadule_pa");
+    var yesConfirmSubmitPA = modalConfirmSubmitPA.find("#confirm_yes_submit_shadule_pa");
+    var inputPascodePA = modalConfirmSubmitPA.find("input#input_passcode");
+    modalGeneratePA.find("#btn_save_change_pa").click(function (e) {
+      var tbodyTable = tableModalGeneratePA.find("tbody");
+      var allTrTable = tbodyTable.find("tr");
+
+      var checkAllRowInput = true;
+      allTrTable.each(function (idx, element) {
+        if (!checkAllInputNameSchadule($(element))) {
+          checkAllRowInput = false;
+          return false;
+        }
+      });
+
+      if (checkAllRowInput) {
+        inputPascodePA.removeClass('input-red');
+        modalConfirmSubmitPA.modal("show");
+      } else {
+        toastAction.showToastAlert(toastAlert, "Colomn", "", 'Lengkapi semua bagian kolom nama shadule', "info");
+        toastAction.hideToastAlert(toastAlert);
+        return false;
+      }
+    });
+    yesConfirmSubmitPA.click(async function (e) {
+      if ($.trim(inputPascodePA.val()) != "") {
+        try {
+          e.preventDefault();
+          modalGeneratePA.css("z-index", "1");
+          setLoading.showLoading();
+          modalConfirmSubmitPA.modal("hide");
+
+          var tbodyTable = tableModalGeneratePA.find("tbody");
+          var allTrTable = tbodyTable.find("tr");
+
+          const db = firebase.firestore();
+          var getDataUserLogin = await getUserLogin(userIdLogin);
+          var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
+          var datagetCollKodeJemaat = getCollKodeJemaat.data();
+
+          if (inputPascodePA.val() == datagetCollKodeJemaat.passcode) {
+            try {
+              var docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
+
+              const dt = new Date();
+              var month = dt.getMonth() + 1;
+              var year = dt.getFullYear();
+              var curTriwulan = getCurrentTriwulan();
+              var selectedTriwulan = modalGeneratePA.find("#triwulan_pa").val();
+              var valSelecTriwulan = parseInt(selectedTriwulan);
+
+              var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
+                .where("triwulan", "==", valSelecTriwulan).where("jadwal_date_y", "==", year).get();
+
+              let collRefForCollection;
+
+              if (checkJadewalFromCol.empty && checkJadewalFromCol.size < 1) {
+                var setDocJadwalJemaat = await docRefJadwalJemaat.add({
+                  "id": "-",
+                  "kode_jemaat": getDataUserLogin.kode_jemaat,
+                  "triwulan": valSelecTriwulan,
+                  "jadwal_date_y": year,
+                  "created_by": getDataUserLogin.id,
+                  "created_date": dt,
+                });
+                var getDocRefJadwal = docRefJadwalJemaat.doc(setDocJadwalJemaat.id);
+                getDocRefJadwal.update({
+                  "id": setDocJadwalJemaat.id
+                });
+
+                collRefForCollection = getDocRefJadwal.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+              } else {
+                var checkJadewalRef = checkJadewalFromCol.docs[0];
+                collRefForCollection = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+              }
+
+              var getCollInCollRef = await collRefForCollection.get();
+              if (!getCollInCollRef.size > 0) {
+                allTrTable.each(async function (idx, element) {
+                  try {
+                    var startIdx = idx + 1;
+                    var getRow = $(element);
+                    var getTextTgl = getRow.find("#tgl_row_pa_" + startIdx);
+                    let allListNameCol = [];
+                    for (var i = 1; i < lengthColumnPA; i++) {
+                      var getInputName = getRow.find("#input_nama_row_" + i);
+                      var newObjCol = {
+                        posisi: i + 1,
+                        nama: $.trim(getInputName.val()),
+                      };
+                      allListNameCol.push(newObjCol);
+                    }
+
+                    var mapForAdd = {
+                      "row": startIdx,
+                      "tanggal": getTextTgl.html(),
+                      "kolom_nama": [],
+                    }
+                    for (var x = 0; x < allListNameCol.length; x++) {
+                      var obj = allListNameCol[x];
+                      mapForAdd["kolom_nama"].push(obj);
+                    }
+                    var addToCollPemudaAdvent = await collRefForCollection.add(mapForAdd);
+                    var getDocRefAddPA = collRefForCollection.doc(addToCollPemudaAdvent.id);
+                  } catch (e) {
+                    setLoading.hideLoading();
+                    toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-PA"', "info");
+                    toastAction.hideToastAlert(toastAlert);
+                    console.error("Error save schadule PA: ", e);
+                    return false;
+                  }
+                });
+              } else {
+                modalGeneratePA.modal("hide");
+                setLoading.hideLoading();
+                toastAction.showToastAlert(toastAlert, "Opss..", "schadule", 'Schadule pemuda advent bulan ini sudah dimuat, tunggu pergantian triwulan atau silahkan edit dan simpan dibawah.', "info");
+                toastAction.hideToastAlert(toastAlert);
+                return false;
+              }
+
+              modalGeneratePA.modal("hide");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil dibuat, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            } catch (e) {
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS987-SAVE-SCH-PA"', "info");
+              toastAction.hideToastAlert(toastAlert);
+              console.error("Error save schadule VM: ", e);
+            }
+          } else {
+            setLoading.hideLoading();
+            modalGeneratePA.css("z-index", "");
+            toastAction.showToastAlert(toastAlert, "Opss..", "passcode", 'Passcode jemaat tidak sesuai, mohon untuk tidak mencoba mengubah', "warning");
+            toastAction.hideToastAlert(toastAlert);
+          }
+          inputPascodePA.val("");
+        } catch (e) {
+          setLoading.hideLoading();
+          toastAction.showToastAlert(toastAlert, "Save Schadule", "", 'Something when wrong, Call admin with code "ERGSS654-SAVE-SCH-PA"', "info");
+          toastAction.hideToastAlert(toastAlert);
+          console.error("Error save schadule VM: ", e);
+        }
+      } else {
+        inputPascodePA.addClass('input-red');
       }
     });
 
@@ -2143,7 +2487,7 @@
           }
         });
 
-        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Rabu Malam"));
+        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Vesper Malam"));
         bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
         thead.append(theadRow);
         createTable.append(table
@@ -2152,6 +2496,88 @@
         bodyModalEditScaduel.append(createTable);
         
         var createBtnSumbit = $("<button type='button' class='btn btn-primary' onclick=\"openModaEditSchadule(['table_shadule_edit_vm'], 'vm')\">").text("Save Change");
+        var createBtnClose = $("<button type='button' class='btn btn-outline-secondary' data-bs-dismiss='modal'>").text("Close");
+        foterModalEditScaduel.append(createBtnClose).append(createBtnSumbit);
+      }
+      if(type == "pa"){
+        var createTable = $("<div class='table-responsive text-nowrap'>");
+        var table = $("<table id='table_shadule_edit_pa' class='table table-hover'>");
+        var theadRow = $("<tr class='text-nowrap'>");
+        var thead = $("<thead>");
+        var tbody = $("<tbody>");
+        let lengthColumnEdit;
+        var docRef = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+        docRef.onSnapshot((querySnapshot)=>{
+          if(querySnapshot.size > 0){
+            var allDosc = querySnapshot.docs;
+            var arrayKolom = allDosc.map((data)=>{
+              return data.data();
+            }).sort((a, b)=>{
+              return a.posisi - b.posisi;
+            });
+            arrayKolom.forEach((getData)=>{
+              theadRow.append($("<th>").text(getData.nama_kolom));
+            });
+            lengthColumnEdit = parseInt(querySnapshot.size);
+          }
+        });
+
+        checkJadewalFromCol.onSnapshot(function (snapshot) {
+          if (snapshot.docs.length > 0) {
+            let checkJadewalFirst;
+            snapshot.forEach(function (doc) {
+              checkJadewalFirst = doc;
+              var dataDocs = doc.data();
+              return;
+            });
+
+            var collPemudaAdvent = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent).orderBy("row", "asc");
+            collPemudaAdvent.onSnapshot(function (querySnapGetCol) {
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                let rowTr = 1;
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='tr_row_pa_" + rowTr + "' row='" + rowTr + "'>");
+                  setColumnBody.append($("<td id='tgl_row_pa_" + rowTr + "'>").text(subdataCol.tanggal));
+                  for (var i = 1; i < lengthColumnEdit; i++) {
+                    var idx = i-1;
+                    var forAppend;
+                    try{
+                      var getName = kolomNameAsc[idx];
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' value='" + getName.nama + "' onkeyup='onChangeCheck(event)' />")
+                    }catch(e){
+                      forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
+                    }
+                    setColumnBody.append($("<td>").append(forAppend));
+                  }
+                  tbody.append(setColumnBody);
+                  rowTr++;
+                });
+              }
+            });
+          }
+        });
+
+        bodyModalEditScaduel.append($("<h5 class='text-center'>").text("Pemuda Advent"));
+        bodyModalEditScaduel.append($("<div class='dropdown-divider'>"));
+        thead.append(theadRow);
+        createTable.append(table
+          .append(thead).append(tbody)
+        );
+        bodyModalEditScaduel.append(createTable);
+        
+        var createBtnSumbit = $("<button type='button' class='btn btn-primary' onclick=\"openModaEditSchadule(['table_shadule_edit_pa'], 'pa')\">").text("Save Change");
         var createBtnClose = $("<button type='button' class='btn btn-outline-secondary' data-bs-dismiss='modal'>").text("Close");
         foterModalEditScaduel.append(createBtnClose).append(createBtnSumbit);
       }
@@ -2379,6 +2805,57 @@
               toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil diperbaharui, Salin URL jadwal dan bagikan!', "success");
               toastAction.hideToastAlert(toastAlert);
             }
+            if(typeOf == "pa"){
+              var collExecutes = checkJadewalRef.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+              
+              var table = $("#"+tablesForUpdate[0]);
+              var tbody = table.find("tbody");
+              var allTrTable = tbody.find("tr");
+              
+              await deleteFirestoreCollection(collExecutes);
+              
+              allTrTable.each(async function (idx, element) {
+                try {
+                  var startIdx = idx + 1;
+                  var getRow = $(element);
+                  var getTextTgl = getRow.find("#tgl_row_pa_" + startIdx);
+                  let allListNameCol = [];
+                  var allTdLength = getRow.find("td");
+                  for (var i = 1; i < allTdLength.length; i++) {
+                    var getInputName = getRow.find("#input_nama_row_" + i);
+                    var newObjCol = {
+                      posisi: i + 1,
+                      nama: $.trim(getInputName.val()),
+                    };
+                    allListNameCol.push(newObjCol);
+                  }
+
+                  var mapForAdd = {
+                    "row": startIdx,
+                    "tanggal": getTextTgl.html(),
+                    "kolom_nama": [],
+                  }
+                  for (var x = 0; x < allListNameCol.length; x++) {
+                    var obj = allListNameCol[x];
+                    mapForAdd["kolom_nama"].push(obj);
+                  }
+
+                  await collExecutes.add(mapForAdd);
+                } catch (e) {
+                  setLoading.hideLoading();
+                  toastAction.showToastAlert(toastAlert, "Edit Schadule", "", 'Something when wrong, Call admin with code "ERGSS001-SAVE-SCH-EDIT-PA"', "info");
+                  toastAction.hideToastAlert(toastAlert);
+                  console.log("Error save schadule PA: "+ e);
+                  return false;
+                }
+              });
+              
+              modalEditSchadule.modal("hide");
+              modalEditSchadule.css("z-index", "");
+              setLoading.hideLoading();
+              toastAction.showToastAlert(toastAlert, "Save Schadule", "success", 'Schadule jemaat telah berhasil diperbaharui, Salin URL jadwal dan bagikan!', "success");
+              toastAction.hideToastAlert(toastAlert);
+            }
           } else {
             setLoading.hideLoading();
             modalEditSchadule.css("z-index", "");
@@ -2551,6 +3028,22 @@
             }
           });
         }
+        if (type == "pa") {
+          var subcollPemudaAdvent = docKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+            .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+          subcollPemudaAdvent.onSnapshot(async function (subcollection) {
+            if (subcollection.size > 0) {
+              subcollection.forEach(function (subdoc) {
+                var subdataPA = subdoc.data();
+                var setNewVal = {
+                  kolom: subdataPA.nama_kolom,
+                  posisi: subdataPA.posisi,
+                }
+                setValueRow.push(setNewVal);
+              });
+            }
+          });
+        }
 
         checkJadewalFromCol.onSnapshot(function (getSnapshot) {
           let checkJadewalFirst = getSnapshot.docs[0].ref;
@@ -2683,6 +3176,38 @@
             });
           }
 
+          if (type == "pa") {
+            var collPemudaAdvent = checkJadewalFirst.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+            collPemudaAdvent.doc(currentrowId).onSnapshot((doc) => {
+              if (doc.data()) {
+                var data = doc.data();
+                var arrayNama = data.kolom_nama.sort((a, b) => {
+                  return a.posisi - b.posisi;
+                });
+                const obj = setValueRow.find(obj => obj.posisi === 1);
+                if (obj) {
+                  obj.value = data.tanggal;
+                }
+                for (var i = 1; i <= arrayNama.length; i++) {
+                  const objName = setValueRow.find(obj => obj.posisi === i + 1);
+                  if (objName) {
+                    objName.value = arrayNama[i - 1].nama;
+                  }
+                }
+
+                setNewRow.append($("<div class='mb-4'>")
+                  .append($("<h4 class='mb-0' style='text-decoration: underline'>").text(dataJemaatForModal.nama))
+                  .append($("<span>").text("Pemuda Advent"))
+                );
+                setValueRow.forEach((data) => {
+                  setNewRow.append($("<div>").text(data.kolom + ": "));
+                  setNewRow.append($("<h5>").text(data.value));
+                  modalBodySchaduleInfo.append(setNewRow);
+                });
+              }
+            });
+          }
+
           setLoading.hideLoading();
           modalBodySchaduleInfo.empty();
           modalSchaduelInfo.modal("show");
@@ -2793,6 +3318,9 @@
       var tableVM = $("#table_shadule_vesper_malam");
       var thead_VM = tableVM.find("thead");
       var tbodyCurTableVM = tableVM.find("tbody");
+      var tablePA = $("#table_shadule_pemuda_advent");
+      var thead_PA = tablePA.find("thead");
+      var tbodyCurTablePA = tablePA.find("tbody");
 
       var checkLastMonthTriwulan = checkMonthEndOfTriwulan();
       selectSchaduleNowPage.val(curTriwulan);
@@ -2838,6 +3366,8 @@
             .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=rm'>").text("Schadule Setting")))));
           var createRowSettingNotifVM = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
             .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=vm'>").text("Schadule Setting")))));
+          var createRowSettingNotifPA = $('<tr class="text-center">').append($('<td style="color: rgb(167, 167, 167); font-style: italic;">')
+            .append($('<div class="row">').append($('<col-12>').text('kolom jadwal belum ditentukan')).append($('<col-12>').text('*masukkan kolom jadwal dimenu > ').append($("<a href='schadule_setting.html?active_tab=pa'>").text("Schadule Setting")))));
 
           docRefKolomJemaat.onSnapshot(function (querySnapshot) {
             if (querySnapshot.exists) {
@@ -2929,6 +3459,25 @@
                     dropItemJumatVesper.attr('disabled', true).css('cursor', 'not-allowed');
                   }
                 });
+                
+                var subcollPemudaAdvent = docRefKolomJemaat.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent)
+                  .orderBy(collumnsName.tb_kolom_jemaat.col_urutan, "asc");
+                subcollPemudaAdvent.onSnapshot(function (subcollectionPA) {
+                  if (subcollectionPA.size > 0) {
+                    thead_PA.empty();
+                    var setColumn = $("<tr class='text-nowrap'>");
+                    subcollectionPA.forEach(function (subdocPA) {
+                      var subdataPA = subdocPA.data();
+                      setColumn.append($("<th id='" + subdataPA.id + "' colomnrow='" + subdataPA.posisi + "'>").text(subdataPA.nama_kolom));
+                    });
+                    thead_PA.append(setColumn);
+                    dropItemPemudaAdvent.attr('disabled', false).css('cursor', 'pointer');
+                  } else {
+                    thead_PA.empty();
+                    thead_PA.append(createRowSettingNotifPA);
+                    dropItemPemudaAdvent.attr('disabled', true).css('cursor', 'not-allowed');
+                  }
+                });
               } catch (e) {
                 toastAction.showToastAlert(toastAlert, "Table Schadule", "", 'Something when wrong, Call admin with code "ERG123-TAB-SCH-CATCH"', "info");
                 toastAction.hideToastAlert(toastAlert);
@@ -2946,6 +3495,9 @@
 
               thead_VM.empty();
               thead_VM.append(createRowSettingNotifVM);
+              
+              thead_PA.empty();
+              thead_PA.append(createRowSettingNotifPA);
 
               setLoading.hideLoading();
             }
@@ -3076,6 +3628,33 @@
                 });
               }
             });
+            
+            var collPemudaAdvent = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+            collPemudaAdvent.onSnapshot(function (querySnapGetCol) {
+              tbodyCurTablePA.empty();
+              if (querySnapGetCol.size > 0) {
+                var getDataDocs = querySnapGetCol.docs;
+                var getRowAsc = getDataDocs.map(function (doc) {
+                  var docData = doc.data();
+                  docData["id"] = doc.id;
+                  return docData;
+                }).sort(function (a, b) {
+                  return a.row - b.row;
+                });
+                getRowAsc.forEach(function (getCol) {
+                  var subdataCol = getCol;
+                  var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                    return a.posisi - b.posisi;
+                  });
+                  var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'pa')\">");
+                  setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                  kolomNameAsc.forEach((getName) => {
+                    setColumnBody.append($("<td>").text(getName.nama));
+                  });
+                  tbodyCurTablePA.append(setColumnBody);
+                });
+              }
+            });
   
             setLoading.hideLoading();
           } else {
@@ -3108,6 +3687,9 @@
       var tableVM = $("#table_shadule_vesper_malam");
       var thead_VM = tableVM.find("thead");
       var tbodyCurTableVM = tableVM.find("tbody");
+      var tablePA = $("#table_shadule_pemuda_advent");
+      var thead_PA = tablePA.find("thead");
+      var tbodyCurTablePA = tablePA.find("tbody");
 
       var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
         .where("triwulan", "==", selectedValue).where("jadwal_date_y", "==", year);
@@ -3228,6 +3810,33 @@
               });
             }
           });
+
+          var collPemudaAdvent = checkJadewalFirst.ref.collection(collInCollsName.tb_kolom_jemaat.collPemudaAdvent);
+          collPemudaAdvent.onSnapshot(function (querySnapGetCol) {
+            tbodyCurTablePA.empty();
+            if (querySnapGetCol.size > 0) {
+              var getDataDocs = querySnapGetCol.docs;
+              var getRowAsc = getDataDocs.map(function (doc) {
+                var docData = doc.data();
+                docData["id"] = doc.id;
+                return docData;
+              }).sort(function (a, b) {
+                return a.row - b.row;
+              });
+              getRowAsc.forEach(function (getCol) {
+                var subdataCol = getCol;
+                var kolomNameAsc = subdataCol.kolom_nama.sort(function (a, b) {
+                  return a.posisi - b.posisi;
+                });
+                var setColumnBody = $("<tr class='text-nowrap' id='" + getCol.id + "' colomnrow='" + subdataCol.row + "' onclick=\"showInfoSchadule(event, 'pa')\">");
+                setColumnBody.append($("<td>").text(subdataCol.tanggal));
+                kolomNameAsc.forEach((getName) => {
+                  setColumnBody.append($("<td>").text(getName.nama));
+                });
+                tbodyCurTablePA.append(setColumnBody);
+              });
+            }
+          });
         
           setLoading.hideLoading();
         } else {
@@ -3235,6 +3844,7 @@
           tbodyCurTableKS.empty();
           tbodyCurTableRM.empty();
           tbodyCurTableVM.empty();
+          tbodyCurTablePA.empty();
           
           setLoading.hideLoading();
         }
