@@ -824,6 +824,7 @@
       var findBtnSS = findUlTab.find("button#btn_tab_ss");
       var findBtnRM = findUlTab.find("button#btn_tab_rm");
       var findBtnVM = findUlTab.find("button#btn_tab_vm");
+      var findBtnPA = findUlTab.find("button#btn_tab_pa");
 
       if(activeTabSchadule == "" || activeTabSchadule == "ss"){
         navsPillSS.addClass("active show");
@@ -834,6 +835,9 @@
       }else if(activeTabSchadule == "vm"){
         navsPillVM.addClass("active show");
         findBtnVM.addClass("active");
+      }else if(activeTabSchadule == "pa"){
+        navsPillPA.addClass("active show");
+        findBtnPA.addClass("active");
       }
 
       var findActiveTab = findUlTab.find(".nav-link.active");
