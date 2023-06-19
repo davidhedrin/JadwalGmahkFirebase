@@ -47,6 +47,33 @@
     .input-red {
       border-color: red;
     }
+
+    .input-container {
+      position: relative;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    .list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      width: 100%;
+      background-color: #f3f3f3;
+      border-radius: 0 0 10px 10px;
+    }
+    .list-items {
+      padding: 10px 5px;
+    }
+    .list-items:hover {
+      background-color: #dddddd;
+    }
   </style>
 </head>
 
@@ -874,6 +901,8 @@
     var dropItemPemudaAdvent = dropItemBtnGenerate.find("#pemuda_advent");
 
     var toastAlert = $("#toast_alert");
+    let namesAuto = [];
+    let sortedNamesAuto = namesAuto.sort();
 
     $(document).ready(function () {
       resizePageFuntion();
@@ -1138,14 +1167,24 @@
                     var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
                     trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
                     for (var l = 1; l < lengthColumnSS; l++) {
-                      trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      trNewBodySS.append($("<td>")
+                        .append($("<div class='input-container'>")
+                          .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                          .append($("<ul class='list'>"))
+                        )
+                      );
                     }
                     tbody_SS.append(trNewBodySS);
     
                     var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
                     trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
                     for (var m = 1; m < lengthColumnKS; m++) {
-                      trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      trNewBodyKS.append($("<td>")
+                        .append($("<div class='input-container'>")
+                          .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                          .append($("<ul class='list'>"))
+                        )
+                      );
                     }
                     tbody_KS.append(trNewBodyKS);
                     rowTr++;
@@ -1176,7 +1215,12 @@
                     var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
                     trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
                     for (var l = 1; l < lengthColumnRM; l++) {
-                      trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      trNewBodyRM.append($("<td>")
+                        .append($("<div class='input-container'>")
+                          .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                          .append($("<ul class='list'>"))
+                        )
+                      );
                     }
                     tbody_RM.append(trNewBodyRM);
                     rowTr++;
@@ -1207,7 +1251,12 @@
                     var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
                     trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
                     for (var l = 1; l < lengthColumnVM; l++) {
-                      trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      trNewBodyVM.append($("<td>")
+                        .append($("<div class='input-container'>")
+                          .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                          .append($("<ul class='list'>"))
+                        )
+                      );
                     }
                     tbody_VM.append(trNewBodyVM);
                     rowTr++;
@@ -1238,7 +1287,12 @@
                     var trNewBodyPA = $("<tr class='text-nowrap' id='tr_row_pa_" + rowTr + "' row='" + rowTr + "'>");
                     trNewBodyPA.append($("<td id='tgl_row_pa_" + rowTr + "'>").text(formattedDate));
                     for (var l = 1; l < lengthColumnPA; l++) {
-                      trNewBodyPA.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                      trNewBodyPA.append($("<td>")
+                        .append($("<div class='input-container'>")
+                          .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                          .append($("<ul class='list'>"))
+                        )
+                      );
                     }
                     tbody_PA.append(trNewBodyPA);
                     rowTr++;
@@ -1433,14 +1487,24 @@
                 var trNewBodySS = $("<tr class='text-nowrap' id='tr_row_ss_" + rowTr + "' row='" + rowTr + "'>");
                 trNewBodySS.append($("<td id='tgl_row_ss_" + rowTr + "'>").text(formattedDate));
                 for (var l = 1; l < lengthColumnSS; l++) {
-                  trNewBodySS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                  trNewBodySS.append($("<td>")
+                    .append($("<div class='input-container'>")
+                      .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                      .append($("<ul class='list'>"))
+                    )
+                  );
                 }
                 tbody_SS.append(trNewBodySS);
 
                 var trNewBodyKS = $("<tr class='text-nowrap' id='tr_row_ks_" + rowTr + "' row='" + rowTr + "'>");
                 trNewBodyKS.append($("<td id='tgl_row_ks_" + rowTr + "'>").text(formattedDate));
                 for (var m = 1; m < lengthColumnKS; m++) {
-                  trNewBodyKS.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                  trNewBodyKS.append($("<td>")
+                    .append($("<div class='input-container'>")
+                      .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + m + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                      .append($("<ul class='list'>"))
+                    )
+                  );
                 }
                 tbody_KS.append(trNewBodyKS);
                 rowTr++;
@@ -1460,7 +1524,12 @@
                 var trNewBodyRM = $("<tr class='text-nowrap' id='tr_row_rm_" + rowTr + "' row='" + rowTr + "'>");
                 trNewBodyRM.append($("<td id='tgl_row_rm_" + rowTr + "'>").text(formattedDate));
                 for (var l = 1; l < lengthColumnRM; l++) {
-                  trNewBodyRM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                  trNewBodyRM.append($("<td>")
+                    .append($("<div class='input-container'>")
+                      .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                      .append($("<ul class='list'>"))
+                    )
+                  );
                 }
                 tbody_RM.append(trNewBodyRM);
                 rowTr++;
@@ -1480,7 +1549,12 @@
                 var trNewBodyVM = $("<tr class='text-nowrap' id='tr_row_vm_" + rowTr + "' row='" + rowTr + "'>");
                 trNewBodyVM.append($("<td id='tgl_row_vm_" + rowTr + "'>").text(formattedDate));
                 for (var l = 1; l < lengthColumnVM; l++) {
-                  trNewBodyVM.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                  trNewBodyVM.append($("<td>")
+                    .append($("<div class='input-container'>")
+                      .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                      .append($("<ul class='list'>"))
+                    )
+                  );
                 }
                 tbody_VM.append(trNewBodyVM);
                 rowTr++;
@@ -1500,7 +1574,12 @@
                 var trNewBodyPA = $("<tr class='text-nowrap' id='tr_row_pa_" + rowTr + "' row='" + rowTr + "'>");
                 trNewBodyPA.append($("<td id='tgl_row_pa_" + rowTr + "'>").text(formattedDate));
                 for (var l = 1; l < lengthColumnPA; l++) {
-                  trNewBodyPA.append($("<td>").append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />")));
+                  trNewBodyPA.append($("<td>")
+                    .append($("<div class='input-container'>")
+                      .append($("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + l + "' value='" + getRandomName() + "' onkeyup='onChangeCheck(event)' />"))
+                      .append($("<ul class='list'>"))
+                    )
+                  );
                 }
                 tbody_PA.append(trNewBodyPA);
                 rowTr++;
@@ -2269,7 +2348,7 @@
                     }catch(e){
                       forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
                     }
-                    setColumnBody.append($("<td>").append(forAppend));
+                    setColumnBody.append($("<td>").append($("<div class='input-container'>").append(forAppend).append($("<ul class='list'>"))));
                   }
                   tbodySS.append(setColumnBody);
                   rowTr++;
@@ -2305,7 +2384,7 @@
                     }catch(e){
                       forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
                     }
-                    setColumnBody.append($("<td>").append(forAppend));
+                    setColumnBody.append($("<td>").append($("<div class='input-container'>").append(forAppend).append($("<ul class='list'>"))));
                   }
                   tbodyKS.append(setColumnBody);
                   rowTr++;
@@ -2395,7 +2474,7 @@
                     }catch(e){
                       forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
                     }
-                    setColumnBody.append($("<td>").append(forAppend));
+                    setColumnBody.append($("<td>").append($("<div class='input-container'>").append(forAppend).append($("<ul class='list'>"))));
                   }
                   tbody.append(setColumnBody);
                   rowTr++;
@@ -2477,7 +2556,7 @@
                     }catch(e){
                       forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
                     }
-                    setColumnBody.append($("<td>").append(forAppend));
+                    setColumnBody.append($("<td>").append($("<div class='input-container'>").append(forAppend).append($("<ul class='list'>"))));
                   }
                   tbody.append(setColumnBody);
                   rowTr++;
@@ -2559,7 +2638,7 @@
                     }catch(e){
                       forAppend = $("<input type='text' class='form-control' style='padding: 0px 6px' placeholder='masukkan nama' id='input_nama_row_" + i + "' onkeyup='onChangeCheck(event)' />");
                     }
-                    setColumnBody.append($("<td>").append(forAppend));
+                    setColumnBody.append($("<td>").append($("<div class='input-container'>").append(forAppend).append($("<ul class='list'>"))));
                   }
                   tbody.append(setColumnBody);
                   rowTr++;
@@ -2901,12 +2980,50 @@
     function onChangeCheck(event) {
       var inputId = event.target;
       var valueInput = inputId.value;
+      var inputIdAttr = $(inputId).attr("id");
+      var tableId = $(inputId).closest("table").attr("id");
+      var currentRowInput = $(inputId).closest("tr").attr("id");
+      var attrRowInput = $(inputId).closest("tr").attr("row");
 
       if (valueInput || valueInput.length > 0) {
         inputId.classList.remove('input-red');
+        
+        removeElementsList();
+        for (let i of sortedNamesAuto) {
+          if (i.toLowerCase().includes(inputId.value.toLowerCase()) && inputId.value != "") {
+            let listItem = document.createElement("li");
+            listItem.classList.add("list-items");
+            listItem.style.cursor = "pointer";
+            listItem.setAttribute("onclick", "displayNamesAuto('" + i + "', '"+tableId+"', '"+currentRowInput+"', '"+inputIdAttr+"')");
+
+            let word = i.replace(new RegExp(inputId.value, "gi"), "<b>$&</b>");
+            listItem.innerHTML = word;
+
+            var nextElement = $(inputId).next();
+            //nextElement.removeAttr("hidden");
+            nextElement.append(listItem);
+          }
+        }
       } else {
+        removeElementsList();
         inputId.classList.add('input-red');
       }
+    }
+    function displayNamesAuto(value, table, tr, input) {
+      var table = $("#"+table);
+      var findTd = table.find("#"+tr);
+      var findInput = findTd.find("#"+input);
+
+      findInput.val(value);
+      removeElementsList();
+    }
+    function removeElementsList() {
+      let items = document.querySelectorAll(".list-items");
+      items.forEach((item) => {
+        //let parentUl = item.parentNode;
+        //parentUl.setAttribute("hidden", true);
+        item.remove();
+      });
     }
 
     async function clickCopyLinkSchadule() {
@@ -3333,7 +3450,7 @@
         }
       });
 
-      getUserById.then(function (doc) {
+      getUserById.then(async function (doc) {
         var userData = doc.data();
         if (userData.user_type.toLowerCase() == "admin") {
           adminPannel.append(lblAdmin).append(btnGerejaAdmin).append(btnUsrManagAdmin);
@@ -3345,15 +3462,20 @@
           $(element).html(userData.nama_lengkap);
         });
 
-        var getJemaat = docRefJemaat.doc(userData.kode_jemaat).get();
-        getJemaat.then(function (doc) {
-          var jemaatData = doc.data();
-          plainJemaat.each(function (index, element) {
-            $(element).html(jemaatData.nama);
-          });
-          plainCurTriwulan.each(function (index, element) {
-            $(element).html("Triwulan " + curTriwulan + " - " + year);
-          });
+        var getJemaat = docRefJemaat.doc(userData.kode_jemaat);
+        var getAwaitJemaat = await getJemaat.get();
+        var jemaatData = getAwaitJemaat.data();
+        plainJemaat.each(function (index, element) {
+          $(element).html(jemaatData.nama);
+        });
+        plainCurTriwulan.each(function (index, element) {
+          $(element).html("Triwulan " + curTriwulan + " - " + year);
+        });
+
+        var getAnggotaJemaat = await getJemaat.collection(collInCollsName.tb_kode_jemaat.collAnggotaJemaat).get();
+        getAnggotaJemaat.forEach((doc)=>{
+          var getDoc = doc.data();
+          namesAuto.push(getDoc.nama);
         });
 
         var docRefKolomJemaat = collRefKolomJemaat.doc(userData.kode_jemaat);
