@@ -2708,6 +2708,8 @@
         modalConfirmSubmitEdit.modal("hide");
 
         try{
+          var selectSchadule = $("#select_triwulan_schadule");
+          var valueSelectTriwulan = parseInt(selectSchadule.val());
           const db = firebase.firestore();
           var getDataUserLogin = await getUserLogin(userIdLogin);
           var getCollKodeJemaat = await db.collection(collectionsName.kode_jemaat).doc(getDataUserLogin.kode_jemaat).get();
@@ -2722,7 +2724,7 @@
           
           if (inputPascodeEdit.val() == datagetCollKodeJemaat.passcode) {
             var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
-            .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year).get();
+            .where("triwulan", "==", valueSelectTriwulan).where("jadwal_date_y", "==", year).get();
       
             var checkJadewalRef = checkJadewalFromCol.docs[0];
       
