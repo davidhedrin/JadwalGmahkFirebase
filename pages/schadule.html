@@ -2256,6 +2256,8 @@
     var bodyModalEditScaduel = modalEditSchadule.find("#bodyModal");
     var foterModalEditScaduel = modalEditSchadule.find("#footerModal");
     async function openModalEditSchadule(type) {
+      var selectSchadule = $("#select_triwulan_schadule");
+      var valueSelectTriwulan = parseInt(selectSchadule.val());
       modalEditSchadule.modal("show");
       bodyModalEditScaduel.empty();
       foterModalEditScaduel.empty();
@@ -2268,7 +2270,7 @@
       const docRefJadwalJemaat = db.collection(collectionsName.jadwal_jemaat);
       var docRefKolomJemaat = db.collection(collectionsName.kolom_jemaat).doc(getDataUserLogin.kode_jemaat);
       var checkJadewalFromCol = await docRefJadwalJemaat.where("kode_jemaat", "==", getDataUserLogin.kode_jemaat)
-      .where("triwulan", "==", curTriwulan).where("jadwal_date_y", "==", year);
+      .where("triwulan", "==", valueSelectTriwulan).where("jadwal_date_y", "==", year);
 
       if (type == "ss") {
         var createTableSS = $("<div class='table-responsive text-nowrap'>");
