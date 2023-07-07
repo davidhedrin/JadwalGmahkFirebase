@@ -177,8 +177,8 @@ function getCurrentTriwulan() {
         daysInGroup += daysInMonth;
       }
 
-      // daysInCurrentGroup = i + 1;
-      daysInCurrentGroup = i;
+      daysInCurrentGroup = i + 1;
+      // daysInCurrentGroup = i;
       break;
     }
   }
