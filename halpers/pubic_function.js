@@ -156,34 +156,39 @@ function deleteFirestoreCollection(collectionRef) {
 }
 
 function getCurrentTriwulan() {
-  const dt = new Date();
-  var month = dt.getMonth() + 1;
-  var year = dt.getFullYear();
-  var monthsPerGroup = 3;
-  var totalGroups = 4;
+  // const dt = new Date();
+  // var month = dt.getMonth() + 1;
+  // var year = dt.getFullYear();
+  // var monthsPerGroup = 3;
+  // var totalGroups = 4;
 
-  var daysInCurrentGroup = 0;
-  for (var i = 0; i < totalGroups; i++) {
-    var startMonth = i * monthsPerGroup;
-    var endMonth = startMonth + monthsPerGroup - 1;
+  // var daysInCurrentGroup = 0;
+  // for (var i = 0; i < totalGroups; i++) {
+  //   var startMonth = i * monthsPerGroup;
+  //   var endMonth = startMonth + monthsPerGroup - 1;
 
-    if (month >= startMonth && month <= endMonth) {
-      var daysInGroup = 0;
-      for (var j = startMonth; j <= endMonth; j++) {
-        var firstDayOfMonth = new Date(year, j, 1);
-        var firstDayOfNextMonth = new Date(year, firstDayOfMonth.getMonth() + 1, 1);
-        var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
-        var daysInMonth = lastDayOfMonth.getDate();
-        daysInGroup += daysInMonth;
-      }
+  //   if (month >= startMonth && month <= endMonth) {
+  //     var daysInGroup = 0;
+  //     for (var j = startMonth; j <= endMonth; j++) {
+  //       var firstDayOfMonth = new Date(year, j, 1);
+  //       var firstDayOfNextMonth = new Date(year, firstDayOfMonth.getMonth() + 1, 1);
+  //       var lastDayOfMonth = new Date(firstDayOfNextMonth.getTime() - 1);
+  //       var daysInMonth = lastDayOfMonth.getDate();
+  //       daysInGroup += daysInMonth;
+  //     }
 
-      daysInCurrentGroup = i + 1;
-      // daysInCurrentGroup = i;
-      break;
-    }
-  }
+  //     daysInCurrentGroup = i + 1;
+  //     // daysInCurrentGroup = i;
+  //     break;
+  //   }
+  // }
 
-  return daysInCurrentGroup;
+  // return daysInCurrentGroup;
+
+  var bulanSekarang = new Date().getMonth();
+  var grup = Math.floor(bulanSekarang / 3) + 1;
+
+  return grup;
 }
 
 function checkMonthEndOfTriwulan() {
